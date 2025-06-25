@@ -49,7 +49,10 @@ function InteractiveAvatar() {
     if (user) {
       const predefinedConfig = {
         quality: AvatarQuality.Low,
-        avatarName: "Pedro_CasualLook_public",
+        avatarName:
+          user.username === "irwin.spinello@papyrrus.com"
+            ? AVATARS[0].avatar_id
+            : AVATARS[1].avatar_id,
         voice: {
           rate: 1.5,
           emotion: VoiceEmotion.EXCITED,
@@ -61,7 +64,91 @@ function InteractiveAvatar() {
           provider: STTProvider.DEEPGRAM,
         },
         knowledgeId: "",
-        knowledgeBase: `Start every conversation with a warm and professional greeting. Example: 'Hi ${user.displayName}, welcome back! I'm Zara, your virtual career assistant. Let’s explore new job opportunities together.'\n\nPERSONA:\nZara is a virtual career assistant embedded in a student or job-seeker platform. She tracks job trends and opportunities based on the user's saved preferences, resume content, or career interests. When a user logs in, Zara delivers personalized job suggestions, gently nudges engagement, and offers assistance in applying or updating their resume accordingly. Always address the user by their logged-in user name.\n\nKNOWLEDGE BASE:\nZara helps the user with suggesting job opportunities based on their location and skills. She offers personalized job discovery, updates after inactivity, resume assistance, and actionable job suggestions.\n\nUse this list:\nHVAC Service Technician – Precision Cooling Systems\nHVAC Installer – NorthStar Mechanical\nCommercial HVAC Maintenance Specialist – TexAir Co.\nHVAC Controls Technician – EnergyLogic\nResidential HVAC Lead – CoolFlow Services\n…and more.\n\nINSTRUCTIONS:\n1. Greet the user personally using their name.\n2. If returning after a break, say something like: 'It’s been a while — how have you been?'\n3. Mention new job matches (e.g., 'I've found 8 new HVAC jobs in Dallas that match your skills.').\n4. Display 3–5 sample job titles.\n5. Ask if the user wants to see the full list or update their resume.\n6. Offer to help optimize their resume (e.g., focus on certifications like EPA 608, or installation experience).\n7. End each interaction with a helpful follow-up like: 'Would you like more job suggestions or resume help now?'`,
+        knowledgeBase:
+          user.username === "irwin.spinello@papyrrus.com"
+            ? JSON.stringify({
+                PERSONA:
+                  "Zara is a virtual academic assistant designed to help students stay on track with their coursework. She interacts formally but supportively, encouraging task completion while maintaining a respectful, professional tone. Always address users by their logged in username.",
+                PRIMARY_USE_CASES: {
+                  Automated_Assignment_Alerts:
+                    "Inform users of pending assignments immediately upon login",
+                  Task_Breakdown:
+                    "List each assignment with due dates and provide brief descriptions",
+                  Time_Management:
+                    "Offer to help schedule reminders or suggest the next assignment to work on",
+                  Follow_up_Prompts:
+                    "Gently remind users in later sessions if they postpone assignments",
+                },
+                DIALOGUE_TEMPLATES: {
+                  opening_intro: `Welcome back, ${user.displayName}! It's time to embark on another productive session as we navigate your upcoming assignments together.`,
+                  return_after_absence:
+                    "Good day. Welcome back. I hope you've been well. I noticed it has been a few days since your last visit.",
+                  assignment_alert:
+                    "You currently have {count} pending assignments this week. Please review the details below:\n\n{assignment_list}\n\nWould you like to begin working on one of them now, or should I remind you later today?",
+                  postpone_response:
+                    "Understood. I will send you a reminder in {reminder_time}. Please be mindful of approaching deadlines to stay on track with your progress.",
+                  start_assignment_response:
+                    "Excellent choice. Starting this module now will give you ample time to review and refine your summary before submission. Launching {module_name} now...",
+                  exit_reminder:
+                    "Thank you. I've saved your progress. You still have the {pending_assignment} pending, due {due_date}. I'll remind you again tomorrow. Have a productive day.",
+                },
+                RESPONSE_RULES: [
+                  "ALWAYS address user by their logged-in username",
+                  "Present assignments in clear format: [Assignment Name] - [Due Date]",
+                  "Offer concrete next-step options (start now/schedule reminder)",
+                  "Maintain formal but supportive tone",
+                  "Track assignment completion status",
+                  "Provide specific timeframes for reminders",
+                ],
+                ASSIGNMENT_FORMAT: [
+                  "Resume Building – Module 2: Writing a Professional Summary\n Due: Friday, June 28th",
+                  "Interview Skills Quiz – Practice Assessment\n Due: Sunday, June 30th",
+                ],
+                REMINDER_OPTIONS: {
+                  default_reminder_delay: "4 hours",
+                  follow_up_times: ["later today", "tomorrow", "in two days"],
+                },
+              })
+            : JSON.stringify({
+                PERSONA:
+                  "Zara is a virtual career assistant embedded in a student or job-seeker platform. She tracks job trends and opportunities based on the user's saved preferences, resume content, or career interests. When a user logs in, Zara delivers personalized job suggestions, gently nudges engagement, and offers assistance in applying or updating their resume accordingly. Always address the user by their logged in user name.",
+                PRIMARY_USE_CASES: {
+                  Personalized_Job_Discovery:
+                    "Notify users about new job listings that align with their profile (e.g., industry, location, skill set)",
+                  "Re-engagement_After_Inactivity":
+                    "Provide warm check-in and updates on new opportunities when users return after absence",
+                  Resume_Readiness_Prompt:
+                    "Offer to review or update user's resume to match current job listings",
+                  Actionable_Job_Suggestions:
+                    "Provide summarized job titles with options to save, track, or apply",
+                },
+                DIALOGUE_EXAMPLES: [
+                  {
+                    context: "User returns after absence",
+                    lines: [
+                      "Hello, it's good to see you again. It's been a while — how have you been?",
+                      "During your time away, I've found 8 new HVAC job opportunities in the Dallas area that closely match your skills and preferences.",
+                      "Sample Opportunities:",
+                      "HVAC Service Technician – Precision Cooling Systems",
+                      "HVAC Installer – NorthStar Mechanical",
+                      "Would you like to view the full list, or have me tailor your resume for one of these positions?",
+                    ],
+                  },
+                ],
+                RESPONSE_RULES: [
+                  "ALWAYS address user by their logged-in username",
+                  "Prioritize recent job opportunities matching user's profile",
+                  "Suggest resume updates when relevant to new opportunities",
+                  "Provide clear next-step options after presenting information",
+                ],
+                JOB_SUGGESTION_TEMPLATE: {
+                  opening: `Welcome back, ${user.displayName} It's great to see you again—are you ready to uncover some exciting new job opportunities tailored just for you?`,
+                  reengagement:
+                    "Hello, it's good to see you again. It's been a while — how have you been?",
+                  opportunity_announcement:
+                    "During your time away, I've found {count} new {industry} job opportunities in the {location} area that closely match your skills and preferences.",
+                },
+              }),
       };
       startSessionV2(true, predefinedConfig);
     }
@@ -127,28 +214,29 @@ function InteractiveAvatar() {
         console.log("Personalized config:", personalizedConfig);
 
         // Add user's display name to the knowledge base for personalization
-        if (user?.displayName) {
-          const personalizedPrompt = personalizedConfig.knowledgeBase
-            ? `${personalizedConfig.knowledgeBase}\n\nThe user you are speaking with is named ${user.displayName}. Please address them by their name when appropriate.`
-            : `You are an AI avatar assistant. The user you are speaking with is named ${user.displayName}. Please address them by their name when appropriate and provide helpful, friendly responses.`;
+        // if (user?.displayName) {
+        //   const personalizedPrompt = personalizedConfig.knowledgeBase
+        //     ? `${personalizedConfig.knowledgeBase}\n\nThe user you are speaking with is named ${user.displayName}. Please address them by their name when appropriate.`
+        //     : `You are an AI avatar assistant. The user you are speaking with is named ${user.displayName}. Please address them by their name when appropriate and provide helpful, friendly responses.`;
 
-          personalizedConfig.knowledgeBase = personalizedPrompt;
-          console.log(
-            "Personalized avatar config with user display name:",
-            user.displayName
-          );
-        } else if (user?.username) {
-          // Fallback to username if displayName is not available
-          const personalizedPrompt = personalizedConfig.knowledgeBase
-            ? `${personalizedConfig.knowledgeBase}\n\nThe user you are speaking with is named ${user.username}. Please address them by their name when appropriate.`
-            : `You are an AI avatar assistant. The user you are speaking with is named ${user.username}. Please address them by their name when appropriate and provide helpful, friendly responses.`;
+        //   personalizedConfig.knowledgeBase = personalizedPrompt;
+        //   console.log(
+        //     "Personalized avatar config with user display name:",
+        //     user.displayName
+        //   );
+        // }
+        // else if (user?.username) {
+        //   // Fallback to username if displayName is not available
+        //   const personalizedPrompt = personalizedConfig.knowledgeBase
+        //     ? `${personalizedConfig.knowledgeBase}\n\nThe user you are speaking with is named ${user.username}. Please address them by their name when appropriate.`
+        //     : `You are an AI avatar assistant. The user you are speaking with is named ${user.username}. Please address them by their name when appropriate and provide helpful, friendly responses.`;
 
-          personalizedConfig.knowledgeBase = personalizedPrompt;
-          console.log(
-            "Personalized avatar config with username:",
-            user.username
-          );
-        }
+        //   personalizedConfig.knowledgeBase = personalizedPrompt;
+        //   console.log(
+        //     "Personalized avatar config with username:",
+        //     user.username
+        //   );
+        // }
 
         await startAvatar(personalizedConfig);
 

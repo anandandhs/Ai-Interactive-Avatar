@@ -24,8 +24,8 @@ export const AVATARS = [
     name: "Pedro Casual Look",
   },
   {
-    avatar_id: "Alessandra_ProfessionalLook_public",
-    name: "Alessandra Professional Look",
+    avatar_id: "Marianne_Black_Suit_public",
+    name: "Marianne Professional Look",
   },
 ];
 
