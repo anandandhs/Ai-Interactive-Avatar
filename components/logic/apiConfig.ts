@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosInstance, AxiosResponse } from "axios";
 import { tokenStorage } from "./tokenStorage";
 
 // API base URL - you can set this in environment variables

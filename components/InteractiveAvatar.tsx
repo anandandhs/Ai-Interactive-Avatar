@@ -43,8 +43,6 @@ function InteractiveAvatar() {
   const { startVoiceChat } = useVoiceChat();
   const { user } = useAuth();
 
-  const [config, setConfig] = useState<StartAvatarRequest>(DEFAULT_CONFIG);
-
   const mediaStream = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
