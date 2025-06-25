@@ -81,8 +81,10 @@ export const TextInput: React.FC = () => {
       />
       <Input
         className="flex-1"
-        style={{ minWidth: "500px" }}
-        placeholder={`Type something for the avatar to ${taskType === TaskType.REPEAT ? "repeat" : "respond"}...`}
+        // style={{ minWidth: "500px" }}
+        placeholder={`Type something for the avatar to ${
+          taskType === TaskType.REPEAT ? "repeat" : "respond"
+        }...`}
         value={message}
         onChange={setMessage}
       />
