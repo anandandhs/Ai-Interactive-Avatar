@@ -1,9 +1,9 @@
-import React, { useEffect, useRef } from "react";
+import React, {useEffect, useRef} from "react";
 
-import { useMessageHistory, MessageSender } from "../logic";
+import {useMessageHistory, MessageSender} from "../logic";
 
 export const MessageHistory: React.FC = () => {
-  const { messages } = useMessageHistory();
+  const {messages} = useMessageHistory();
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -16,12 +16,9 @@ export const MessageHistory: React.FC = () => {
 
   return (
     <div
-      className="w-full h-full flex flex-column surface-card"
+      className="w-full h-full flex flex-column"
       style={{
-        backgroundColor: "var(--bg-primary)",
-        border: "1px solid var(--border-light)",
-        borderRadius: "var(--radius-2xl)",
-        boxShadow: "var(--shadow-lg)",
+        backgroundColor: "transparent",
       }}
     >
       <div
@@ -33,16 +30,10 @@ export const MessageHistory: React.FC = () => {
           flexShrink: 0,
         }}
       >
-        <h3
-          className="text-heading-small"
-          style={{ color: "var(--text-primary)" }}
-        >
+        <h3 className="text-white text-2xl font-bold relative z-1  pb-2">
           Conversation History
         </h3>
-        <span
-          className="text-caption"
-          style={{ color: "var(--text-secondary)" }}
-        >
+        <span className="text-caption" style={{color: "var(--text-secondary)"}}>
           {messages.length} {messages.length === 1 ? "message" : "messages"}
         </span>
       </div>
@@ -67,12 +58,9 @@ export const MessageHistory: React.FC = () => {
           >
             <i
               className="pi pi-comments text-4xl"
-              style={{ color: "var(--gray-400)" }}
+              style={{color: "var(--gray-400)"}}
             />
-            <p
-              className="text-body-medium text-center"
-              style={{ color: "var(--text-secondary)" }}
-            >
+            <p className="text-body-medium text-center text-white text-light">
               Your conversation will appear here
             </p>
           </div>
@@ -102,7 +90,7 @@ export const MessageHistory: React.FC = () => {
               >
                 <div
                   className="flex align-items-center"
-                  style={{ gap: "var(--space-2)" }}
+                  style={{gap: "var(--space-2)"}}
                 >
                   <div
                     className="w-2 h-2 border-round-full"
@@ -116,7 +104,8 @@ export const MessageHistory: React.FC = () => {
                   <span
                     className="text-caption font-medium"
                     style={{
-                      color: "var(--text-secondary)",
+                      color: "#fff",
+                      fontWeight: "300",
                     }}
                   >
                     {message.sender === MessageSender.AVATAR
@@ -130,16 +119,14 @@ export const MessageHistory: React.FC = () => {
                   style={{
                     backgroundColor:
                       message.sender === MessageSender.CLIENT
-                        ? "var(--primary-color)"
-                        : "var(--bg-tertiary)",
+                        ? "#182427"
+                        : "#3b3a32",
                     color:
-                      message.sender === MessageSender.CLIENT
-                        ? "var(--bg-primary)"
-                        : "var(--text-primary)",
+                      message.sender === MessageSender.CLIENT ? "#fff" : "#fff",
                     border:
                       message.sender === MessageSender.CLIENT
-                        ? "none"
-                        : "1px solid var(--border-light)",
+                        ? "1px solid #FFFFFF1A"
+                        : "1px solid #FFFFFF1A",
                     boxShadow: "var(--shadow-sm)",
                     fontSize: "var(--font-size-base)",
                     lineHeight: "var(--line-height-relaxed)",

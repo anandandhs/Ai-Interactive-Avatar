@@ -1,14 +1,16 @@
 import React from "react";
 
-import { useVoiceChat } from "../logic/useVoiceChat";
-import { Button } from "../Button";
-import { LoadingIcon, MicIcon, MicOffIcon } from "../Icons";
-import { useConversationState } from "../logic/useConversationState";
+import {useVoiceChat} from "../logic/useVoiceChat";
+import {Button} from "../Button";
+import {LoadingIcon, MicIcon, MicOffIcon} from "../Icons";
+import {useConversationState} from "../logic/useConversationState";
+import style from "../../styles/commonStyle.module.css";
+import clsx from "clsx";
 
 export const AudioInput: React.FC = () => {
-  const { muteInputAudio, unmuteInputAudio, isMuted, isVoiceChatLoading } =
+  const {muteInputAudio, unmuteInputAudio, isMuted, isVoiceChatLoading} =
     useVoiceChat();
-  const { isUserTalking } = useConversationState();
+  const {isUserTalking} = useConversationState();
 
   const handleMuteClick = () => {
     if (isMuted) {
@@ -21,13 +23,15 @@ export const AudioInput: React.FC = () => {
   return (
     <div>
       <Button
-        className={`!p-2 relative`}
+        className={clsx(`!p-2 relative`, style.micButton)}
         disabled={isVoiceChatLoading}
         onClick={handleMuteClick}
       >
-        <div
-          className={`absolute left-0 top-0 rounded-lg border-2 border-[#7559FF] w-full h-full ${isUserTalking ? "animate-ping" : ""}`}
-        />
+        {/* <div
+          className={`absolute left-0 top-0 rounded-lg border-2 border-[#7559FF] w-full h-full ${
+            isUserTalking ? "animate-ping" : ""
+          }`}
+        /> */}
         {isVoiceChatLoading ? (
           <LoadingIcon className="animate-spin" size={20} />
         ) : isMuted ? (
