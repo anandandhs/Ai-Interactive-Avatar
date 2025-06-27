@@ -1,19 +1,27 @@
 "use client";
 
-import {Toolbar} from "primereact/toolbar";
-import {Button} from "primereact/button";
-import {useAuth} from "./logic/useAuth";
+import { Toolbar } from "primereact/toolbar";
+import { Button } from "primereact/button";
+import { useAuth } from "./logic/useAuth";
 import Image from "next/image";
 import Logo from "../public/Svg/nav_logo.svg";
 import Settings from "../public/Svg/settings.svg";
 import Profile from "../public/Svg/profile.svg";
-import {useStreamingAvatarSession} from "./logic";
+import {
+  StreamingAvatarSessionState,
+  useStreamingAvatarSession,
+} from "./logic";
+import { useRouter } from "next/router";
 
 export default function NavBar() {
-  const {user, logout} = useAuth();
-  const {stopAvatar} = useStreamingAvatarSession();
+  const { user, logout } = useAuth();
+  const { stopAvatar, sessionState } = useStreamingAvatarSession();
   const handleLogout = () => {
+    if (sessionState !== StreamingAvatarSessionState.INACTIVE) {
+      stopAvatar();
+    }
     logout();
+    window.location.href = "/";
   };
 
   const startContent = (
@@ -23,7 +31,7 @@ export default function NavBar() {
   );
 
   const endContent = (
-    <div className="flex align-items-center" style={{gap: "var(--space-4)"}}>
+    <div className="flex align-items-center" style={{ gap: "var(--space-4)" }}>
       <Image src={Settings} alt="settings" />
       <Image src={Profile} alt="profile" />
       <Button
@@ -31,7 +39,7 @@ export default function NavBar() {
         className="p-button-text p-button-rounded"
         onClick={handleLogout}
         tooltip="Sign out"
-        tooltipOptions={{position: "bottom"}}
+        tooltipOptions={{ position: "bottom" }}
         style={{
           color: "var(--error-color)",
           backgroundColor: "transparent",

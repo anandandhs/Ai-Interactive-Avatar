@@ -1,20 +1,21 @@
-import React, {forwardRef} from "react";
-import {ConnectionQuality} from "@heygen/streaming-avatar";
+import React, { forwardRef } from "react";
+import { ConnectionQuality } from "@heygen/streaming-avatar";
 
-import {useConnectionQuality} from "../logic/useConnectionQuality";
-import {useStreamingAvatarSession} from "../logic/useStreamingAvatarSession";
-import {StreamingAvatarSessionState} from "../logic";
-import {CloseIcon} from "../Icons";
-import {Button} from "../Button";
+import { useConnectionQuality } from "../logic/useConnectionQuality";
+import { useStreamingAvatarSession } from "../logic/useStreamingAvatarSession";
+import { StreamingAvatarSessionState } from "../logic";
+import { CloseIcon } from "../Icons";
+import { Button } from "../Button";
 import Texas from "../../public/Svg/texas.svg";
 import Image from "next/image";
 import style from "../../styles/commonStyle.module.css";
 
 export const AvatarVideo = forwardRef<HTMLVideoElement>(({}, ref) => {
-  const {sessionState, stopAvatar} = useStreamingAvatarSession();
-  const {connectionQuality} = useConnectionQuality();
+  const { sessionState, stopAvatar, stream } = useStreamingAvatarSession();
+  const { connectionQuality } = useConnectionQuality();
 
-  const isLoaded = sessionState === StreamingAvatarSessionState.CONNECTED;
+  const isLoaded =
+    sessionState === StreamingAvatarSessionState.CONNECTED && stream !== null;
 
   return (
     <>
@@ -44,21 +45,28 @@ export const AvatarVideo = forwardRef<HTMLVideoElement>(({}, ref) => {
           icon={<CloseIcon />}
         />
       )} */}
-      <div>
-        <Image
-          src={Texas}
-          alt="texas"
-          className="relative"
-          style={{top: "25rem"}}
-        />
-        <video ref={ref} autoPlay playsInline className={style.videoContainer}>
-          <track kind="captions" />
-        </video>
-      </div>
+      {isLoaded && (
+        <div>
+          <Image
+            src={Texas}
+            alt="texas"
+            className="relative"
+            style={{ top: "25rem" }}
+          />
+          <video
+            ref={ref}
+            autoPlay
+            playsInline
+            className={style.videoContainer}
+          >
+            <track kind="captions" />
+          </video>
+        </div>
+      )}
       {!isLoaded && (
         <div
           className="w-full h-full flex align-items-center justify-content-center absolute"
-          style={{top: 0, left: 0}}
+          style={{ top: 0, left: 0 }}
         >
           Loading...
         </div>
