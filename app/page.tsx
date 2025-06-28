@@ -23,7 +23,8 @@ export default function App() {
             className="text-body-medium"
             style={{ color: "var(--text-secondary)" }}
           >
-            Loading your experience...
+            {/* Loading your experience... */}
+            <div className="loader"></div>
           </span>
         </div>
       </div>

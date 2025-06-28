@@ -1,16 +1,16 @@
 "use client";
 
-import React, {useState} from "react";
-import {Input} from "./Input";
-import {Card} from "primereact/card";
-import {Message} from "primereact/message";
+import React, { useState } from "react";
+import { Input } from "./Input";
+import { Card } from "primereact/card";
+import { Message } from "primereact/message";
 
 import Image from "next/image";
 import Avatar from "../public/Svg/avatar.svg";
 
-import {InputText} from "primereact/inputtext";
+import { InputText } from "primereact/inputtext";
 import TextInput from "./UI/CommonUI/TextInput";
-import {Button} from "./Button";
+import { Button } from "./Button";
 import AppButton from "./UI/CommonUI/AppButton";
 import style from "../styles/commonStyle.module.css";
 import clsx from "clsx";
@@ -44,13 +44,16 @@ export const LoginPage: React.FC<LoginPageProps> = ({
         <div className={style.homeBackground}>
           <h5
             className="text-2xl font-normal p-5 relative z-1"
-            style={{color: "#002768"}}
+            style={{ color: "#002768" }}
           >
-            Your A.I Powered Career Concierge Log In To Begin Your Workforce
+            Your AI Powered Career Concierge Log In To Begin Your Workforce
             Journey.
           </h5>
 
-          <div className="flex align-items-end relative" style={{top: "2rem"}}>
+          <div
+            className="flex align-items-end relative"
+            style={{ top: "2rem" }}
+          >
             <Image
               src={BackgroundStar}
               alt="home_1"
@@ -62,13 +65,13 @@ export const LoginPage: React.FC<LoginPageProps> = ({
               alt="avatar"
               className="absolute z-1"
               height={550}
-              style={{left: "7rem"}}
+              style={{ left: "7rem" }}
             />
             <Image
               src={BackgroundLogo}
               alt="home_2"
               className="relative"
-              style={{left: "-12.6rem"}}
+              style={{ left: "-12.6rem" }}
             />
           </div>
         </div>
@@ -76,13 +79,16 @@ export const LoginPage: React.FC<LoginPageProps> = ({
       <div className="col-6">
         <div
           className="flex flex-column justify-content-center align-items-center relative"
-          style={{top: "15%"}}
+          style={{ top: "15%" }}
         >
           <div className="flex flex-column justify-content-center align-items-center gap-2 mt-5">
             <h2>Welcome back !</h2>
             <p className={style.blueText}>Connect with our Intelligence</p>
           </div>
-          <div className="flex flex-column gap-4 mt-5" style={{width: "30rem"}}>
+          <div
+            className="flex flex-column gap-4 mt-5"
+            style={{ width: "30rem" }}
+          >
             <div className="flex relative">
               <Image src={Mail} alt="mail" className={style.imageInput} />
               <TextInput
@@ -118,7 +124,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             </p>
 
             <AppButton
-              label="Login"
+              label="Log in"
               width="100%"
               onClick={handleSubmit}
               disabled={!username.trim() || !password.trim() || loading}
@@ -126,7 +132,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             />
 
             <span className="flex justify-content-center">
-              Dont have an account? <p className={style.blueText}>Sign in</p>
+              Don't have an account?{" "}
+              <p className={style.blueText}>&nbsp;{"Sign in"}</p>
             </span>
           </div>
         </div>

@@ -14,7 +14,7 @@ import {
 import { useRouter } from "next/router";
 
 export default function NavBar() {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const { stopAvatar, sessionState } = useStreamingAvatarSession();
   const handleLogout = () => {
     if (sessionState !== StreamingAvatarSessionState.INACTIVE) {

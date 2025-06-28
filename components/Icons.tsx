@@ -3,7 +3,7 @@ import Mic from "../public/Svg/mic.svg";
 import MicMute from "../public/Svg/mic_off.svg";
 
 export function HeyGenLogo() {
-  return <img alt="HeyGen Logo" className="h-8" src="/heygen-logo.png" />;
+  return <img alt="HeyGen Logo" className="h-8" src="/metalogo.png" />;
 }
 
 type IconSvgProps = {
@@ -13,7 +13,12 @@ type IconSvgProps = {
   className?: string;
 };
 
-export function GithubIcon({size = 24, width, height, ...props}: IconSvgProps) {
+export function GithubIcon({
+  size = 24,
+  width,
+  height,
+  ...props
+}: IconSvgProps) {
   return (
     <svg
       height={size || height}
@@ -54,7 +59,7 @@ export function ChevronDownIcon({
   );
 }
 
-export function SendIcon({size = 24, width, height, ...props}: IconSvgProps) {
+export function SendIcon({ size = 24, width, height, ...props }: IconSvgProps) {
   return (
     <svg
       fill="none"
@@ -74,7 +79,7 @@ export function SendIcon({size = 24, width, height, ...props}: IconSvgProps) {
   );
 }
 
-export function MicIcon({size = 24, width, height, ...props}: IconSvgProps) {
+export function MicIcon({ size = 24, width, height, ...props }: IconSvgProps) {
   return (
     <div className="flex flex-column gap-2">
       <Image src={Mic} alt="Mic" className="cursor-pointer" />
@@ -83,7 +88,12 @@ export function MicIcon({size = 24, width, height, ...props}: IconSvgProps) {
   );
 }
 
-export function MicOffIcon({size = 24, width, height, ...props}: IconSvgProps) {
+export function MicOffIcon({
+  size = 24,
+  width,
+  height,
+  ...props
+}: IconSvgProps) {
   return (
     <div className="flex flex-column gap-2">
       <Image src={MicMute} alt="Mic" className="cursor-pointer" />
@@ -123,7 +133,12 @@ export function LoadingIcon({
   );
 }
 
-export function CloseIcon({size = 24, width, height, ...props}: IconSvgProps) {
+export function CloseIcon({
+  size = 24,
+  width,
+  height,
+  ...props
+}: IconSvgProps) {
   return (
     <svg
       fill="none"
