@@ -703,3 +703,7 @@ li {
     box-shadow: 0 2.5em 0 0;
   }
 }
+.custom-input.p-inputtext {
+  padding: 0 !important;
+  padding-left: 2.5rem !important;
+}

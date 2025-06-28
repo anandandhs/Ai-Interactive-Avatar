@@ -28,7 +28,7 @@ const TextInput: React.FC<TextInputProps> = ({
   error,
 }) => {
   return (
-    <div className="flex flex-column">
+    <div className="flex flex-column w-full">
       <span className={style.label}>{label}</span>
       <InputText
         id={id}

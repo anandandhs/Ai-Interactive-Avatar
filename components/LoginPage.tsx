@@ -3,18 +3,21 @@
 import React, {useState} from "react";
 import {Input} from "./Input";
 import {Card} from "primereact/card";
-import {Password} from "primereact/password";
 import {Message} from "primereact/message";
-import Logo from "../public/Svg/texas_logo.svg";
+
 import Image from "next/image";
-import Avatar from "../public/Svg/home_avatar.svg";
-import BackgroundLogin from "../public/Svg/login_background.svg";
+import Avatar from "../public/Svg/avatar.svg";
+
 import {InputText} from "primereact/inputtext";
 import TextInput from "./UI/CommonUI/TextInput";
 import {Button} from "./Button";
 import AppButton from "./UI/CommonUI/AppButton";
 import style from "../styles/commonStyle.module.css";
 import clsx from "clsx";
+import Mail from "../public/Svg/mail.svg";
+import Password from "../public/Svg/password.svg";
+import BackgroundLogo from "../public/Svg/home_2.svg";
+import BackgroundStar from "../public/Svg/home_1.svg";
 
 interface LoginPageProps {
   onLogin: (username: string, password: string) => Promise<boolean>;
@@ -36,21 +39,38 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   };
 
   return (
-    <div className="grid">
+    <div className="grid h-full">
       <div className="col-6">
-        <div className={style.homeBlur}>
-          <Image
-            src={BackgroundLogin}
-            alt="Avatar"
-            className={style.blurImage}
-            style={{filter: "blur(15px)"}}
-          />
-          {/* <div className={style.blurOverlay} /> */}
-          <h5 className="text-white text-2xl font-normal p-5 relative z-1">
+        <div className={style.homeBackground}>
+          <h5
+            className="text-2xl font-normal p-5 relative z-1"
+            style={{color: "#002768"}}
+          >
             Your A.I Powered Career Concierge Log In To Begin Your Workforce
             Journey.
           </h5>
-          <Image src={Avatar} alt="Avatar" className={style.centerImage} />
+
+          <div className="flex align-items-end relative" style={{top: "2rem"}}>
+            <Image
+              src={BackgroundStar}
+              alt="home_1"
+              width={400}
+              className="z-1"
+            />
+            <Image
+              src={Avatar}
+              alt="avatar"
+              className="absolute z-1"
+              height={550}
+              style={{left: "7rem"}}
+            />
+            <Image
+              src={BackgroundLogo}
+              alt="home_2"
+              className="relative"
+              style={{left: "-12.6rem"}}
+            />
+          </div>
         </div>
       </div>
       <div className="col-6">
@@ -58,31 +78,40 @@ export const LoginPage: React.FC<LoginPageProps> = ({
           className="flex flex-column justify-content-center align-items-center relative"
           style={{top: "15%"}}
         >
-          <Image alt="logo" src={Logo} />
           <div className="flex flex-column justify-content-center align-items-center gap-2 mt-5">
             <h2>Welcome back !</h2>
             <p className={style.blueText}>Connect with our Intelligence</p>
           </div>
           <div className="flex flex-column gap-4 mt-5" style={{width: "30rem"}}>
-            <TextInput
-              label="Email"
-              width="100%"
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="w-full"
-              autoComplete="username"
-            />
-            <TextInput
-              label="Password"
-              width="100%"
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full"
-              autoComplete="username"
-            />
+            <div className="flex relative">
+              <Image src={Mail} alt="mail" className={style.imageInput} />
+              <TextInput
+                label="Email"
+                width="100%"
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="w-full custom-input"
+                autoComplete="username"
+              />
+            </div>
+            <div className="flex relative">
+              <Image
+                src={Password}
+                alt="password"
+                className={style.imageInput}
+              />
+              <TextInput
+                label="Password"
+                width="100%"
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full custom-input"
+                autoComplete="username"
+              />
+            </div>
 
             <p className={clsx("text-right", style.blueText)}>
               Forgot Password?

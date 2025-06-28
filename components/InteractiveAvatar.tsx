@@ -248,11 +248,11 @@ function InteractiveAvatar() {
         //   );
         // }
 
-        await startAvatar(personalizedConfig);
+        // await startAvatar(personalizedConfig);
 
-        if (isVoiceChat) {
-          await startVoiceChat();
-        }
+        // if (isVoiceChat) {
+        //   await startVoiceChat();
+        // }
       } catch (error) {
         console.error("Error starting avatar session:", error);
       }
@@ -274,57 +274,17 @@ function InteractiveAvatar() {
 
   return (
     <div className={style.homeBlur}>
-      {sessionState === StreamingAvatarSessionState.INACTIVE && (
+      {/* {sessionState === StreamingAvatarSessionState.INACTIVE && (
         <div
           className="flex justify-content-center align-items-center absolute z-1 top-0 left-0 bottom-0 right-0"
           style={{backgroundColor: "#fff"}}
         >
           <div className="loader"></div>
         </div>
-      )}
-      <Image
-        src={BackgroundImage}
-        alt="Background_image"
-        className={style.blurImage}
-      />
+      )} */}
 
-      <div className={clsx("flex", style.chatCard)}>
+      <div className={clsx("flex gap-4", style.chatCard)}>
         {/* Left Side - Avatar Video and Controls (60%) */}
-        <div className={style.conversationContainer}>
-          {sessionState === StreamingAvatarSessionState.CONNECTED ? (
-            <MessageHistory />
-          ) : (
-            <div
-              className="flex flex-column align-items-center justify-content-center  h-full"
-              style={{
-                backgroundColor: "transparent",
-                border: "none",
-                padding: "var(--space-8)",
-                gap: "var(--space-4)",
-              }}
-            >
-              <i
-                className="pi pi-comments text-6xl"
-                style={{color: "var(--gray-400)"}}
-              />
-              <h3 className="text-heading-medium text-center text-white">
-                Conversation
-              </h3>
-              <p
-                className="text-body-medium text-center text-white text-light"
-                style={{
-                  maxWidth: "20rem",
-                  lineHeight: "var(--line-height-relaxed)",
-                }}
-              >
-                Start a conversation with your avatar to see the chat history
-                here
-              </p>
-            </div>
-          )}
-        </div>
-
-        {/* Right Side - Conversation History (60%) */}
         <div
           className={clsx(
             "flex flex-column overflow-hidden surface-card avatar-video-section",
@@ -332,10 +292,8 @@ function InteractiveAvatar() {
           )}
           style={{
             width: "65%",
-            backgroundColor: "var(--bg-primary)",
-            border: "1px solid var(--border-light)",
-
-            boxShadow: "var(--shadow-lg)",
+            backgroundColor: "#fff",
+            border: "1px solid #5151511a",
             height: "100%",
             maxHeight: "100%", // Prevent expansion
             minHeight: "0", // Allow shrinking
@@ -353,7 +311,10 @@ function InteractiveAvatar() {
             {sessionState !== StreamingAvatarSessionState.INACTIVE ? (
               <AvatarVideo ref={mediaStream} />
             ) : (
-              <div className="w-full h-full flex align-items-center justify-content-center text-white">
+              <div
+                className="w-full h-full flex align-items-center justify-content-center"
+                style={{color: "#515151"}}
+              >
                 <>{"Initializing your avatar..."}</>
                 {/* <AvatarConfig config={config} onConfigChange={setConfig} /> */}
               </div>
@@ -475,6 +436,45 @@ function InteractiveAvatar() {
               </div>
             )}
           </div>
+        </div>
+
+        {/* Right Side - Conversation History (60%) */}
+        <div className={style.conversationContainer}>
+          {sessionState === StreamingAvatarSessionState.CONNECTED ? (
+            <MessageHistory />
+          ) : (
+            <div
+              className="flex flex-column align-items-center justify-content-center  h-full"
+              style={{
+                backgroundColor: "transparent",
+                border: "none",
+                padding: "var(--space-8)",
+                gap: "var(--space-4)",
+              }}
+            >
+              <i
+                className="pi pi-comments text-6xl"
+                style={{color: "var(--gray-400)"}}
+              />
+              <h3
+                className="text-heading-medium text-center"
+                style={{color: "#515151"}}
+              >
+                Conversation
+              </h3>
+              <p
+                className="text-body-medium text-center text-light"
+                style={{
+                  maxWidth: "20rem",
+                  lineHeight: "var(--line-height-relaxed)",
+                  color: "#515151",
+                }}
+              >
+                Start a conversation with your avatar to see the chat history
+                here
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

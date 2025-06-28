@@ -30,7 +30,10 @@ export const MessageHistory: React.FC = () => {
           flexShrink: 0,
         }}
       >
-        <h3 className="text-white text-2xl font-bold relative z-1  pb-2">
+        <h3
+          className=" text-2xl font-bold relative z-1  pb-2"
+          style={{color: "#515151"}}
+        >
           Conversation History
         </h3>
         <span className="text-caption" style={{color: "var(--text-secondary)"}}>
@@ -60,7 +63,10 @@ export const MessageHistory: React.FC = () => {
               className="pi pi-comments text-4xl"
               style={{color: "var(--gray-400)"}}
             />
-            <p className="text-body-medium text-center text-white text-light">
+            <p
+              className="text-body-medium text-center text-light"
+              style={{color: "#515151"}}
+            >
               Your conversation will appear here
             </p>
           </div>
@@ -119,14 +125,14 @@ export const MessageHistory: React.FC = () => {
                   style={{
                     backgroundColor:
                       message.sender === MessageSender.CLIENT
-                        ? "#182427"
-                        : "#3b3a32",
+                        ? "#5151511A"
+                        : "#1B84FF1A",
                     color:
-                      message.sender === MessageSender.CLIENT ? "#fff" : "#fff",
-                    border:
                       message.sender === MessageSender.CLIENT
-                        ? "1px solid #FFFFFF1A"
-                        : "1px solid #FFFFFF1A",
+                        ? "#515151"
+                        : "#515151",
+                    border:
+                      message.sender === MessageSender.CLIENT ? "none" : "none",
                     boxShadow: "var(--shadow-sm)",
                     fontSize: "var(--font-size-base)",
                     lineHeight: "var(--line-height-relaxed)",
