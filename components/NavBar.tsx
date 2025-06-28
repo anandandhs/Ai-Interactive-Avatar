@@ -13,7 +13,11 @@ import {
 } from "./logic";
 import { useRouter } from "next/router";
 
-export default function NavBar() {
+export default function NavBar({
+  isAuthenticated = false,
+}: {
+  isAuthenticated: boolean;
+}) {
   const { logout } = useAuth();
   const { stopAvatar, sessionState } = useStreamingAvatarSession();
   const handleLogout = () => {
@@ -57,7 +61,7 @@ export default function NavBar() {
   return (
     <Toolbar
       start={startContent}
-      end={endContent}
+      end={isAuthenticated ? endContent : null}
       className="border-none"
       style={{
         background: "var(--bg-primary)",

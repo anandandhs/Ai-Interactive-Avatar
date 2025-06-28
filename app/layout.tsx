@@ -44,15 +44,14 @@ export default function RootLayout({
         }}
       >
         <main className="relative flex flex-column h-screen w-screen overflow-hidden">
-          <NavBar />
           <div
-            className="flex-1 overflow-hidden"
-            style={{
-              backgroundColor: "var(--bg-secondary)",
-              padding: "var(--space-6) var(--space-8)",
-              height: "calc(100vh - 5rem)", // Account for navbar
-              maxHeight: "calc(100vh - 5rem)",
-            }}
+          // className="flex-1 overflow-hidden"
+          // style={{
+          //   backgroundColor: "var(--bg-secondary)",
+          //   padding: "var(--space-6) var(--space-8)",
+          //   height: "calc(100vh - 5rem)", // Account for navbar
+          //   maxHeight: "calc(100vh - 5rem)",
+          // }}
           >
             {children}
           </div>

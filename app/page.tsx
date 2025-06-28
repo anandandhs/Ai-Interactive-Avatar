@@ -2,6 +2,7 @@
 
 import InteractiveAvatar from "@/components/InteractiveAvatar";
 import { LoginPage } from "@/components/LoginPage";
+import NavBar from "@/components/NavBar";
 import { useAuth } from "@/components/logic/useAuth";
 
 export default function App() {
@@ -32,32 +33,60 @@ export default function App() {
   }
 
   if (!isAuthenticated) {
-    return <LoginPage onLogin={login} error={error} loading={loading} />;
+    return (
+      <>
+        <NavBar isAuthenticated={isAuthenticated} />
+        <div
+          className="flex-1 overflow-hidden"
+          style={{
+            backgroundColor: "var(--bg-secondary)",
+            padding: "var(--space-6) var(--space-8)",
+            height: "calc(100vh - 5rem)", // Account for navbar
+            maxHeight: "calc(100vh - 5rem)",
+          }}
+        >
+          <LoginPage onLogin={login} error={error} loading={loading} />
+        </div>
+      </>
+    );
   }
 
   return (
-    <div
-      className="w-full h-full flex flex-column overflow-hidden"
-      style={{
-        backgroundColor: "var(--bg-secondary)",
-        height: "100%",
-        maxHeight: "100%",
-      }}
-    >
+    <>
+      <NavBar isAuthenticated={isAuthenticated} />
       <div
-        className="w-full max-w-7xl flex flex-column mx-auto h-full overflow-hidden"
+        className="flex-1 overflow-hidden"
         style={{
-          height: "100%",
-          maxHeight: "100%",
+          backgroundColor: "var(--bg-secondary)",
+          padding: "var(--space-6) var(--space-8)",
+          height: "calc(100vh - 5rem)", // Account for navbar
+          maxHeight: "calc(100vh - 5rem)",
         }}
       >
         <div
-          className="w-full h-full overflow-hidden"
-          style={{ height: "100%", maxHeight: "100%" }}
+          className="w-full h-full flex flex-column overflow-hidden"
+          style={{
+            backgroundColor: "var(--bg-secondary)",
+            height: "100%",
+            maxHeight: "100%",
+          }}
         >
-          <InteractiveAvatar />
+          <div
+            className="w-full max-w-7xl flex flex-column mx-auto h-full overflow-hidden"
+            style={{
+              height: "100%",
+              maxHeight: "100%",
+            }}
+          >
+            <div
+              className="w-full h-full overflow-hidden"
+              style={{ height: "100%", maxHeight: "100%" }}
+            >
+              <InteractiveAvatar />
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
