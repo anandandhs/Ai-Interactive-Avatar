@@ -289,7 +289,8 @@ function InteractiveAvatar() {
                 className="w-full h-full flex align-items-center justify-content-center"
                 style={{ color: "#515151" }}
               >
-                <>{"Initializing your avatar..."}</>
+                <div className="loader"></div>
+                {/* <>{"Initializing your avatar..."}</> */}
                 {/* <AvatarConfig config={config} onConfigChange={setConfig} /> */}
               </div>
             )}

@@ -187,7 +187,7 @@ export const AvatarVideo = forwardRef<HTMLVideoElement>(({}, ref) => {
           className="w-full h-full flex align-items-center justify-content-center absolute"
           style={{ top: 0, left: 0 }}
         >
-          Loading...
+          <div className="loader"></div>
         </div>
       )}
     </>
