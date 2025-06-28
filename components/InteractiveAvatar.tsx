@@ -7,27 +7,27 @@ import {
   STTProvider,
   ElevenLabsModel,
 } from "@heygen/streaming-avatar";
-import {useEffect, useRef, useState} from "react";
-import {useMemoizedFn, useUnmount} from "ahooks";
+import { useEffect, useRef, useState } from "react";
+import { useMemoizedFn, useUnmount } from "ahooks";
 
-import {AvatarVideo} from "./AvatarSession/AvatarVideo";
-import {useStreamingAvatarSession} from "./logic/useStreamingAvatarSession";
-import {AvatarControls} from "./AvatarSession/AvatarControls";
-import {useVoiceChat} from "./logic/useVoiceChat";
-import {StreamingAvatarProvider, StreamingAvatarSessionState} from "./logic";
-import {LoadingIcon} from "./Icons";
-import {MessageHistory} from "./AvatarSession/MessageHistory";
-import {useAuth} from "./logic/useAuth";
+import { AvatarVideo } from "./AvatarSession/AvatarVideo";
+import { useStreamingAvatarSession } from "./logic/useStreamingAvatarSession";
+import { AvatarControls } from "./AvatarSession/AvatarControls";
+import { useVoiceChat } from "./logic/useVoiceChat";
+import { StreamingAvatarProvider, StreamingAvatarSessionState } from "./logic";
+import { LoadingIcon } from "./Icons";
+import { MessageHistory } from "./AvatarSession/MessageHistory";
+import { useAuth } from "./logic/useAuth";
 import Avatar from "../public/Svg/home_avatar.svg";
 import BackgroundImage from "../public/Svg/background_image.svg";
 import Mic from "../public/Svg/mic.svg";
 import Speaker from "../public/Svg/speaker.svg";
 import style from "../styles/commonStyle.module.css";
 
-import {AVATARS} from "@/app/lib/constants";
+import { AVATARS } from "@/app/lib/constants";
 import Image from "next/image";
 import clsx from "clsx";
-import {InputText} from "primereact/inputtext";
+import { InputText } from "primereact/inputtext";
 import SendIcon from "../public/Svg/send.svg";
 import AppButton from "./UI/CommonUI/AppButton";
 
@@ -48,10 +48,10 @@ const DEFAULT_CONFIG: StartAvatarRequest = {
 };
 
 function InteractiveAvatar() {
-  const {initAvatar, startAvatar, stopAvatar, sessionState, stream} =
+  const { initAvatar, startAvatar, stopAvatar, sessionState, stream } =
     useStreamingAvatarSession();
-  const {startVoiceChat} = useVoiceChat();
-  const {user} = useAuth();
+  const { startVoiceChat } = useVoiceChat();
+  const { user } = useAuth();
 
   const mediaStream = useRef<HTMLVideoElement>(null);
 
@@ -218,41 +218,13 @@ function InteractiveAvatar() {
         });
 
         // Create a personalized config with user's display name
-        const personalizedConfig = {...config};
+        const personalizedConfig = { ...config };
 
-        console.log("User data:", user);
-        console.log("Personalized config:", personalizedConfig);
+        await startAvatar(personalizedConfig);
 
-        // Add user's display name to the knowledge base for personalization
-        // if (user?.displayName) {
-        //   const personalizedPrompt = personalizedConfig.knowledgeBase
-        //     ? `${personalizedConfig.knowledgeBase}\n\nThe user you are speaking with is named ${user.displayName}. Please address them by their name when appropriate.`
-        //     : `You are an AI avatar assistant. The user you are speaking with is named ${user.displayName}. Please address them by their name when appropriate and provide helpful, friendly responses.`;
-
-        //   personalizedConfig.knowledgeBase = personalizedPrompt;
-        //   console.log(
-        //     "Personalized avatar config with user display name:",
-        //     user.displayName
-        //   );
-        // }
-        // else if (user?.username) {
-        //   // Fallback to username if displayName is not available
-        //   const personalizedPrompt = personalizedConfig.knowledgeBase
-        //     ? `${personalizedConfig.knowledgeBase}\n\nThe user you are speaking with is named ${user.username}. Please address them by their name when appropriate.`
-        //     : `You are an AI avatar assistant. The user you are speaking with is named ${user.username}. Please address them by their name when appropriate and provide helpful, friendly responses.`;
-
-        //   personalizedConfig.knowledgeBase = personalizedPrompt;
-        //   console.log(
-        //     "Personalized avatar config with username:",
-        //     user.username
-        //   );
-        // }
-
-        // await startAvatar(personalizedConfig);
-
-        // if (isVoiceChat) {
-        //   await startVoiceChat();
-        // }
+        if (isVoiceChat) {
+          await startVoiceChat();
+        }
       } catch (error) {
         console.error("Error starting avatar session:", error);
       }
@@ -301,11 +273,13 @@ function InteractiveAvatar() {
         >
           {/* Avatar Display Area */}
           <div
-            className="relative flex-1 overflow-hidden flex flex-column align-items-center justify-content-center"
+            className="relative overflow-hidden flex flex-column align-items-center justify-content-center"
             style={{
               backgroundColor: "transparent",
               borderRadius: "var(--radius-2xl) var(--radius-2xl) 0 0",
               minHeight: "0", // Allow flex shrinking
+              flex: "1 1 0", // Allow growing and shrinking but start from 0
+              maxHeight: "calc(100% - 80px)", // Reserve space for controls (80px)
             }}
           >
             {sessionState !== StreamingAvatarSessionState.INACTIVE ? (
@@ -313,7 +287,7 @@ function InteractiveAvatar() {
             ) : (
               <div
                 className="w-full h-full flex align-items-center justify-content-center"
-                style={{color: "#515151"}}
+                style={{ color: "#515151" }}
               >
                 <>{"Initializing your avatar..."}</>
                 {/* <AvatarConfig config={config} onConfigChange={setConfig} /> */}
@@ -323,7 +297,7 @@ function InteractiveAvatar() {
             {/* Status Indicator */}
             <div
               className="absolute top-0 right-0 m-4 flex align-items-center"
-              style={{gap: "var(--space-2)"}}
+              style={{ gap: "var(--space-2)" }}
             >
               <div
                 className="w-3 h-3 border-round-full"
@@ -364,6 +338,8 @@ function InteractiveAvatar() {
               backgroundColor: "transparent",
               gap: "var(--space-4)",
               flexShrink: 0, // Prevent controls from shrinking
+              minHeight: "80px", // Ensure minimum height for controls
+              height: "80px", // Fixed height for controls area
             }}
           >
             {sessionState === StreamingAvatarSessionState.CONNECTED ? (
@@ -424,12 +400,12 @@ function InteractiveAvatar() {
               // </div>
               <div
                 className="flex flex-column align-items-center"
-                style={{gap: "var(--space-3)"}}
+                style={{ gap: "var(--space-3)" }}
               >
                 <LoadingIcon />
                 <span
                   className="text-body-medium"
-                  style={{color: "var(--text-secondary)"}}
+                  style={{ color: "var(--text-secondary)" }}
                 >
                   Initializing your avatar...
                 </span>
@@ -454,11 +430,11 @@ function InteractiveAvatar() {
             >
               <i
                 className="pi pi-comments text-6xl"
-                style={{color: "var(--gray-400)"}}
+                style={{ color: "var(--gray-400)" }}
               />
               <h3
                 className="text-heading-medium text-center"
-                style={{color: "#515151"}}
+                style={{ color: "#515151" }}
               >
                 Conversation
               </h3>
