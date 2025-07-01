@@ -57,12 +57,20 @@ export const AvatarVideo = forwardRef<HTMLVideoElement>(({}, ref) => {
     };
 
     // Use the same sizing and positioning for both avatars
+    // return {
+    //   ...baseStyles,
+    //   top: "6.375rem",
+    //   left: "7.5rem",
+    //   width: "75%",
+    //   height: "84%",
+    //   objectFit: "cover" as const,
+    // };
     return {
       ...baseStyles,
-      top: "6.375rem",
-      left: "7.5rem",
-      width: "75%",
-      height: "84%",
+      top: "0",
+      left: "0",
+      width: "100%",
+      height: "100%",
       objectFit: "cover" as const,
     };
   };

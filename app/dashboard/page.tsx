@@ -144,7 +144,7 @@ export default function Dashboard() {
         }}
       > */}
       <div
-        className="w-full h-full flex flex-column"
+        className="w-full h-full flex flex-column overflow-y-scroll"
         style={{
           backgroundColor: "var(--bg-secondary)",
           height: "100%",
