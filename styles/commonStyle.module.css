@@ -4,7 +4,12 @@
 .blueText {
   color: #1b84ff;
 }
-
+.lightText {
+  color: #515151cc;
+}
+.blueLightText {
+  color: #67748e;
+}
 .homeBlur {
   position: relative;
   width: 100%;
@@ -160,4 +165,63 @@
   position: absolute;
   top: 2.75rem;
   left: 1rem;
+}
+.dashboardLeft {
+  width: 20%;
+  height: 100%;
+  border-right: 1px solid #5151511a;
+}
+.pageCard {
+  border: 1px solid #5151511a;
+  border-radius: 20px;
+}
+.headCard {
+  background-color: #1b84ff1a;
+  color: #515151;
+  font-weight: 700;
+  padding: 1rem;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom: 1px solid #5151511a;
+  font-size: 16px;
+}
+.statusYellow {
+  background-color: #fffdef;
+  border: 1px solid #ffde05;
+  border-radius: 20px;
+  color: #515151;
+  font-size: 10px;
+}
+.statusGreen {
+  background-color: #04cb121a;
+  border: 1px solid #04cb12;
+  border-radius: 20px;
+}
+.tableHead {
+  background-color: #1b84ff1a;
+  color: #515151;
+  padding: 1rem;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  font-size: 16px;
+}
+.tabContainer {
+  border-bottom: 1px solid #5151511a;
+  display: flex;
+  gap: 1.5rem;
+  width: 100%;
+}
+.tab {
+  color: #515151;
+  cursor: pointer;
+}
+.activeTab {
+  color: #1b84ff;
+  border-bottom: 1px solid #1b84ff;
+  cursor: pointer;
+}
+.tab:active {
+  color: #1b84ff;
+  border-bottom: 1px solid #1b84ff;
+  cursor: pointer;
 }

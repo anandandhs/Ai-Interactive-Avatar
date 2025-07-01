@@ -707,3 +707,24 @@ li {
   padding: 0 !important;
   padding-left: 2.5rem !important;
 }
+.breadcrumb-list.p-breadcrumb li {
+  list-style-type: none !important;
+  margin-left: 10px !important;
+}
+.custom-table .p-datatable-thead > tr > th {
+  color: #515151;
+  font-weight: 700;
+  font-size: 16px;
+  padding: 1rem;
+}
+.custom-table .p-datatable-tbody > tr > td {
+  color: #515151;
+  font-weight: 500;
+  font-size: 16px;
+  padding: 1rem;
+}
+.custom-table .p-datatable-header {
+  border: 1px solid #5151511a;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
