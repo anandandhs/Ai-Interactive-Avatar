@@ -12,24 +12,40 @@ import {
 } from "recharts";
 
 export default function SimpleBarChart() {
-  const data = [
-    { name: "Electrical Systems", blue: 30 },
-    { name: "Refrigiration Cycle", blue: 20 },
-    { name: "Thermostat Installation", blue: 5 },
+  const rawData = [
+    {name: "Electrical Systems", blue: 30},
+    {name: "Refrigiration Cycle", blue: 20},
+    {name: "Thermostat Installation", blue: 5},
   ];
+  const data = rawData.map((item) => ({
+    name: item.name,
+    part1: item.blue * 0.5, // first half (gradient)
+    part2: item.blue * 0.5, // second half (solid)
+  }));
+
   return (
     <ResponsiveContainer width="100%" height={300}>
       <BarChart
         data={data}
         layout="vertical"
-        margin={{ top: 20, right: 30, left: 40, bottom: 5 }}
+        margin={{top: 20, right: 30, left: 40, bottom: 5}}
       >
+        <defs>
+          <linearGradient id="gradient1" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#0099FF" />
+            <stop offset="100%" stopColor="#00FFFF" />
+          </linearGradient>
+        </defs>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis type="number" />
-        <YAxis dataKey="name" type="category" />
+        <YAxis
+          dataKey="name"
+          type="category"
+          tick={{fill: "#252B41E5", fontSize: 14, fontWeight: 400}}
+        />
         <Tooltip />
-        <Bar dataKey="blue" fill="#1B84FF" />
-        <Bar dataKey="green" fill="#28a745" />
+        <Bar dataKey="part1" stackId="a" fill="url(#gradient1)" barSize={20} />
+        <Bar dataKey="part2" stackId="a" fill="#1B84FF" barSize={20} />
       </BarChart>
     </ResponsiveContainer>
   );

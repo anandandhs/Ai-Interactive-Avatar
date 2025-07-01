@@ -63,7 +63,7 @@ export default function Dashboard() {
       icon: <Image src={Interview} alt="Settings" width={20} height={20} />,
     },
   ];
-  const items = [{ label: "Dasshboard", id: "dashboard", url: "/dashboard" }];
+  const items = [{label: "Dasshboard", id: "dashboard", url: "/dashboard"}];
   const home = {
     icon: <Image src={Home} alt="home" width={20} height={20} />,
     url: "/",
@@ -88,13 +88,13 @@ export default function Dashboard() {
         <div className="flex gap-2">
           <span
             className={clsx("px-2 py-1", style.statusYellow)}
-            style={{ width: "4vw" }}
+            style={{width: "4vw"}}
           >
             {employmentType}
           </span>
           <span
             className={clsx("px-2 py-1", style.statusYellow)}
-            style={{ width: "5vw" }}
+            style={{width: "5vw"}}
           >
             {location}
           </span>
@@ -104,7 +104,7 @@ export default function Dashboard() {
     </div>
   );
 
-  const Tab = ({ title, active }: { title: string; active: boolean }) => {
+  const Tab = ({title, active}: {title: string; active: boolean}) => {
     return (
       <span className={clsx(style.tab, active && style.activeTab)}>
         {title}
@@ -165,17 +165,14 @@ export default function Dashboard() {
           >
             <div
               className="w-full h-full"
-              style={{ height: "100%", maxHeight: "100%" }}
+              style={{height: "100%", maxHeight: "100%"}}
             ></div>
             <div className="flex">
               <div className={style.dashboardLeft}>
                 <Image src={Avatar} alt="avatar" />
                 <div className="mt-4 flex flex-column gap-4">
                   {options.map((item, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center gap-2 mb-2 text-sm text-gray-800"
-                    >
+                    <div key={index} className="flex items-center gap-4 mb-2">
                       {item.icon}
                       <span className={clsx("text-base", style.normalText)}>
                         {item.name}
@@ -192,7 +189,7 @@ export default function Dashboard() {
                     <h3 className={clsx("ml-2", style.normalText)}>
                       Dashboard
                     </h3>
-                    <AppBreadCrumb model={items} home={home} />
+                    <AppBreadCrumb items={items} home={home} />
                   </div>
                 </div>
 
@@ -200,10 +197,12 @@ export default function Dashboard() {
                 <div className="flex gap-4 flex-column">
                   {/* firstpart */}
                   <div className="flex gap-4 mt-4">
-                    <div className={style.pageCard} style={{ width: "75%" }}>
-                      <h3 className={style.headCard}>Job Opportunities</h3>
+                    <div className={style.pageCard} style={{width: "80%"}}>
+                      <h3 className={clsx("text-lg", style.headCard)}>
+                        Job Opportunities
+                      </h3>
 
-                      <div className="flex gap-3 p-5 align-items-center">
+                      <div className="flex  p-5 align-items-center justify-content-around">
                         <Image
                           src={ArrowLeft}
                           alt="left_arrow"
@@ -239,19 +238,21 @@ export default function Dashboard() {
                         "flex flex-column gap-4 p-5",
                         style.pageCard
                       )}
-                      style={{ width: "25%" }}
+                      style={{width: "20%"}}
                     >
                       <div className="flex gap-4 justify-content-between">
                         <Image src={MailBox} alt="mail_box" />
                         <Image src={Notification} alt="notification" />
                       </div>
-                      <div className={clsx("flex p-3", style.statusGreen)}>
+                      <div className={clsx("flex p-2", style.statusGreen)}>
                         <Image src={Calendar} alt="calendar" />
                         <div className="flex flex-column">
-                          <h3 className={style.blueLightText}>
+                          <h3
+                            className={clsx("text-base", style.blueLightText)}
+                          >
                             Assignment Due
                           </h3>
-                          <h2 className={clsx("", style.normalText)}>3</h2>
+                          <h2 className={style.normalText}>3</h2>
                         </div>
                       </div>
                     </div>
@@ -261,8 +262,48 @@ export default function Dashboard() {
                     <AssignmentTable></AssignmentTable>
                     <div
                       className={clsx("p-3", style.pageCard)}
-                      style={{ width: "40%" }}
+                      style={{width: "40%"}}
                     >
+                      <div className="flex justify-content-between">
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px",
+                          }}
+                        >
+                          <span className={style.circleOuter}>
+                            <span className={style.circleInner}></span>
+                          </span>
+                          <span
+                            className={clsx(
+                              "text-sm font-bold",
+                              style.normalText
+                            )}
+                          >
+                            Current Level
+                          </span>
+                        </div>
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px",
+                          }}
+                        >
+                          <span className={style.circleOuter}>
+                            <span className={style.circleInner}></span>
+                          </span>
+                          <span
+                            className={clsx(
+                              "text-sm font-bold",
+                              style.normalText
+                            )}
+                          >
+                            Recommended Level
+                          </span>
+                        </div>
+                      </div>
                       <SimpleBarChart />
                     </div>
                   </div>
@@ -270,7 +311,7 @@ export default function Dashboard() {
                   <div className="flex flex-column gap-4">
                     <div
                       className={clsx("flex gap-4", style.tabContainer)}
-                      style={{ height: "2.5rem" }}
+                      style={{height: "2.5rem"}}
                     >
                       <Tab title="Recommended Course" active={true} />
                     </div>
