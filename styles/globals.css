@@ -743,3 +743,23 @@ li {
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
 }
+
+.custom-breadcrumb .p-breadcrumb-list li:last-child .p-menuitem-text {
+  color: #515151 !important;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.custom-breadcrumb .p-breadcrumb-list li:last-child .p-menuitem-text:focus {
+  border: none;
+  outline: none !important;
+}
+
+.custom-breadcrumb .p-breadcrumb-list li .p-menuitem-link {
+  border: none;
+  outline: none !important;
+}
+
+.custom-breadcrumb .p-breadcrumb-list li {
+  margin-left: 5px !important;
+}
