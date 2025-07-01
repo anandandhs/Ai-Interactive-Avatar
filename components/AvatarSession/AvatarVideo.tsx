@@ -6,23 +6,23 @@ import { useStreamingAvatarSession } from "../logic/useStreamingAvatarSession";
 import { StreamingAvatarSessionState } from "../logic";
 import { CloseIcon } from "../Icons";
 import { Button } from "../Button";
-import { useAuth } from "../logic/useAuth";
 import { AVATARS } from "@/app/lib/constants";
 // import Texas from "../../public/Svg/texas.svg";
 import Texas from "../../public/Svg/deskBg.svg";
 import Image from "next/image";
+import { useAuthContext } from "../Prividers/AuthProvider";
 
 export const AvatarVideo = forwardRef<HTMLVideoElement>(({}, ref) => {
   const { sessionState, stream } = useStreamingAvatarSession();
   const { connectionQuality } = useConnectionQuality();
-  const { user } = useAuth();
+  const auth = useAuthContext();
   const [removeBG] = useState(true);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // Determine current avatar based on user
   const currentAvatarId =
-    user?.username === "irwin.spinello@papyrrus.com"
+    auth?.user?.username === "irwin.spinello@papyrrus.com"
       ? AVATARS[0].avatar_id
       : AVATARS[1].avatar_id;
 

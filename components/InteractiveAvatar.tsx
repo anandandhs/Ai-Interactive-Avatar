@@ -17,7 +17,6 @@ import { useVoiceChat } from "./logic/useVoiceChat";
 import { StreamingAvatarProvider, StreamingAvatarSessionState } from "./logic";
 import { LoadingIcon } from "./Icons";
 import { MessageHistory } from "./AvatarSession/MessageHistory";
-import { useAuth } from "./logic/useAuth";
 import Avatar from "../public/Svg/home_avatar.svg";
 import BackgroundImage from "../public/Svg/background_image.svg";
 import Mic from "../public/Svg/mic.svg";
@@ -30,6 +29,7 @@ import clsx from "clsx";
 import { InputText } from "primereact/inputtext";
 import SendIcon from "../public/Svg/send.svg";
 import AppButton from "./UI/CommonUI/AppButton";
+import { useAuthContext } from "./Prividers/AuthProvider";
 
 const DEFAULT_CONFIG: StartAvatarRequest = {
   quality: AvatarQuality.Low,
@@ -51,16 +51,16 @@ function InteractiveAvatar() {
   const { initAvatar, startAvatar, stopAvatar, sessionState, stream } =
     useStreamingAvatarSession();
   const { startVoiceChat } = useVoiceChat();
-  const { user } = useAuth();
+  const auth = useAuthContext();
 
   const mediaStream = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    if (user) {
+    if (auth?.user) {
       const predefinedConfig = {
         quality: AvatarQuality.Low,
         avatarName:
-          user.username == "irwin.spinello@papyrrus.com"
+          auth?.user.username == "irwin.spinello@papyrrus.com"
             ? AVATARS[0].avatar_id
             : AVATARS[1].avatar_id,
         voice: {
@@ -68,14 +68,15 @@ function InteractiveAvatar() {
           emotion: VoiceEmotion.EXCITED,
           model: ElevenLabsModel.eleven_flash_v2_5,
         },
-        language: user.username == "jason.padilla@papyrrus.com" ? "es" : "en",
+        language:
+          auth?.user.username == "jason.padilla@papyrrus.com" ? "es" : "en",
         voiceChatTransport: VoiceChatTransport.WEBSOCKET,
         sttSettings: {
           provider: STTProvider.DEEPGRAM,
         },
         knowledgeId: "",
         knowledgeBase:
-          user.username == "irwin.spinello@papyrrus.com"
+          auth?.user.username == "irwin.spinello@papyrrus.com"
             ? JSON.stringify({
                 PERSONA:
                   "Zara is a virtual academic assistant designed to help students stay on track with their coursework. She interacts formally but supportively, encouraging task completion while maintaining a respectful, professional tone. Always address users by their logged in username.",
@@ -90,7 +91,7 @@ function InteractiveAvatar() {
                     "Gently remind users in later sessions if they postpone assignments",
                 },
                 DIALOGUE_TEMPLATES: {
-                  opening_intro: `Welcome back, ${user.displayName}! It's time to embark on another productive session as we navigate your upcoming assignments together.`,
+                  opening_intro: `Welcome back, ${auth?.user.displayName}! It's time to embark on another productive session as we navigate your upcoming assignments together.`,
                   return_after_absence:
                     "Good day. Welcome back. I hope you've been well. I noticed it has been a few days since your last visit.",
                   assignment_alert:
@@ -152,7 +153,7 @@ function InteractiveAvatar() {
                   "Provide clear next-step options after presenting information",
                 ],
                 JOB_SUGGESTION_TEMPLATE: {
-                  opening: `Welcome back, ${user.displayName} It's great to see you again—are you ready to uncover some exciting new job opportunities tailored just for you?`,
+                  opening: `Welcome back, ${auth?.user.displayName} It's great to see you again—are you ready to uncover some exciting new job opportunities tailored just for you?`,
                   reengagement:
                     "Hello, it's good to see you again. It's been a while — how have you been?",
                   opportunity_announcement:
@@ -162,7 +163,7 @@ function InteractiveAvatar() {
       };
       startSessionV2(true, predefinedConfig);
     }
-  }, [user]);
+  }, [auth]);
 
   async function fetchAccessToken() {
     try {

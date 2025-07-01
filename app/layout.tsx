@@ -4,6 +4,12 @@ import { Fira_Code as FontMono, Inter as FontSans } from "next/font/google";
 import { Open_Sans } from "next/font/google";
 
 import NavBar from "@/components/NavBar";
+import {
+  AuthProvider,
+  useAuthContext,
+} from "@/components/Prividers/AuthProvider";
+import React from "react";
+import LayoutContent from "./LayoutContent";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -50,19 +56,11 @@ export default function RootLayout({
           color: "var(--text-primary)",
         }}
       >
-        <main className="relative flex flex-column h-screen w-screen overflow-hidden">
-          <div
-          // className="flex-1 overflow-hidden"
-          // style={{
-          //   backgroundColor: "var(--bg-secondary)",
-          //   padding: "var(--space-6) var(--space-8)",
-          //   height: "calc(100vh - 5rem)", // Account for navbar
-          //   maxHeight: "calc(100vh - 5rem)",
-          // }}
-          >
-            {children}
-          </div>
-        </main>
+        <AuthProvider>
+          <main className="relative flex flex-column h-screen w-screen overflow-hidden">
+            <LayoutContent>{children}</LayoutContent>
+          </main>
+        </AuthProvider>
       </body>
     </html>
   );

@@ -63,7 +63,7 @@ export default function Dashboard() {
       icon: <Image src={Interview} alt="Settings" width={20} height={20} />,
     },
   ];
-  const items = [{label: "Dasshboard", id: "dashboard", url: "/dashboard"}];
+  const items = [{ label: "Dasshboard", id: "dashboard", url: "/dashboard" }];
   const home = {
     icon: <Image src={Home} alt="home" width={20} height={20} />,
     url: "/",
@@ -88,13 +88,13 @@ export default function Dashboard() {
         <div className="flex gap-2">
           <span
             className={clsx("px-2 py-1", style.statusYellow)}
-            style={{width: "4vw"}}
+            style={{ width: "4vw" }}
           >
             {employmentType}
           </span>
           <span
             className={clsx("px-2 py-1", style.statusYellow)}
-            style={{width: "5vw"}}
+            style={{ width: "5vw" }}
           >
             {location}
           </span>
@@ -104,7 +104,7 @@ export default function Dashboard() {
     </div>
   );
 
-  const Tab = ({title, active}: {title: string; active: boolean}) => {
+  const Tab = ({ title, active }: { title: string; active: boolean }) => {
     return (
       <span className={clsx(style.tab, active && style.activeTab)}>
         {title}
@@ -134,12 +134,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <NavBar
-        isAuthenticated={true}
-        dashboardSwitch={true}
-        setDashboardSwitch={() => {}}
-      />
-      <div
+      {/* <div
         className="flex-1 overflow-y-scroll"
         style={{
           backgroundColor: "var(--bg-primary)",
@@ -147,196 +142,191 @@ export default function Dashboard() {
           height: "calc(100vh - 5rem)", // Account for navbar
           maxHeight: "calc(100vh - 5rem)",
         }}
+      > */}
+      <div
+        className="w-full h-full flex flex-column"
+        style={{
+          backgroundColor: "var(--bg-secondary)",
+          height: "100%",
+          maxHeight: "100%",
+        }}
       >
         <div
-          className="w-full h-full flex flex-column"
+          className="w-full max-w-7xl flex flex-column mx-auto h-full"
           style={{
-            backgroundColor: "var(--bg-secondary)",
             height: "100%",
             maxHeight: "100%",
           }}
         >
           <div
-            className="w-full max-w-7xl flex flex-column mx-auto h-full"
-            style={{
-              height: "100%",
-              maxHeight: "100%",
-            }}
-          >
-            <div
-              className="w-full h-full"
-              style={{height: "100%", maxHeight: "100%"}}
-            ></div>
-            <div className="flex">
-              <div className={style.dashboardLeft}>
-                <Image src={Avatar} alt="avatar" />
-                <div className="mt-4 flex flex-column gap-4">
-                  {options.map((item, index) => (
-                    <div key={index} className="flex items-center gap-4 mb-2">
-                      {item.icon}
-                      <span className={clsx("text-base", style.normalText)}>
-                        {item.name}
-                      </span>
-                    </div>
-                  ))}
+            className="w-full h-full"
+            style={{ height: "100%", maxHeight: "100%" }}
+          ></div>
+          <div className="flex">
+            <div className={style.dashboardLeft}>
+              <Image src={Avatar} alt="avatar" />
+              <div className="mt-4 flex flex-column gap-4">
+                {options.map((item, index) => (
+                  <div key={index} className="flex items-center gap-4 mb-2">
+                    {item.icon}
+                    <span className={clsx("text-base", style.normalText)}>
+                      {item.name}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="pl-4 w-full">
+              {/* header */}
+              <div className="flex gap-2 align-items-center">
+                <Image src={Back} alt="back" />
+                <div className="flex flex-column gap-1">
+                  <h3 className={clsx("ml-2", style.normalText)}>Dashboard</h3>
+                  <AppBreadCrumb items={items} home={home} />
                 </div>
               </div>
-              <div className="pl-4 w-full">
-                {/* header */}
-                <div className="flex gap-2 align-items-center">
-                  <Image src={Back} alt="back" />
-                  <div className="flex flex-column gap-1">
-                    <h3 className={clsx("ml-2", style.normalText)}>
-                      Dashboard
+
+              {/* body */}
+              <div className="flex gap-4 flex-column">
+                {/* firstpart */}
+                <div className="flex gap-4 mt-4">
+                  <div className={style.pageCard} style={{ width: "80%" }}>
+                    <h3 className={clsx("text-lg", style.headCard)}>
+                      Job Opportunities
                     </h3>
-                    <AppBreadCrumb items={items} home={home} />
+
+                    <div className="flex  p-5 align-items-center justify-content-around">
+                      <Image
+                        src={ArrowLeft}
+                        alt="left_arrow"
+                        className="cursor-pointer"
+                      />
+                      <JobRoleCard
+                        role="HVAC Technician"
+                        salary="$2,000 - 5,000 / Monthly"
+                        employmentType="Full Time"
+                        location="Glendale,Arizona"
+                      />
+                      <JobRoleCard
+                        role="HVAC Technician"
+                        salary="$2,000 - 5,000 / Monthly"
+                        employmentType="Full Time"
+                        location="Glendale,Arizona"
+                      />
+                      <JobRoleCard
+                        role="HVAC Technician"
+                        salary="$2,000 - 5,000 / Monthly"
+                        employmentType="Full Time"
+                        location="Glendale,Arizona"
+                      />
+                      <Image
+                        src={ArrowRight}
+                        alt="right_arrow"
+                        className="cursor-pointer"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    className={clsx(
+                      "flex flex-column gap-4 p-5",
+                      style.pageCard
+                    )}
+                    style={{ width: "20%" }}
+                  >
+                    <div className="flex gap-4 justify-content-between">
+                      <Image src={MailBox} alt="mail_box" />
+                      <Image src={Notification} alt="notification" />
+                    </div>
+                    <div className={clsx("flex p-2", style.statusGreen)}>
+                      <Image src={Calendar} alt="calendar" />
+                      <div className="flex flex-column">
+                        <h3 className={clsx("text-base", style.blueLightText)}>
+                          Assignment Due
+                        </h3>
+                        <h2 className={style.normalText}>3</h2>
+                      </div>
+                    </div>
                   </div>
                 </div>
-
-                {/* body */}
-                <div className="flex gap-4 flex-column">
-                  {/* firstpart */}
-                  <div className="flex gap-4 mt-4">
-                    <div className={style.pageCard} style={{width: "80%"}}>
-                      <h3 className={clsx("text-lg", style.headCard)}>
-                        Job Opportunities
-                      </h3>
-
-                      <div className="flex  p-5 align-items-center justify-content-around">
-                        <Image
-                          src={ArrowLeft}
-                          alt="left_arrow"
-                          className="cursor-pointer"
-                        />
-                        <JobRoleCard
-                          role="HVAC Technician"
-                          salary="$2,000 - 5,000 / Monthly"
-                          employmentType="Full Time"
-                          location="Glendale,Arizona"
-                        />
-                        <JobRoleCard
-                          role="HVAC Technician"
-                          salary="$2,000 - 5,000 / Monthly"
-                          employmentType="Full Time"
-                          location="Glendale,Arizona"
-                        />
-                        <JobRoleCard
-                          role="HVAC Technician"
-                          salary="$2,000 - 5,000 / Monthly"
-                          employmentType="Full Time"
-                          location="Glendale,Arizona"
-                        />
-                        <Image
-                          src={ArrowRight}
-                          alt="right_arrow"
-                          className="cursor-pointer"
-                        />
+                {/* second part */}
+                <div className="flex gap-4">
+                  <AssignmentTable></AssignmentTable>
+                  <div
+                    className={clsx("p-3", style.pageCard)}
+                    style={{ width: "40%" }}
+                  >
+                    <div className="flex justify-content-between">
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                        }}
+                      >
+                        <span className={style.circleOuter}>
+                          <span className={style.circleInner}></span>
+                        </span>
+                        <span
+                          className={clsx(
+                            "text-sm font-bold",
+                            style.normalText
+                          )}
+                        >
+                          Current Level
+                        </span>
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                        }}
+                      >
+                        <span className={style.circleOuter}>
+                          <span className={style.circleInner}></span>
+                        </span>
+                        <span
+                          className={clsx(
+                            "text-sm font-bold",
+                            style.normalText
+                          )}
+                        >
+                          Recommended Level
+                        </span>
                       </div>
                     </div>
-                    <div
-                      className={clsx(
-                        "flex flex-column gap-4 p-5",
-                        style.pageCard
-                      )}
-                      style={{width: "20%"}}
-                    >
-                      <div className="flex gap-4 justify-content-between">
-                        <Image src={MailBox} alt="mail_box" />
-                        <Image src={Notification} alt="notification" />
-                      </div>
-                      <div className={clsx("flex p-2", style.statusGreen)}>
-                        <Image src={Calendar} alt="calendar" />
-                        <div className="flex flex-column">
-                          <h3
-                            className={clsx("text-base", style.blueLightText)}
-                          >
-                            Assignment Due
-                          </h3>
-                          <h2 className={style.normalText}>3</h2>
-                        </div>
-                      </div>
-                    </div>
+                    <SimpleBarChart />
                   </div>
-                  {/* second part */}
+                </div>
+                {/* third part */}
+                <div className="flex flex-column gap-4">
+                  <div
+                    className={clsx("flex gap-4", style.tabContainer)}
+                    style={{ height: "2.5rem" }}
+                  >
+                    <Tab title="Recommended Course" active={true} />
+                  </div>
                   <div className="flex gap-4">
-                    <AssignmentTable></AssignmentTable>
-                    <div
-                      className={clsx("p-3", style.pageCard)}
-                      style={{width: "40%"}}
-                    >
-                      <div className="flex justify-content-between">
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "8px",
-                          }}
-                        >
-                          <span className={style.circleOuter}>
-                            <span className={style.circleInner}></span>
-                          </span>
-                          <span
-                            className={clsx(
-                              "text-sm font-bold",
-                              style.normalText
-                            )}
-                          >
-                            Current Level
-                          </span>
-                        </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "8px",
-                          }}
-                        >
-                          <span className={style.circleOuter}>
-                            <span className={style.circleInner}></span>
-                          </span>
-                          <span
-                            className={clsx(
-                              "text-sm font-bold",
-                              style.normalText
-                            )}
-                          >
-                            Recommended Level
-                          </span>
-                        </div>
-                      </div>
-                      <SimpleBarChart />
-                    </div>
-                  </div>
-                  {/* third part */}
-                  <div className="flex flex-column gap-4">
-                    <div
-                      className={clsx("flex gap-4", style.tabContainer)}
-                      style={{height: "2.5rem"}}
-                    >
-                      <Tab title="Recommended Course" active={true} />
-                    </div>
-                    <div className="flex gap-4">
-                      <CourseCard
-                        courseTitle="HVAC Basics"
-                        courseDescription="Learn the fundamentals of HVAC systems."
-                        user="Steve H"
-                      />
-                      <CourseCard
-                        courseTitle="HVAC Basics"
-                        courseDescription="Learn the fundamentals of HVAC systems."
-                        user="Steve H"
-                      />
-                      <CourseCard
-                        courseTitle="HVAC Basics"
-                        courseDescription="Learn the fundamentals of HVAC systems."
-                        user="Steve H"
-                      />
-                      <CourseCard
-                        courseTitle="HVAC Basics"
-                        courseDescription="Learn the fundamentals of HVAC systems."
-                        user="Steve H"
-                      />
-                    </div>
+                    <CourseCard
+                      courseTitle="HVAC Basics"
+                      courseDescription="Learn the fundamentals of HVAC systems."
+                      user="Steve H"
+                    />
+                    <CourseCard
+                      courseTitle="HVAC Basics"
+                      courseDescription="Learn the fundamentals of HVAC systems."
+                      user="Steve H"
+                    />
+                    <CourseCard
+                      courseTitle="HVAC Basics"
+                      courseDescription="Learn the fundamentals of HVAC systems."
+                      user="Steve H"
+                    />
+                    <CourseCard
+                      courseTitle="HVAC Basics"
+                      courseDescription="Learn the fundamentals of HVAC systems."
+                      user="Steve H"
+                    />
                   </div>
                 </div>
               </div>
@@ -344,6 +334,7 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+      {/* </div> */}
     </>
   );
 }

@@ -2,7 +2,6 @@
 
 import { Toolbar } from "primereact/toolbar";
 import { Button } from "primereact/button";
-import { useAuth } from "./logic/useAuth";
 import Image from "next/image";
 import Logo from "../public/Svg/nav_logo.svg";
 import Settings from "../public/Svg/settings.svg";
@@ -14,23 +13,24 @@ import {
   useStreamingAvatarSession,
 } from "./logic";
 import Link from "next/link";
+import { useAuthContext } from "./Prividers/AuthProvider";
+import { useRouter } from "next/navigation";
 
 export default function NavBar({
-  isAuthenticated = false,
   dashboardSwitch,
   setDashboardSwitch,
 }: {
-  isAuthenticated: boolean;
   dashboardSwitch: boolean;
   setDashboardSwitch: (value: boolean) => void;
 }) {
-  const { logout } = useAuth();
+  const auth = useAuthContext();
+  const router = useRouter();
   const { stopAvatar, sessionState } = useStreamingAvatarSession();
   const handleLogout = () => {
     if (sessionState !== StreamingAvatarSessionState.INACTIVE) {
       stopAvatar();
     }
-    logout();
+    auth?.logout();
     window.location.href = "/";
   };
 
@@ -43,24 +43,25 @@ export default function NavBar({
   const endContent = (
     <div className="flex align-items-center" style={{ gap: "var(--space-4)" }}>
       {dashboardSwitch ? (
-        <Link href="/dashboard">
-          <Image
-            src={AiChat}
-            alt="dashboard"
-            className="cursor-pointer"
-            onClick={() => setDashboardSwitch(false)}
-          />
-        </Link>
+        <Image
+          src={AiChat}
+          alt="dashboard"
+          className="cursor-pointer"
+          onClick={() => {
+            setDashboardSwitch(false), router.push("/");
+          }}
+        />
       ) : (
-        <Link href="/">
-          <Image
-            src={Dasboard}
-            alt="ai-chat"
-            onClick={() => setDashboardSwitch(true)}
-            className="cursor-pointer"
-          />
-        </Link>
+        <Image
+          src={Dasboard}
+          alt="ai-chat"
+          className="cursor-pointer"
+          onClick={() => {
+            setDashboardSwitch(true), router.push("/dashboard");
+          }}
+        />
       )}
+
       <Image src={Settings} alt="settings" />
       <Image src={Profile} alt="profile" />
       <Button
@@ -86,7 +87,7 @@ export default function NavBar({
   return (
     <Toolbar
       start={startContent}
-      end={isAuthenticated ? endContent : null}
+      end={endContent}
       className="border-none"
       style={{
         background: "var(--bg-primary)",

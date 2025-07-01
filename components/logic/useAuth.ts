@@ -17,6 +17,16 @@ export interface User {
   displayName?: string;
 }
 
+export interface UseAuthReturn {
+  user: User | null;
+  error: any;
+  loading: boolean;
+  login: (username: string, password: string) => Promise<boolean>;
+  logout: () => void;
+  isAuthenticated: boolean;
+  isInitialized: boolean;
+}
+
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
@@ -177,5 +187,5 @@ export const useAuth = () => {
     logout,
     isAuthenticated,
     isInitialized,
-  };
+  } as UseAuthReturn;
 };

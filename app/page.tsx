@@ -2,16 +2,15 @@
 
 import InteractiveAvatar from "@/components/InteractiveAvatar";
 import { LoginPage } from "@/components/LoginPage";
-import NavBar from "@/components/NavBar";
-import { useAuth } from "@/components/logic/useAuth";
+import { useAuthContext } from "@/components/Prividers/AuthProvider";
 import { useState } from "react";
 
 export default function App() {
-  const { error, loading, login, isAuthenticated, isInitialized } = useAuth();
+  const auth = useAuthContext();
   const [dashboardSwitch, setDashboardSwitch] = useState<boolean>(false);
 
   // Show loading while initializing auth state
-  if (!isInitialized) {
+  if (!auth?.isInitialized) {
     return (
       <div
         className="min-h-screen flex align-items-center justify-content-center"
@@ -34,31 +33,18 @@ export default function App() {
     );
   }
 
-  if (!isAuthenticated) {
+  if (!auth?.isAuthenticated) {
     return (
-      <>
-        <div
-          className="flex-1 overflow-hidden"
-          style={{
-            backgroundColor: "var(--bg-primary)",
-            padding: isAuthenticated ? "var(--space-8) var(--space-8)" : "",
-            height: isAuthenticated ? "calc(100vh - 5rem)" : "calc(100vh)", // Account for navbar
-            maxHeight: isAuthenticated ? "calc(100vh - 5rem)" : "calc(100vh)",
-          }}
-        >
-          <LoginPage onLogin={login} error={error} loading={loading} />
-        </div>
-      </>
+      <LoginPage
+        onLogin={auth.login}
+        error={auth?.error}
+        loading={auth?.loading}
+      />
     );
   }
 
   return (
     <>
-      <NavBar
-        isAuthenticated={isAuthenticated}
-        dashboardSwitch={dashboardSwitch}
-        setDashboardSwitch={setDashboardSwitch}
-      />
       <div
         className="flex-1 overflow-hidden"
         style={{
