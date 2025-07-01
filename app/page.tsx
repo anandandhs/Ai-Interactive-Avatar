@@ -3,7 +3,7 @@
 import InteractiveAvatar from "@/components/InteractiveAvatar";
 import {LoginPage} from "@/components/LoginPage";
 import NavBar from "@/components/NavBar";
-// import Dashboard from "@/components/Pages/Dashboard";
+import Dashboard from "@/components/Pages/Dashboard";
 import {useAuth} from "@/components/logic/useAuth";
 
 export default function App() {
@@ -38,8 +38,8 @@ export default function App() {
       <>
         <NavBar isAuthenticated={isAuthenticated} />
         <div
-          className="flex-1 overflow-hidden"
-          // className="flex-1 overflow-y-scroll"
+          // className="flex-1 overflow-hidden"
+          className="flex-1 overflow-y-scroll"
           style={{
             backgroundColor: "var(--bg-secondary)",
             padding: "var(--space-6) var(--space-8)",
@@ -47,8 +47,8 @@ export default function App() {
             maxHeight: "calc(100vh - 5rem)",
           }}
         >
-          {/* <Dashboard /> */}
-          <LoginPage onLogin={login} error={error} loading={loading} />
+          <Dashboard />
+          {/* <LoginPage onLogin={login} error={error} loading={loading} /> */}
         </div>
       </>
     );

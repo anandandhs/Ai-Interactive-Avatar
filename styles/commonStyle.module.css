@@ -225,3 +225,18 @@
   border-bottom: 1px solid #1b84ff;
   cursor: pointer;
 }
+.circleOuter {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: linear-gradient(to right, #0099ff, #00ffff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.circleInner {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;
+}
