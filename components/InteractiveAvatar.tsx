@@ -24,7 +24,7 @@ import Mic from "../public/Svg/mic.svg";
 import Speaker from "../public/Svg/speaker.svg";
 import style from "../styles/commonStyle.module.css";
 
-import { AVATARS } from "@/app/lib/constants";
+import { AVATARS, STT_LANGUAGE_LIST } from "@/app/lib/constants";
 import Image from "next/image";
 import clsx from "clsx";
 import { InputText } from "primereact/inputtext";
@@ -68,7 +68,7 @@ function InteractiveAvatar() {
           emotion: VoiceEmotion.EXCITED,
           model: ElevenLabsModel.eleven_flash_v2_5,
         },
-        language: "en",
+        language: user.username == "jason.padilla@papyrrus.com" ? "es" : "en",
         voiceChatTransport: VoiceChatTransport.WEBSOCKET,
         sttSettings: {
           provider: STTProvider.DEEPGRAM,
@@ -307,8 +307,8 @@ function InteractiveAvatar() {
                     sessionState === StreamingAvatarSessionState.CONNECTED
                       ? "var(--success-color)"
                       : sessionState === StreamingAvatarSessionState.INACTIVE
-                      ? "var(--gray-400)"
-                      : "var(--warning-color)",
+                        ? "var(--gray-400)"
+                        : "var(--warning-color)",
                   boxShadow: "var(--shadow-sm)",
                 }}
               />
@@ -325,8 +325,8 @@ function InteractiveAvatar() {
                 {sessionState === StreamingAvatarSessionState.CONNECTED
                   ? "Connected"
                   : sessionState === StreamingAvatarSessionState.INACTIVE
-                  ? "Ready"
-                  : "Connecting..."}
+                    ? "Ready"
+                    : "Connecting..."}
               </span>
             </div>
           </div>
