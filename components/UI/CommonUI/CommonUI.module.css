@@ -1,21 +1,30 @@
 .inputContainer {
-  height: 50px;
+  height: 2.813rem;
   border: 1px solid #51515126 !important;
   border-radius: 10px !important;
+  color: #515151;
+  font-weight: 400;
+  width: 25rem;
+  font-size: 1rem
 }
+
 .inputContainer:hover {
   border: 1px solid #1b84ff !important;
 }
+
 .inputContainer:focus {
   border: 1px solid #1b84ff !important;
 }
+
 .label {
   color: #515151;
 }
+
 .error {
   color: red;
   font-size: 13px;
 }
+
 /* Button */
 .buttonContainer {
   background-color: #1b84ff;
@@ -23,6 +32,7 @@
   font-weight: 700;
   height: 50px;
 }
+
 .secondaryButton {
   border: 1px solid #fffefe1a !important;
   background-color: transparent !important;
@@ -30,6 +40,7 @@
   height: 50px;
   border-radius: 10px !important;
 }
+
 .secondaryButton:hover {
   border: 1px solid #fffefe1a !important;
   background-color: transparent !important;

@@ -1,11 +1,18 @@
 import "@/styles/globals.css";
 import { Metadata } from "next";
 import { Fira_Code as FontMono, Inter as FontSans } from "next/font/google";
+import { Open_Sans } from "next/font/google";
 
 import NavBar from "@/components/NavBar";
 
 const fontSans = FontSans({
   subsets: ["latin"],
+  variable: "--font-sans-og",
+});
+
+const openSans = Open_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"], // Choose weights you need
   variable: "--font-sans",
 });
 
@@ -32,7 +39,7 @@ export default function RootLayout({
   return (
     <html
       suppressHydrationWarning
-      className={`${fontSans.variable} ${fontMono.variable}`}
+      className={`${fontSans.variable} ${fontMono.variable} ${openSans.variable}`}
       lang="en"
     >
       <head />

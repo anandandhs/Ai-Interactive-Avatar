@@ -18,6 +18,9 @@ import Mail from "../public/Svg/mail.svg";
 import Password from "../public/Svg/password.svg";
 import BackgroundLogo from "../public/Svg/home_2.svg";
 import BackgroundStar from "../public/Svg/home_1.svg";
+import LoginAvatar from "../public/Svg/meliassaLogin.svg";
+import Logo from "../public/Svg/nav_logo.svg";
+import { relative } from "path";
 
 interface LoginPageProps {
   onLogin: (username: string, password: string) => Promise<boolean>;
@@ -41,7 +44,45 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   return (
     <div className="grid h-full">
       <div className="col-6">
-        <div className={style.homeBackground}>
+        <div
+          style={{
+            marginTop: "3.125rem",
+            marginLeft: "3.125rem",
+            paddingBottom: "3.125rem",
+          }}
+        >
+          <Image
+            src={LoginAvatar}
+            alt="avatar"
+            // className="w-auto"
+            // style={{
+            //   objectFit: "contain",
+            //   height: "100vh",
+            // }}
+            // style={{
+            //   width: "auto", // Preserve original width
+            //   objectFit: "fill", // Force fill container (breaks aspect ratio)
+            // }}
+          />
+          <h5
+            className="text-2xl font-normal p-5 relative z-1"
+            style={{
+              bottom: "12rem",
+              color: "white",
+              fontSize: "1.563rem",
+              fontWeight: 400,
+              lineHeight: "3rem",
+              maxWidth: "32rem",
+              left: "10rem",
+              textAlign: "center",
+            }}
+          >
+            Your AI Powered Career Concierge Log In To Begin Your Workforce
+            Journey.
+          </h5>
+        </div>
+
+        {/* <div className={style.homeBackground}>
           <h5
             className="text-2xl font-normal p-5 relative z-1"
             style={{ color: "#002768" }}
@@ -74,16 +115,36 @@ export const LoginPage: React.FC<LoginPageProps> = ({
               style={{ left: "-12.6rem" }}
             />
           </div>
-        </div>
+        </div> */}
       </div>
       <div className="col-6">
         <div
           className="flex flex-column justify-content-center align-items-center relative"
           style={{ top: "15%" }}
         >
+          <Image src={Logo} alt="logo" />
           <div className="flex flex-column justify-content-center align-items-center gap-2 mt-5">
-            <h2>Welcome back !</h2>
-            <p className={style.blueText}>Connect with our Intelligence</p>
+            <h2
+              style={{
+                color: "#515151",
+                fontWeight: "500",
+                fontSize: "2.25rem",
+                lineHeight: "100%",
+              }}
+            >
+              Welcome back !
+            </h2>
+            <p
+              style={{
+                color: "#1B84FF",
+                fontWeight: "500",
+                fontSize: "1rem",
+                lineHeight: "100%",
+              }}
+              // className={style.blueText}
+            >
+              Connect with our Intelligence
+            </p>
           </div>
           <div
             className="flex flex-column gap-4 mt-5"
@@ -97,7 +158,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
                 id="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full custom-input"
+                className="custom-input"
                 autoComplete="username"
               />
             </div>
@@ -114,12 +175,20 @@ export const LoginPage: React.FC<LoginPageProps> = ({
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full custom-input"
+                className="custom-input"
                 autoComplete="username"
               />
             </div>
 
-            <p className={clsx("text-right", style.blueText)}>
+            <p
+              className={clsx("text-right", style.blueText)}
+              style={{
+                color: "#1B84FF",
+                fontWeight: "400",
+                fontSize: "1rem",
+                lineHeight: "100%",
+              }}
+            >
               Forgot Password?
             </p>
 
@@ -131,9 +200,27 @@ export const LoginPage: React.FC<LoginPageProps> = ({
               loading={loading}
             />
 
-            <span className="flex justify-content-center">
-              Don't have an account?{" "}
-              <p className={style.blueText}>&nbsp;{"Sign in"}</p>
+            <span
+              className="flex justify-content-center"
+              style={{
+                color: "#515151",
+                fontWeight: "400",
+                fontSize: "1rem",
+                lineHeight: "100%",
+              }}
+            >
+              {"Don't have an account?"}
+              <p
+                className={style.blueText}
+                style={{
+                  color: "#1B84FF",
+                  fontWeight: "400",
+                  fontSize: "1rem",
+                  lineHeight: "100%",
+                }}
+              >
+                &nbsp;{"Sign in"}
+              </p>
             </span>
           </div>
         </div>

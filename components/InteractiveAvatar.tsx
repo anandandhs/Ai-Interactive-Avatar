@@ -307,8 +307,8 @@ function InteractiveAvatar() {
                     sessionState === StreamingAvatarSessionState.CONNECTED
                       ? "var(--success-color)"
                       : sessionState === StreamingAvatarSessionState.INACTIVE
-                        ? "var(--gray-400)"
-                        : "var(--warning-color)",
+                      ? "var(--gray-400)"
+                      : "var(--warning-color)",
                   boxShadow: "var(--shadow-sm)",
                 }}
               />
@@ -325,8 +325,8 @@ function InteractiveAvatar() {
                 {sessionState === StreamingAvatarSessionState.CONNECTED
                   ? "Connected"
                   : sessionState === StreamingAvatarSessionState.INACTIVE
-                    ? "Ready"
-                    : "Connecting..."}
+                  ? "Ready"
+                  : "Connecting..."}
               </span>
             </div>
           </div>
