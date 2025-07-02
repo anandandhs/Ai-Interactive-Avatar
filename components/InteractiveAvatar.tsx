@@ -221,6 +221,7 @@ function InteractiveAvatar() {
         // Create a personalized config with user's display name
         const personalizedConfig = { ...config };
 
+        //Comment both these these lines for dev to avoid using ai credits
         await startAvatar(personalizedConfig);
 
         if (isVoiceChat) {
