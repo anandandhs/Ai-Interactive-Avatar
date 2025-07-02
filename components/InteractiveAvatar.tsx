@@ -64,9 +64,15 @@ function InteractiveAvatar() {
             ? AVATARS[0].avatar_id
             : AVATARS[1].avatar_id,
         voice: {
-          rate: 1.5,
+          rate: 0.8,
           emotion: VoiceEmotion.EXCITED,
-          model: ElevenLabsModel.eleven_flash_v2_5,
+          model:
+            auth?.user.username == "jason.padilla@papyrrus.com"
+              ? ElevenLabsModel.eleven_multilingual_v2
+              : ElevenLabsModel.eleven_flash_v2_5,
+          ...(auth?.user.username == "jason.padilla@papyrrus.com" && {
+            voiceId: "e85822bd14e144e8b6fe73da2fb1085c",
+          }),
         },
         language:
           auth?.user.username == "jason.padilla@papyrrus.com" ? "es" : "en",
@@ -74,6 +80,7 @@ function InteractiveAvatar() {
         sttSettings: {
           provider: STTProvider.DEEPGRAM,
         },
+        activityIdleTimeout: 3600, // comment this after demo
         knowledgeId: "",
         knowledgeBase:
           auth?.user.username == "irwin.spinello@papyrrus.com"
