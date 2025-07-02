@@ -47,8 +47,10 @@ export default function AssignmentTable() {
 
   const tableHeader = () => {
     return (
-      <div className={clsx("flex justify-content-between", style.tableHead)}>
-        <h3>Pending Assignments</h3>
+      <div
+        className={clsx("flex justify-content-between px-4", style.tableHead)}
+      >
+        <h3 className="text-base">Pending Assignments</h3>
 
         <p className="font-semibold">
           Total Assignment Due: <span className="font-bold">12</span>

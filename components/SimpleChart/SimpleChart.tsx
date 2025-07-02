@@ -25,7 +25,7 @@ export default function SimpleBarChart() {
   }));
 
   return (
-    <ResponsiveContainer width="100%" height={300}>
+    <ResponsiveContainer width="100%" height={300} className="p-3">
       <BarChart
         data={data}
         layout="vertical"

@@ -29,7 +29,7 @@ export default function LayoutContent({children}: {children: React.ReactNode}) {
             : "overflow-hidden"
         }`}
         style={{
-          backgroundColor: "var(--bg-secondary)",
+          backgroundColor: "#51515105",
           padding: "var(--space-6) var(--space-8)",
           height: auth?.isAuthenticated ? "calc(100vh - 5rem)" : "calc(100vh)",
           maxHeight: auth?.isAuthenticated

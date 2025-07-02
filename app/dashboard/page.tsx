@@ -19,6 +19,9 @@ import Notification from "../../public/Svg/notification.svg";
 import Calendar from "../../public/Svg/calender_green.svg";
 import Eye from "../../public/Svg/eye.svg";
 import Thumbnail from "../../public/Svg/thumbnail_sample.png";
+import Thumbnail1 from "../../public/Svg/thumbnail_1.png";
+import Thumbnail2 from "../../public/Svg/thumbnail_2.png";
+import Thumbnail3 from "../../public/Svg/thumbnail_3.png";
 import Image from "next/image";
 import type {StaticImageData} from "next/image";
 
@@ -120,22 +123,33 @@ export default function Dashboard() {
     courseTitle,
     courseDescription,
     user,
+    coverImage,
+    index,
   }: {
     courseTitle: string;
     courseDescription: string;
     user: string;
+    coverImage: StaticImageData;
+    index: number;
   }) => {
+    const isEven = index % 2 === 0;
     return (
-      <div className={style.pageCard}>
+      <div className={isEven ? style.pageGreyCard : style.pageCard}>
         <div className="inline-block relative">
-          <Image src={Thumbnail} alt={courseTitle} />
+          {/* <Image src={coverImage} alt={courseTitle} /> */}
+          <Image
+            src={coverImage}
+            alt={courseTitle}
+            className="w-full h-auto object-cover rounded-t"
+            style={{maxHeight: "12rem"}} // Optional: to keep a consistent height
+          />
 
           <span className={style.imageOverlayText}>HVAC Installation</span>
         </div>
 
         <div
           className="flex flex-column gap-1 p-4 pb-5"
-          style={{width: "18vw"}}
+          // style={{width: "18vw"}}
         >
           <h3 className={style.normalText}>{courseTitle}</h3>
           <p className={style.blueText}>{user}</p>
@@ -159,224 +173,238 @@ export default function Dashboard() {
       <div
         className="w-full h-full flex flex-column"
         style={{
-          backgroundColor: "var(--bg-secondary)",
+          backgroundColor: "#51515105",
           height: "100%",
           maxHeight: "100%",
         }}
       >
-        <div
+        {/* <div
           className="w-full max-w-7xl flex flex-column mx-auto h-full"
           style={{
             height: "100%",
             maxHeight: "100%",
           }}
-        >
-          <div
-            className="w-full h-full"
-            style={{height: "100%", maxHeight: "100%"}}
-          ></div>
-          <div className="flex">
-            <div className={clsx("pr-4", style.dashboardLeft)}>
-              <Image src={Avatar} alt="avatar" />
-              <div className="mt-4 flex flex-column gap-4">
-                {options.map((item, index) => (
-                  <div key={index} className="flex items-center gap-4 mb-2">
-                    {item.icon}
-                    <span className={clsx("text-base", style.normalText)}>
-                      {item.name}
-                    </span>
-                  </div>
-                ))}
+        > */}
+        <div
+          className="w-full h-full"
+          style={{height: "100%", maxHeight: "100%"}}
+        ></div>
+        <div className="flex">
+          <div className={clsx("p-4 relative", style.dashboardLeft)}>
+            <Image
+              src={Avatar}
+              alt="avatar"
+              className="w-full h-auto object-cover rounded-t"
+            />
+            <div className="mt-4 flex flex-column gap-4">
+              {options.map((item, index) => (
+                <div key={index} className="flex items-center gap-4 mb-2">
+                  {item.icon}
+                  <span className={clsx("text-base", style.normalText)}>
+                    {item.name}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div style={{width: "80%"}}>
+            {/* header */}
+            <div className="flex gap-2 align-items-center">
+              <Image src={Back} alt="back" />
+              <div className="flex flex-column gap-1">
+                <h3 className={clsx("ml-2", style.normalText)}>Dashboard</h3>
+                <AppBreadCrumb items={items} home={home} />
               </div>
             </div>
-            <div className="pl-4 w-full">
-              {/* header */}
-              <div className="flex gap-2 align-items-center">
-                <Image src={Back} alt="back" />
-                <div className="flex flex-column gap-1">
-                  <h3 className={clsx("ml-2", style.normalText)}>Dashboard</h3>
-                  <AppBreadCrumb items={items} home={home} />
-                </div>
-              </div>
 
-              {/* body */}
-              <div className="flex gap-4 flex-column">
-                {/* firstpart */}
-                <div className="flex gap-4 mt-4">
-                  <div
-                    className={clsx("flex  gap-4 p-5", style.pageCard)}
-                    style={{width: "40%"}}
-                  >
-                    <div className={clsx("flex p-4", style.statusGreen)}>
+            {/* body */}
+            <div className="flex gap-4 flex-column">
+              {/* firstpart */}
+              <div className="flex gap-4 mt-4">
+                <div
+                  className={clsx("flex  gap-4 p-5", style.pageCard)}
+                  style={{width: "40%"}}
+                >
+                  <div className={clsx("flex p-4", style.statusGreen)}>
+                    <div className="flex flex-column">
+                      <Image src={Calendar} alt="calendar" />
+                      <h3
+                        className={clsx(
+                          "text-base mt-4",
+                          style.blueLightText,
+                          style.textTruncate
+                        )}
+                      >
+                        Assignment Due
+                      </h3>
+                      <h2 className={style.normalText}>3</h2>
+                    </div>
+                  </div>
+                  <div className="flex flex-column gap-4 justify-content-between">
+                    <div
+                      className={clsx(
+                        "flex align-items-center gap-3 px-3 py-4",
+                        style.statusYellow
+                      )}
+                    >
+                      <Image src={Notification} alt="notification" />
                       <div className="flex flex-column">
-                        <Image src={Calendar} alt="calendar" />
                         <h3
                           className={clsx(
-                            "text-base mt-4",
-                            style.blueLightText
+                            "text-base ",
+                            style.blueLightText,
+                            style.textTruncate
                           )}
                         >
-                          Assignment Due
+                          Notification Enabled
                         </h3>
-                        <h2 className={style.normalText}>3</h2>
+                        <h3 className={style.normalText}>Yes</h3>
                       </div>
                     </div>
-                    <div className="flex flex-column gap-4 justify-content-between">
-                      <div
-                        className={clsx(
-                          "flex align-items-center gap-3 px-3 py-4",
-                          style.statusYellow
-                        )}
-                      >
-                        <Image src={Notification} alt="notification" />
-                        <div className="flex flex-column">
-                          <h3
-                            className={clsx("text-base", style.blueLightText)}
-                          >
-                            Notification Enabled
-                          </h3>
-                          <h3 className={style.normalText}>Yes</h3>
-                        </div>
-                      </div>
-                      <div
-                        className={clsx(
-                          "flex align-items-center gap-3 px-3 py-4",
-                          style.statusBlue
-                        )}
-                      >
-                        <Image src={MailBox} alt="mail_box" />
-                        <div className="flex flex-column">
-                          <h3
-                            className={clsx("text-base", style.blueLightText)}
-                          >
-                            New Jobs listed
-                          </h3>
-                          <h2 className={style.normalText}>10</h2>
-                        </div>
+                    <div
+                      className={clsx(
+                        "flex align-items-center gap-3 px-3 py-4",
+                        style.statusBlue
+                      )}
+                    >
+                      <Image src={MailBox} alt="mail_box" />
+                      <div className="flex flex-column">
+                        <h3
+                          className={clsx(
+                            "text-base",
+                            style.blueLightText,
+                            style.textTruncate
+                          )}
+                        >
+                          New Jobs listed
+                        </h3>
+                        <h2 className={style.normalText}>10</h2>
                       </div>
                     </div>
                   </div>
+                </div>
 
-                  <div
-                    className="flex flex-column gap-4"
-                    style={{width: "60%"}}
-                  >
-                    <div className="flex justify-content-between">
-                      <h3 className={clsx("text-base", style.normalText)}>
-                        Job Opportunities
-                      </h3>
-                      <p className={style.blueText}>View More</p>
-                    </div>
-                    <div className="flex gap-4">
-                      <JobRoleCard
-                        role="HVAC Technician"
-                        salary="$2,000 - 5,000 / Monthly"
-                        employmentType="Full Time"
-                        location="Glendale,Arizona"
-                        logo={Logo1}
-                      />
-                      <JobRoleCard
-                        role="HVAC Technician"
-                        salary="$2,000 - 5,000 / Monthly"
-                        employmentType="Full Time"
-                        location="Glendale,Arizona"
-                        logo={Logo2}
-                      />
-                      <JobRoleCard
-                        role="HVAC Technician"
-                        salary="$2,000 - 5,000 / Monthly"
-                        employmentType="Full Time"
-                        location="Glendale,Arizona"
-                        logo={Logo3}
-                      />
-                    </div>
-                  </div>
-                </div>
-                {/* second part */}
-                <div className="flex gap-4">
-                  <AssignmentTable></AssignmentTable>
-                  <div
-                    className={clsx("p-3", style.pageCard)}
-                    style={{width: "40%"}}
-                  >
-                    <div className="flex justify-content-between">
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "8px",
-                        }}
-                      >
-                        <span className={style.circleOuterGray}>
-                          <span className={style.circleInner}></span>
-                        </span>
-                        <span
-                          className={clsx(
-                            "text-sm font-bold",
-                            style.normalText
-                          )}
-                        >
-                          Current Level
-                        </span>
-                      </div>
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "8px",
-                        }}
-                      >
-                        <span className={style.circleOuterBlue}>
-                          <span className={style.circleInner}></span>
-                        </span>
-                        <span
-                          className={clsx(
-                            "text-sm font-bold",
-                            style.normalText
-                          )}
-                        >
-                          Recommended Level
-                        </span>
-                      </div>
-                    </div>
-                    <SimpleBarChart />
-                  </div>
-                </div>
-                {/* third part */}
-                <div className="flex flex-column gap-4 mb-5">
+                <div className="flex flex-column gap-4" style={{width: "60%"}}>
                   <div className="flex justify-content-between">
                     <h3 className={clsx("text-base", style.normalText)}>
-                      Recommended Courses
+                      Job Opportunities
                     </h3>
                     <p className={style.blueText}>View More</p>
                   </div>
                   <div className="flex gap-4">
-                    <CourseCard
-                      courseTitle="HVAC Basics"
-                      courseDescription="Learn the fundamentals of HVAC systems."
-                      user="Steve H"
+                    <JobRoleCard
+                      role="HVAC Technician"
+                      salary="$2,000 - 5,000 / Monthly"
+                      employmentType="Full Time"
+                      location="Glendale,Arizona"
+                      logo={Logo1}
                     />
-                    <CourseCard
-                      courseTitle="HVAC Basics"
-                      courseDescription="Learn the fundamentals of HVAC systems."
-                      user="Steve H"
+                    <JobRoleCard
+                      role="HVAC Technician"
+                      salary="$2,000 - 5,000 / Monthly"
+                      employmentType="Full Time"
+                      location="Glendale,Arizona"
+                      logo={Logo2}
                     />
-                    <CourseCard
-                      courseTitle="HVAC Basics"
-                      courseDescription="Learn the fundamentals of HVAC systems."
-                      user="Steve H"
-                    />
-                    <CourseCard
-                      courseTitle="HVAC Basics"
-                      courseDescription="Learn the fundamentals of HVAC systems."
-                      user="Steve H"
+                    <JobRoleCard
+                      role="HVAC Technician"
+                      salary="$2,000 - 5,000 / Monthly"
+                      employmentType="Full Time"
+                      location="Glendale,Arizona"
+                      logo={Logo3}
                     />
                   </div>
+                </div>
+              </div>
+              {/* second part */}
+              <div className="flex gap-4">
+                <AssignmentTable></AssignmentTable>
+                <div className={style.pageCard} style={{width: "40%"}}>
+                  <div
+                    className={clsx(
+                      "flex justify-content-between px-4",
+                      style.tableHead
+                    )}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                      }}
+                    >
+                      <span className={style.circleOuterGray}>
+                        <span className={style.circleInner}></span>
+                      </span>
+                      <span
+                        className={clsx("text-sm font-bold", style.normalText)}
+                      >
+                        Current Level
+                      </span>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                      }}
+                    >
+                      <span className={style.circleOuterBlue}>
+                        <span className={style.circleInner}></span>
+                      </span>
+                      <span
+                        className={clsx("text-sm font-bold", style.normalText)}
+                      >
+                        Recommended Level
+                      </span>
+                    </div>
+                  </div>
+                  <SimpleBarChart />
+                </div>
+              </div>
+              {/* third part */}
+              <div className="flex flex-column gap-4 mb-5">
+                <div className="flex justify-content-between">
+                  <h3 className={clsx("text-base", style.normalText)}>
+                    Recommended Courses
+                  </h3>
+                  <p className={style.blueText}>View More</p>
+                </div>
+                <div className="flex gap-4">
+                  <CourseCard
+                    courseTitle="HVAC Basics"
+                    courseDescription="HVAC installation stands for Heating, Ventilation, and Air Conditioning installation. "
+                    user="Steve H"
+                    coverImage={Thumbnail1}
+                    index={0}
+                  />
+                  <CourseCard
+                    courseTitle="Refrigiration & Cooling System"
+                    courseDescription="HVAC installation stands for Heating, Ventilation, and Air Conditioning installation."
+                    user="Steve H"
+                    coverImage={Thumbnail2}
+                    index={1}
+                  />
+                  <CourseCard
+                    courseTitle="Customer Service & Jobside Communication"
+                    courseDescription="HVAC installation stands for Heating, Ventilation, and Air Conditioning installation."
+                    user="Steve H"
+                    coverImage={Thumbnail}
+                    index={2}
+                  />
+                  <CourseCard
+                    courseTitle="Energy Efficiency"
+                    courseDescription="HVAC installation stands for Heating, Ventilation, and Air Conditioning installation."
+                    user="Steve H"
+                    coverImage={Thumbnail3}
+                    index={3}
+                  />
                 </div>
               </div>
             </div>
           </div>
         </div>
+        {/* </div> */}
       </div>
       {/* </div> */}
     </>
