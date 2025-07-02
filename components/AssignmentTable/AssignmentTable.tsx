@@ -58,6 +58,7 @@ export default function AssignmentTable() {
   };
 
   return (
+    // <div style={{width: "60%"}}>
     <DataTable
       header={tableHeader()}
       value={mockRow}
@@ -74,5 +75,6 @@ export default function AssignmentTable() {
         />
       ))}
     </DataTable>
+    // </div>
   );
 }

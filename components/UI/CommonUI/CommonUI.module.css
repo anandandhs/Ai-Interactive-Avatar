@@ -5,15 +5,27 @@
   color: #515151;
   font-weight: 400;
   width: 25rem;
-  font-size: 1rem
+  font-size: 1rem;
 }
-
+.errorInputContainer {
+  height: 2.813rem;
+  border: 1px solid #c80a0a !important;
+  border-radius: 10px !important;
+  color: #515151;
+  font-weight: 400;
+  width: 25rem;
+  font-size: 1rem;
+}
+.errorInputContainer:focus {
+  box-shadow: none;
+}
 .inputContainer:hover {
-  border: 1px solid #1b84ff !important;
+  border: 1px solid #515151 !important;
 }
 
 .inputContainer:focus {
-  border: 1px solid #1b84ff !important;
+  border: 1px solid #515151 !important;
+  box-shadow: none !important;
 }
 
 .label {
@@ -27,12 +39,15 @@
 
 /* Button */
 .buttonContainer {
-  background-color: #1b84ff;
+  background-color: #515151;
   color: #fff;
   font-weight: 700;
   height: 50px;
+  border-radius: 10px !important;
 }
-
+.buttonContainer:hover {
+  background-color: #515151 !important;
+}
 .secondaryButton {
   border: 1px solid #fffefe1a !important;
   background-color: transparent !important;

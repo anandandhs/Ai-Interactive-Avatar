@@ -7,29 +7,29 @@ import {
   STTProvider,
   ElevenLabsModel,
 } from "@heygen/streaming-avatar";
-import { useEffect, useRef, useState } from "react";
-import { useMemoizedFn, useUnmount } from "ahooks";
+import {useEffect, useRef, useState} from "react";
+import {useMemoizedFn, useUnmount} from "ahooks";
 
-import { AvatarVideo } from "./AvatarSession/AvatarVideo";
-import { useStreamingAvatarSession } from "./logic/useStreamingAvatarSession";
-import { AvatarControls } from "./AvatarSession/AvatarControls";
-import { useVoiceChat } from "./logic/useVoiceChat";
-import { StreamingAvatarProvider, StreamingAvatarSessionState } from "./logic";
-import { LoadingIcon } from "./Icons";
-import { MessageHistory } from "./AvatarSession/MessageHistory";
+import {AvatarVideo} from "./AvatarSession/AvatarVideo";
+import {useStreamingAvatarSession} from "./logic/useStreamingAvatarSession";
+import {AvatarControls} from "./AvatarSession/AvatarControls";
+import {useVoiceChat} from "./logic/useVoiceChat";
+import {StreamingAvatarProvider, StreamingAvatarSessionState} from "./logic";
+import {LoadingIcon} from "./Icons";
+import {MessageHistory} from "./AvatarSession/MessageHistory";
 import Avatar from "../public/Svg/home_avatar.svg";
 import BackgroundImage from "../public/Svg/background_image.svg";
 import Mic from "../public/Svg/mic.svg";
 import Speaker from "../public/Svg/speaker.svg";
 import style from "../styles/commonStyle.module.css";
 
-import { AVATARS, STT_LANGUAGE_LIST } from "@/app/lib/constants";
+import {AVATARS, STT_LANGUAGE_LIST} from "@/app/lib/constants";
 import Image from "next/image";
 import clsx from "clsx";
-import { InputText } from "primereact/inputtext";
+import {InputText} from "primereact/inputtext";
 import SendIcon from "../public/Svg/send.svg";
 import AppButton from "./UI/CommonUI/AppButton";
-import { useAuthContext } from "./Prividers/AuthProvider";
+import {useAuthContext} from "./Prividers/AuthProvider";
 
 const DEFAULT_CONFIG: StartAvatarRequest = {
   quality: AvatarQuality.Low,
@@ -48,9 +48,9 @@ const DEFAULT_CONFIG: StartAvatarRequest = {
 };
 
 function InteractiveAvatar() {
-  const { initAvatar, startAvatar, stopAvatar, sessionState, stream } =
+  const {initAvatar, startAvatar, stopAvatar, sessionState, stream} =
     useStreamingAvatarSession();
-  const { startVoiceChat } = useVoiceChat();
+  const {startVoiceChat} = useVoiceChat();
   const auth = useAuthContext();
 
   const mediaStream = useRef<HTMLVideoElement>(null);
@@ -226,14 +226,13 @@ function InteractiveAvatar() {
         });
 
         // Create a personalized config with user's display name
-        const personalizedConfig = { ...config };
+        const personalizedConfig = {...config};
 
-        //Comment both these these lines for dev to avoid using ai credits
-        await startAvatar(personalizedConfig);
+        // await startAvatar(personalizedConfig);
 
-        if (isVoiceChat) {
-          await startVoiceChat();
-        }
+        // if (isVoiceChat) {
+        //   await startVoiceChat();
+        // }
       } catch (error) {
         console.error("Error starting avatar session:", error);
       }
@@ -296,7 +295,7 @@ function InteractiveAvatar() {
             ) : (
               <div
                 className="w-full h-full flex align-items-center justify-content-center"
-                style={{ color: "#515151" }}
+                style={{color: "#515151"}}
               >
                 <div className="loader"></div>
                 {/* <>{"Initializing your avatar..."}</> */}
@@ -307,7 +306,7 @@ function InteractiveAvatar() {
             {/* Status Indicator */}
             <div
               className="absolute top-0 right-0 m-4 flex align-items-center"
-              style={{ gap: "var(--space-2)" }}
+              style={{gap: "var(--space-2)"}}
             >
               <div
                 className="w-3 h-3 border-round-full"
@@ -410,12 +409,12 @@ function InteractiveAvatar() {
               // </div>
               <div
                 className="flex flex-column align-items-center"
-                style={{ gap: "var(--space-3)" }}
+                style={{gap: "var(--space-3)"}}
               >
                 <LoadingIcon />
                 <span
                   className="text-body-medium"
-                  style={{ color: "var(--text-secondary)" }}
+                  style={{color: "var(--text-secondary)"}}
                 >
                   Initializing your avatar...
                 </span>
@@ -440,11 +439,11 @@ function InteractiveAvatar() {
             >
               <i
                 className="pi pi-comments text-6xl"
-                style={{ color: "var(--gray-400)" }}
+                style={{color: "var(--gray-400)"}}
               />
               <h3
                 className="text-heading-medium text-center"
-                style={{ color: "#515151" }}
+                style={{color: "#515151"}}
               >
                 Conversation
               </h3>

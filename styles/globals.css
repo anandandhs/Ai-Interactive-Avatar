@@ -126,7 +126,7 @@ body {
   --primary-400: #42a5f5;
   --primary-500: #2196f3;
   --primary-600: #1e88e5;
-  --primary-700: #1976d2;
+  --primary-700: #515151;
   --primary-800: #1565c0;
   --primary-900: #0d47a1;
 
@@ -283,8 +283,8 @@ body {
 }
 
 .p-inputtext:focus {
-  border-color: var(--primary-color) !important;
-  box-shadow: 0 0 0 3px var(--primary-color-light) !important;
+  /* border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 3px var(--primary-color-light) !important; */
   outline: none !important;
 }
 
@@ -297,7 +297,7 @@ body {
 
 /* Button Components */
 .p-button {
-  background-color: #1B84FF;
+  background-color: #515151;
   /* border: 2px solid var(--primary-color) !important; */
   border-radius: var(--radius-lg) !important;
   padding: var(--space-3) var(--space-6) !important;
@@ -305,25 +305,26 @@ body {
   font-size: var(--font-size-base) !important;
   line-height: var(--line-height-normal) !important;
   transition: all var(--transition-fast) !important;
-  min-height: 48px !important;
+  min-height: 50px !important;
   /* Accessibility - minimum touch target */
   cursor: pointer !important;
+  border: none;
 }
 
 .p-button:hover:not(:disabled) {
   background-color: var(--primary-color-hover) !important;
-  border-color: var(--primary-color-hover) !important;
+  /* border-color: var(--primary-color-hover) !important; */
   transform: translateY(-1px) !important;
-  box-shadow: var(--shadow-md) !important;
+  /* box-shadow: var(--shadow-md) !important; */
 }
 
 .p-button:active:not(:disabled) {
   transform: translateY(0) !important;
-  box-shadow: var(--shadow-sm) !important;
+  /* box-shadow: var(--shadow-sm) !important; */
 }
 
 .p-button:focus {
-  box-shadow: 0 0 0 3px var(--primary-color-light) !important;
+  box-shadow: none !important;
   outline: none !important;
 }
 
@@ -567,7 +568,6 @@ body {
 }
 
 @keyframes pulse {
-
   0%,
   100% {
     opacity: 1;
@@ -701,7 +701,6 @@ li {
 }
 
 @keyframes bblFadInOut {
-
   0%,
   80%,
   100% {
@@ -724,14 +723,14 @@ li {
   margin-left: 10px !important;
 }
 
-.custom-table .p-datatable-thead>tr>th {
+.custom-table .p-datatable-thead > tr > th {
   color: #515151;
   font-weight: 700;
   font-size: 16px;
   padding: 1rem;
 }
 
-.custom-table .p-datatable-tbody>tr>td {
+.custom-table .p-datatable-tbody > tr > td {
   color: #515151;
   font-weight: 500;
   font-size: 16px;
@@ -740,8 +739,8 @@ li {
 
 .custom-table .p-datatable-header {
   border: 1px solid #5151511a;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
 }
 
 .custom-breadcrumb .p-breadcrumb-list li:last-child .p-menuitem-text {
@@ -762,4 +761,7 @@ li {
 
 .custom-breadcrumb .p-breadcrumb-list li {
   margin-left: 5px !important;
+}
+.p-datatable-wrapper {
+  width: 100%;
 }

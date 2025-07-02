@@ -1,5 +1,5 @@
 import React from "react";
-import { InputText } from "primereact/inputtext";
+import {InputText} from "primereact/inputtext";
 import style from "../CommonUI/CommonUI.module.css";
 
 interface TextInputProps {
@@ -13,6 +13,7 @@ interface TextInputProps {
   autoComplete?: string;
   type?: string;
   error?: string;
+  errorContainer?: boolean;
 }
 
 const TextInput: React.FC<TextInputProps> = ({
@@ -26,6 +27,7 @@ const TextInput: React.FC<TextInputProps> = ({
   autoComplete,
   type,
   error,
+  errorContainer,
 }) => {
   return (
     <div className="flex flex-column w-full">
@@ -46,8 +48,10 @@ const TextInput: React.FC<TextInputProps> = ({
         value={String(value)}
         onChange={onChange}
         placeholder={placeholder}
-        className={`${style.inputContainer} ${className || ""}`}
-        style={{ width }}
+        className={`${
+          errorContainer ? style.errorInputContainer : style.inputContainer
+        } ${className || ""}`}
+        style={{width}}
         autoComplete={autoComplete}
       />
       <span className={style.error}>{error}</span>

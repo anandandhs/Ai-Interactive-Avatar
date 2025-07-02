@@ -17,10 +17,11 @@ export default function SimpleBarChart() {
     {name: "Refrigiration Cycle", blue: 20},
     {name: "Thermostat Installation", blue: 5},
   ];
+
   const data = rawData.map((item) => ({
     name: item.name,
-    part1: item.blue * 0.5, // first half (gradient)
-    part2: item.blue * 0.5, // second half (solid)
+    part1: item.blue * 0.5, // gray part
+    part2: item.blue * 0.5, // blue part
   }));
 
   return (
@@ -32,8 +33,8 @@ export default function SimpleBarChart() {
       >
         <defs>
           <linearGradient id="gradient1" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#0099FF" />
-            <stop offset="100%" stopColor="#00FFFF" />
+            <stop offset="0%" stopColor="#515151" />
+            <stop offset="100%" stopColor="#515151" />
           </linearGradient>
         </defs>
         <CartesianGrid strokeDasharray="3 3" />

@@ -1,16 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
-import { Input } from "./Input";
-import { Card } from "primereact/card";
-import { Message } from "primereact/message";
+import React, {useState} from "react";
+import {Input} from "./Input";
+import {Card} from "primereact/card";
+import {Message} from "primereact/message";
 
 import Image from "next/image";
 import Avatar from "../public/Svg/avatar.svg";
 
-import { InputText } from "primereact/inputtext";
+import {InputText} from "primereact/inputtext";
 import TextInput from "./UI/CommonUI/TextInput";
-import { Button } from "./Button";
+import {Button} from "./Button";
 import AppButton from "./UI/CommonUI/AppButton";
 import style from "../styles/commonStyle.module.css";
 import clsx from "clsx";
@@ -20,7 +20,7 @@ import BackgroundLogo from "../public/Svg/home_2.svg";
 import BackgroundStar from "../public/Svg/home_1.svg";
 import LoginAvatar from "../public/Svg/meliassaLogin.svg";
 import Logo from "../public/Svg/nav_logo.svg";
-import { relative } from "path";
+import {relative} from "path";
 
 interface LoginPageProps {
   onLogin: (username: string, password: string) => Promise<boolean>;
@@ -43,38 +43,29 @@ export const LoginPage: React.FC<LoginPageProps> = ({
 
   return (
     <div className="grid h-full">
-      <div className="col-6">
-        <div
-          style={{
-            marginTop: "3.125rem",
-            marginLeft: "3.125rem",
-            paddingBottom: "3.125rem",
-          }}
-        >
+      {/* Left Side */}
+      <div className="col-12 md:col-6 flex md:align-items-center align-items-start justify-content-center p-5">
+        <div className="w-full relative">
           <Image
             src={LoginAvatar}
             alt="avatar"
-            // className="w-auto"
-            // style={{
-            //   objectFit: "contain",
-            //   height: "100vh",
-            // }}
-            // style={{
-            //   width: "auto", // Preserve original width
-            //   objectFit: "fill", // Force fill container (breaks aspect ratio)
-            // }}
+            className="w-full relative"
+            style={{objectFit: "contain", maxHeight: "90vh", left: "-1rem"}}
           />
           <h5
-            className="text-2xl font-normal p-5 relative z-1"
+            className="absolute text-center"
             style={{
-              bottom: "12rem",
+              bottom: "9%",
+              left: "50%",
+              transform: "translateX(-50%)",
               color: "white",
-              fontSize: "1.563rem",
+              fontSize: "1.5rem",
               fontWeight: 400,
-              lineHeight: "3rem",
-              maxWidth: "32rem",
-              left: "10rem",
-              textAlign: "center",
+              lineHeight: "2.5rem",
+              maxWidth: "80%",
+              padding: "0 1rem",
+              whiteSpace: "normal",
+              width: "32vw",
             }}
           >
             Your AI Powered Career Concierge Log In To Begin Your Workforce
@@ -118,100 +109,75 @@ export const LoginPage: React.FC<LoginPageProps> = ({
         </div> */}
       </div>
       <div className="col-6">
-        <div
-          className="flex flex-column justify-content-center align-items-center relative"
-          style={{ top: "15%" }}
-        >
-          <Image src={Logo} alt="logo" />
-          <div className="flex flex-column justify-content-center align-items-center gap-2 mt-5">
-            <h2
-              style={{
-                color: "#515151",
-                fontWeight: "500",
-                fontSize: "2.25rem",
-                lineHeight: "100%",
-              }}
-            >
-              Welcome back !
-            </h2>
-            <p
-              style={{
-                color: "#1B84FF",
-                fontWeight: "500",
-                fontSize: "1rem",
-                lineHeight: "100%",
-              }}
-              // className={style.blueText}
-            >
-              Connect with our Intelligence
-            </p>
-          </div>
-          <div
-            className="flex flex-column gap-4 mt-5"
-            style={{ width: "30rem" }}
-          >
-            <div className="flex relative">
-              <Image src={Mail} alt="mail" className={style.imageInput} />
-              <TextInput
-                label="Email"
-                width="100%"
-                id="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="custom-input"
-                autoComplete="username"
-              />
-            </div>
-            <div className="flex relative">
-              <Image
-                src={Password}
-                alt="password"
-                className={style.imageInput}
-              />
-              <TextInput
-                label="Password"
-                width="100%"
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="custom-input"
-                autoComplete="username"
-              />
-            </div>
-
-            <p
-              className={clsx("text-right", style.blueText)}
-              style={{
-                color: "#1B84FF",
-                fontWeight: "400",
-                fontSize: "1rem",
-                lineHeight: "100%",
-              }}
-            >
-              Forgot Password?
-            </p>
-
-            <AppButton
-              label="Log in"
-              width="100%"
-              onClick={handleSubmit}
-              disabled={!username.trim() || !password.trim() || loading}
-              loading={loading}
-            />
-
-            <span
-              className="flex justify-content-center"
-              style={{
-                color: "#515151",
-                fontWeight: "400",
-                fontSize: "1rem",
-                lineHeight: "100%",
-              }}
-            >
-              {"Don't have an account?"}
+        <div className="h-full flex flex-column justify-content-center">
+          <div className="flex flex-column justify-content-center align-items-center relative">
+            <Image src={Logo} alt="logo" />
+            <div className="flex flex-column justify-content-center align-items-center gap-2 mt-5">
+              <h2
+                style={{
+                  color: "#515151",
+                  fontWeight: "500",
+                  fontSize: "2.25rem",
+                  lineHeight: "100%",
+                }}
+              >
+                Welcome back !
+              </h2>
               <p
-                className={style.blueText}
+                style={{
+                  color: "#1B84FF",
+                  fontWeight: "500",
+                  fontSize: "1rem",
+                  lineHeight: "100%",
+                }}
+                // className={style.blueText}
+              >
+                Connect with our Intelligence
+              </p>
+            </div>
+            <div
+              className="flex flex-column gap-4 mt-5"
+              style={{width: "30rem"}}
+            >
+              {error && (
+                <div className={style.errorBox}>
+                  Sorry..! Invalid E-mail Please enter correct E-mail.
+                </div>
+              )}
+
+              <div className="flex relative">
+                <Image src={Mail} alt="mail" className={style.imageInput} />
+                <TextInput
+                  label="Email"
+                  width="100%"
+                  id="username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="custom-input"
+                  autoComplete="username"
+                  // errorContainer={true}
+                />
+              </div>
+              <div className="flex relative">
+                <Image
+                  src={Password}
+                  alt="password"
+                  className={style.imageInput}
+                />
+                <TextInput
+                  label="Password"
+                  width="100%"
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="custom-input"
+                  autoComplete="username"
+                />
+              </div>
+
+              <p
+                className={clsx("text-right", style.blueText)}
                 style={{
                   color: "#1B84FF",
                   fontWeight: "400",
@@ -219,9 +185,39 @@ export const LoginPage: React.FC<LoginPageProps> = ({
                   lineHeight: "100%",
                 }}
               >
-                &nbsp;{"Sign in"}
+                Forgot Password?
               </p>
-            </span>
+
+              <AppButton
+                label="Log in"
+                width="100%"
+                onClick={handleSubmit}
+                loading={loading}
+              />
+
+              <span
+                className="flex justify-content-center"
+                style={{
+                  color: "#515151",
+                  fontWeight: "400",
+                  fontSize: "1rem",
+                  lineHeight: "100%",
+                }}
+              >
+                {"Don't have an account?"}
+                <p
+                  className={style.blueText}
+                  style={{
+                    color: "#1B84FF",
+                    fontWeight: "400",
+                    fontSize: "1rem",
+                    lineHeight: "100%",
+                  }}
+                >
+                  &nbsp;{"Sign in"}
+                </p>
+              </span>
+            </div>
           </div>
         </div>
       </div>
