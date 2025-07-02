@@ -7,6 +7,9 @@ import Resume from "../../public/Svg/resume.svg";
 import JobMatch from "../../public/Svg/job_match.svg";
 import Interview from "../../public/Svg/interview.svg";
 import Skills from "../../public/Svg/skills.svg";
+import SettingsIcon from "../../public/Svg/setting_icon.svg";
+import NotiIcon from "../../public/Svg/noti_icon.svg";
+import Assignment from "../../public/Svg/assignment.svg";
 import Back from "../../public/Svg/back_icon.svg";
 import Logo1 from "../../public/Svg/job_logo_1.svg";
 import Logo2 from "../../public/Svg/job_logo_2.svg";
@@ -59,15 +62,15 @@ export default function Dashboard() {
     },
     {
       name: "Assignments",
-      icon: <Image src={Resume} alt="Assignments" width={20} height={20} />,
+      icon: <Image src={Assignment} alt="Assignments" width={20} height={20} />,
     },
     {
       name: "Notifications",
-      icon: <Image src={JobMatch} alt="Notifications" width={20} height={20} />,
+      icon: <Image src={NotiIcon} alt="Notifications" width={20} height={20} />,
     },
     {
       name: "Settings",
-      icon: <Image src={Interview} alt="Settings" width={20} height={20} />,
+      icon: <Image src={SettingsIcon} alt="Settings" width={20} height={20} />,
     },
   ];
   const items = [{label: "Dasshboard", id: "dashboard", url: "/dashboard"}];
