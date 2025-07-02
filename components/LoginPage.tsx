@@ -139,11 +139,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
               className="flex flex-column gap-4 mt-5"
               style={{width: "30rem"}}
             >
-              {error && (
-                <div className={style.errorBox}>
-                  Sorry..! Invalid E-mail Please enter correct E-mail.
-                </div>
-              )}
+              {error && <div className={style.errorBox}>{error}</div>}
 
               <div className="flex relative">
                 <Image src={Mail} alt="mail" className={style.imageInput} />
@@ -155,7 +151,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({
                   onChange={(e) => setUsername(e.target.value)}
                   className="custom-input"
                   autoComplete="username"
-                  // errorContainer={true}
                 />
               </div>
               <div className="flex relative">

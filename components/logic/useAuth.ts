@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
-import { tokenStorage, TokenData } from "./tokenStorage";
-import { useApiPost } from "./useApi";
+import {useState, useCallback, useEffect} from "react";
+import {tokenStorage, TokenData} from "./tokenStorage";
+import {useApiPost} from "./useApi";
 import {
   LoginRequest,
   LoginResponse,
@@ -84,10 +84,10 @@ export const useAuth = () => {
             setUser(userData);
           } catch (error) {
             console.error("Error parsing stored user data:", error);
-            setUser({ username: "User" });
+            setUser({username: "User"});
           }
         } else {
-          setUser({ username: "User" });
+          setUser({username: "User"});
         }
       }
       setIsInitialized(true);
@@ -162,7 +162,7 @@ export const useAuth = () => {
           setError(null);
           return true;
         } else {
-          setError("Invalid credentials");
+          setError("Invalid username or password.");
           console.log("Login failed: No access token in response");
           return false;
         }

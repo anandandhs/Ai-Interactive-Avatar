@@ -228,11 +228,11 @@ function InteractiveAvatar() {
         // Create a personalized config with user's display name
         const personalizedConfig = {...config};
 
-        // await startAvatar(personalizedConfig);
+        await startAvatar(personalizedConfig);
 
-        // if (isVoiceChat) {
-        //   await startVoiceChat();
-        // }
+        if (isVoiceChat) {
+          await startVoiceChat();
+        }
       } catch (error) {
         console.error("Error starting avatar session:", error);
       }

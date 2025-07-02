@@ -32,17 +32,17 @@ export default function AssignmentTable() {
 
   const actionTemplate = () => {
     return (
-      <>
+      <div className="text-center">
         <Image src={Eye} alt="eye" />
-      </>
+      </div>
     );
   };
 
   const mockColumn = [
-    {header: "Assignment Name", field: "name"},
-    {header: "Class", field: "class"},
-    {header: "Due", field: "date"},
-    {header: "Action", field: "action", body: actionTemplate},
+    {header: "Assignment Name", field: "name", width: "30%"},
+    {header: "Class", field: "class", width: "30%"},
+    {header: "Due", field: "date", width: "30%"},
+    {header: "Action", field: "action", body: actionTemplate, width: "10%"},
   ];
 
   const tableHeader = () => {
@@ -58,23 +58,24 @@ export default function AssignmentTable() {
   };
 
   return (
-    // <div style={{width: "60%"}}>
-    <DataTable
-      header={tableHeader()}
-      value={mockRow}
-      showGridlines
-      className="custom-table"
-      style={{width: "60%"}}
-    >
-      {mockColumn.map((col, index) => (
-        <Column
-          key={index}
-          field={col.field}
-          header={col.header}
-          body={col.body}
-        />
-      ))}
-    </DataTable>
-    // </div>
+    <div style={{width: "60%"}}>
+      <DataTable
+        header={tableHeader()}
+        value={mockRow}
+        showGridlines
+        className="custom-table"
+        // style={{width: "60%"}}
+      >
+        {mockColumn.map((col, index) => (
+          <Column
+            key={index}
+            field={col.field}
+            header={col.header}
+            body={col.body}
+            style={{width: col.width}}
+          />
+        ))}
+      </DataTable>
+    </div>
   );
 }
