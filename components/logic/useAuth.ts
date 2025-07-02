@@ -19,7 +19,7 @@ export interface User {
 
 export interface UseAuthReturn {
   user: User | null;
-  error: any;
+  error: string | null;
   loading: boolean;
   login: (username: string, password: string) => Promise<boolean>;
   logout: () => void;
@@ -30,6 +30,7 @@ export interface UseAuthReturn {
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const loginApi = useApiPost<LoginResponse>("/Mobile/Authentication");
 
@@ -158,8 +159,10 @@ export const useAuth = () => {
 
           setUser(userData);
           console.log("User data set:", userData);
+          setError(null);
           return true;
         } else {
+          setError("Invalid credentials");
           console.log("Login failed: No access token in response");
           return false;
         }
@@ -181,7 +184,7 @@ export const useAuth = () => {
 
   return {
     user,
-    error: loginApi.error,
+    error,
     loading: loginApi.loading,
     login,
     logout,

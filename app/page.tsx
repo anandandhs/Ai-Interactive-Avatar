@@ -34,6 +34,7 @@ export default function App() {
   }
 
   if (!auth?.isAuthenticated) {
+    console.log("Not authenticated", auth?.error);
     return (
       <LoginPage
         onLogin={auth.login}
