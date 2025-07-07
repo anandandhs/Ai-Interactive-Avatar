@@ -7,29 +7,29 @@ import {
   STTProvider,
   ElevenLabsModel,
 } from "@heygen/streaming-avatar";
-import {useEffect, useRef, useState} from "react";
-import {useMemoizedFn, useUnmount} from "ahooks";
+import { useEffect, useRef, useState } from "react";
+import { useMemoizedFn, useUnmount } from "ahooks";
 
-import {AvatarVideo} from "./AvatarSession/AvatarVideo";
-import {useStreamingAvatarSession} from "./logic/useStreamingAvatarSession";
-import {AvatarControls} from "./AvatarSession/AvatarControls";
-import {useVoiceChat} from "./logic/useVoiceChat";
-import {StreamingAvatarProvider, StreamingAvatarSessionState} from "./logic";
-import {LoadingIcon} from "./Icons";
-import {MessageHistory} from "./AvatarSession/MessageHistory";
+import { AvatarVideo } from "./AvatarSession/AvatarVideo";
+import { useStreamingAvatarSession } from "./logic/useStreamingAvatarSession";
+import { AvatarControls } from "./AvatarSession/AvatarControls";
+import { useVoiceChat } from "./logic/useVoiceChat";
+import { StreamingAvatarProvider, StreamingAvatarSessionState } from "./logic";
+import { LoadingIcon } from "./Icons";
+import { MessageHistory } from "./AvatarSession/MessageHistory";
 import Avatar from "../public/Svg/home_avatar.svg";
 import BackgroundImage from "../public/Svg/background_image.svg";
 import Mic from "../public/Svg/mic.svg";
 import Speaker from "../public/Svg/speaker.svg";
 import style from "../styles/commonStyle.module.css";
 
-import {AVATARS, STT_LANGUAGE_LIST} from "@/app/lib/constants";
+import { AVATARS, STT_LANGUAGE_LIST } from "@/app/lib/constants";
 import Image from "next/image";
 import clsx from "clsx";
-import {InputText} from "primereact/inputtext";
+import { InputText } from "primereact/inputtext";
 import SendIcon from "../public/Svg/send.svg";
 import AppButton from "./UI/CommonUI/AppButton";
-import {useAuthContext} from "./Prividers/AuthProvider";
+import { useAuthContext } from "./Prividers/AuthProvider";
 
 const DEFAULT_CONFIG: StartAvatarRequest = {
   quality: AvatarQuality.Low,
@@ -48,9 +48,9 @@ const DEFAULT_CONFIG: StartAvatarRequest = {
 };
 
 function InteractiveAvatar() {
-  const {initAvatar, startAvatar, stopAvatar, sessionState, stream} =
+  const { initAvatar, startAvatar, stopAvatar, sessionState, stream } =
     useStreamingAvatarSession();
-  const {startVoiceChat} = useVoiceChat();
+  const { startVoiceChat } = useVoiceChat();
   const auth = useAuthContext();
 
   const mediaStream = useRef<HTMLVideoElement>(null);
@@ -86,7 +86,7 @@ function InteractiveAvatar() {
           auth?.user.username == "irwin.spinello@papyrrus.com"
             ? JSON.stringify({
                 PERSONA:
-                  "Zara is a virtual academic assistant designed to help students stay on track with their coursework. She interacts formally but supportively, encouraging task completion while maintaining a respectful, professional tone. Always address users by their logged in username.",
+                  "Pedro is a virtual academic assistant designed to help students stay on track with their coursework. She interacts formally but supportively, encouraging task completion while maintaining a respectful, professional tone. Always address users by their logged in username.",
                 PRIMARY_USE_CASES: {
                   Automated_Assignment_Alerts:
                     "Inform users of pending assignments immediately upon login",
@@ -127,9 +127,50 @@ function InteractiveAvatar() {
                   follow_up_times: ["later today", "tomorrow", "in two days"],
                 },
               })
+            : auth?.user.username == "jason.padilla@papyrrus.com"
+            ? JSON.stringify({
+                PERSONA:
+                  "Marianne es una asistente virtual de carrera integrada en una plataforma para estudiantes o personas que buscan empleo. Realiza un seguimiento de las tendencias y oportunidades laborales según las preferencias guardadas del usuario, el contenido de su currículum o sus intereses profesionales. Al iniciar sesión, Marianne ofrece sugerencias de trabajo personalizadas, fomenta la participación y ofrece asistencia para solicitar empleo o actualizar su currículum. Siempre diríjase al usuario por su nombre de usuario registrado.",
+                PRIMARY_USE_CASES: {
+                  Personalized_Job_Discovery:
+                    "Notificar a los usuarios sobre nuevas ofertas de trabajo que coincidan con su perfil (por ejemplo, industria, ubicación, conjunto de habilidades)",
+                  "Re-engagement_After_Inactivity":
+                    "Proporcionar un registro cálido y actualizaciones sobre nuevas oportunidades cuando los usuarios regresan después de una ausencia",
+                  Resume_Readiness_Prompt:
+                    "Ofrecer revisar o actualizar el currículum del usuario para que coincida con las ofertas de trabajo actuales",
+                  Actionable_Job_Suggestions:
+                    "Proporcionar títulos de trabajo resumidos con opciones para guardar, rastrear o aplicar",
+                },
+                DIALOGUE_EXAMPLES: [
+                  {
+                    context: "User returns after absence",
+                    lines: [
+                      "Hola, me alegra verte de nuevo. Ha pasado un tiempo. ¿Cómo has estado?",
+                      "Durante su tiempo fuera, encontré 8 nuevas oportunidades laborales de HVAC en el área de Dallas que coinciden estrechamente con sus habilidades y preferencias.",
+                      "Oportunidades de muestra:",
+                      "Técnico de servicio de HVAC – Sistemas de enfriamiento de precisión",
+                      "Instalador de HVAC – NorthStar Mechanical",
+                      "¿Quiere ver la lista completa o adaptar su currículum para uno de estos puestos?",
+                    ],
+                  },
+                ],
+                RESPONSE_RULES: [
+                  "SIEMPRE diríjase al usuario por su nombre de usuario registrado",
+                  "Priorizar las oportunidades de trabajo recientes que coincidan con el perfil del usuario",
+                  "Sugerir actualizaciones del currículum cuando sean relevantes para nuevas oportunidades",
+                  "Ofrecer opciones claras para los siguientes pasos después de presentar la información",
+                ],
+                JOB_SUGGESTION_TEMPLATE: {
+                  opening: `Bienvenido de nuevo, ${auth?.user.displayName}. Es genial verte de nuevo. ¿Estás listo para descubrir nuevas y emocionantes oportunidades laborales diseñadas especialmente para ti?`,
+                  reengagement:
+                    "Hola, me alegra volver a verte. Ha pasado un tiempo. ¿Cómo has estado?",
+                  opportunity_announcement:
+                    "Durante su ausencia, encontré {count} nuevas oportunidades laborales en {industry} en el área de {location} que se ajustan estrechamente a sus habilidades y preferencias.",
+                },
+              })
             : JSON.stringify({
                 PERSONA:
-                  "Zara is a virtual career assistant embedded in a student or job-seeker platform. She tracks job trends and opportunities based on the user's saved preferences, resume content, or career interests. When a user logs in, Zara delivers personalized job suggestions, gently nudges engagement, and offers assistance in applying or updating their resume accordingly. Always address the user by their logged in user name.",
+                  "Marianne is a virtual career assistant embedded in a student or job-seeker platform. She tracks job trends and opportunities based on the user's saved preferences, resume content, or career interests. When a user logs in, Zara delivers personalized job suggestions, gently nudges engagement, and offers assistance in applying or updating their resume accordingly. Always address the user by their logged in user name.",
                 PRIMARY_USE_CASES: {
                   Personalized_Job_Discovery:
                     "Notify users about new job listings that align with their profile (e.g., industry, location, skill set)",
@@ -226,7 +267,7 @@ function InteractiveAvatar() {
         });
 
         // Create a personalized config with user's display name
-        const personalizedConfig = {...config};
+        const personalizedConfig = { ...config };
 
         await startAvatar(personalizedConfig);
 
@@ -295,7 +336,7 @@ function InteractiveAvatar() {
             ) : (
               <div
                 className="w-full h-full flex align-items-center justify-content-center"
-                style={{color: "#515151"}}
+                style={{ color: "#515151" }}
               >
                 <div className="loader"></div>
                 {/* <>{"Initializing your avatar..."}</> */}
@@ -306,7 +347,7 @@ function InteractiveAvatar() {
             {/* Status Indicator */}
             <div
               className="absolute top-0 right-0 m-4 flex align-items-center"
-              style={{gap: "var(--space-2)"}}
+              style={{ gap: "var(--space-2)" }}
             >
               <div
                 className="w-3 h-3 border-round-full"
@@ -409,12 +450,12 @@ function InteractiveAvatar() {
               // </div>
               <div
                 className="flex flex-column align-items-center"
-                style={{gap: "var(--space-3)"}}
+                style={{ gap: "var(--space-3)" }}
               >
                 <LoadingIcon />
                 <span
                   className="text-body-medium"
-                  style={{color: "var(--text-secondary)"}}
+                  style={{ color: "var(--text-secondary)" }}
                 >
                   Initializing your avatar...
                 </span>
@@ -439,11 +480,11 @@ function InteractiveAvatar() {
             >
               <i
                 className="pi pi-comments text-6xl"
-                style={{color: "var(--gray-400)"}}
+                style={{ color: "var(--gray-400)" }}
               />
               <h3
                 className="text-heading-medium text-center"
-                style={{color: "#515151"}}
+                style={{ color: "#515151" }}
               >
                 Conversation
               </h3>
