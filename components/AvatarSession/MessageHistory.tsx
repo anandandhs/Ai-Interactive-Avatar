@@ -24,19 +24,22 @@ export const MessageHistory: React.FC = () => {
       <div
         className="flex align-items-center justify-content-between"
         style={{
-          padding:
-            "var(--space-6) var(--space-6) var(--space-4) var(--space-6)",
+          // padding:
+          //   "var(--space-6) var(--space-6) var(--space-4) var(--space-6)",
           borderBottom: "1px solid var(--border-light)",
           flexShrink: 0,
         }}
       >
         <h3
-          className=" text-2xl font-bold relative z-1  pb-2"
+          className=" text-2xl font-bold relative z-1  p-4"
           style={{color: "#515151"}}
         >
           Conversation History
         </h3>
-        <span className="text-caption" style={{color: "var(--text-secondary)"}}>
+        <span
+          className="text-caption p-4"
+          style={{color: "var(--text-secondary)"}}
+        >
           {messages.length} {messages.length === 1 ? "message" : "messages"}
         </span>
       </div>

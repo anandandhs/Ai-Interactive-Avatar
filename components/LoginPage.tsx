@@ -137,7 +137,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             </div>
             <div
               className="flex flex-column gap-4 mt-5"
-              style={{width: "30rem"}}
+              style={{width: "28rem"}}
             >
               {error && <div className={style.errorBox}>{error}</div>}
 
@@ -172,7 +172,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
               </div>
 
               <p
-                className={clsx("text-right", style.blueText)}
+                className={clsx("text-right -mt-3", style.blueText)}
                 style={{
                   color: "#1B84FF",
                   fontWeight: "400",

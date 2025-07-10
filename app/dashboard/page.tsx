@@ -212,7 +212,7 @@ export default function Dashboard() {
           </div>
           <div style={{width: "80%"}}>
             {/* header */}
-            <div className="flex gap-2 align-items-center">
+            <div className="flex gap-3 align-items-center">
               <Image src={Back} alt="back" />
               <div className="flex flex-column gap-1">
                 <h3 className={clsx("ml-2", style.normalText)}>Dashboard</h3>
@@ -221,11 +221,11 @@ export default function Dashboard() {
             </div>
 
             {/* body */}
-            <div className="flex gap-4 flex-column">
+            <div className="flex gap-5 flex-column">
               {/* firstpart */}
-              <div className="flex gap-4 mt-4">
+              <div className="flex gap-5 mt-4">
                 <div
-                  className={clsx("flex  gap-4 p-5", style.pageCard)}
+                  className={clsx("flex  gap-5 p-5", style.pageCard)}
                   style={{width: "40%"}}
                 >
                   <div className={clsx("flex p-4", style.statusGreen)}>
@@ -243,7 +243,10 @@ export default function Dashboard() {
                       <h2 className={style.normalText}>3</h2>
                     </div>
                   </div>
-                  <div className="flex flex-column gap-4 justify-content-between">
+                  <div
+                    className="flex flex-column gap-4 justify-content-between"
+                    style={{width: "53%"}}
+                  >
                     <div
                       className={clsx(
                         "flex align-items-center gap-3 px-3 py-4",
@@ -294,7 +297,7 @@ export default function Dashboard() {
                     </h3>
                     <p className={style.blueText}>View More</p>
                   </div>
-                  <div className="flex gap-4">
+                  <div className="flex gap-5">
                     <JobRoleCard
                       role="HVAC Technician"
                       salary="$2,000 - 5,000 / Monthly"
@@ -320,12 +323,12 @@ export default function Dashboard() {
                 </div>
               </div>
               {/* second part */}
-              <div className="flex gap-4">
+              <div className="flex gap-5">
                 <AssignmentTable></AssignmentTable>
                 <div className={style.pageCard} style={{width: "40%"}}>
                   <div
                     className={clsx(
-                      "flex justify-content-between px-4",
+                      "flex justify-content-between px-5",
                       style.tableHead
                     )}
                   >
@@ -366,14 +369,14 @@ export default function Dashboard() {
                 </div>
               </div>
               {/* third part */}
-              <div className="flex flex-column gap-4 mb-5">
+              <div className="flex flex-column gap-5 mb-5">
                 <div className="flex justify-content-between">
                   <h3 className={clsx("text-base", style.normalText)}>
                     Recommended Courses
                   </h3>
                   <p className={style.blueText}>View More</p>
                 </div>
-                <div className="flex gap-4">
+                <div className="flex gap-5">
                   <CourseCard
                     courseTitle="HVAC Basics"
                     courseDescription="HVAC installation stands for Heating, Ventilation, and Air Conditioning installation. "

@@ -48,7 +48,7 @@ export default function AssignmentTable() {
   const tableHeader = () => {
     return (
       <div
-        className={clsx("flex justify-content-between px-4", style.tableHead)}
+        className={clsx("flex justify-content-between px-5", style.tableHead)}
       >
         <h3 className="text-base">Pending Assignments</h3>
 
@@ -64,9 +64,7 @@ export default function AssignmentTable() {
       <DataTable
         header={tableHeader()}
         value={mockRow}
-        showGridlines
         className="custom-table"
-        // style={{width: "60%"}}
       >
         {mockColumn.map((col, index) => (
           <Column

@@ -60,7 +60,7 @@
   width: 35%;
   border: 1px solid #5151511a;
   border-radius: 20px;
-  padding: 2rem;
+  /* padding: 2rem; */
 }
 .chatRightContainer {
   border-radius: 0 !important;
@@ -135,7 +135,7 @@
 }
 .interruptButton {
   border: 1px solid #5151511a !important;
-  background-color: #1b84ff1a !important;
+  background-color: #ffffff !important;
   color: #515151 !important;
 }
 .interruptButton:focus {
@@ -145,12 +145,12 @@
 .interruptButton:hover:not(:disabled) {
   box-shadow: none !important;
   border: 1px solid #5151511a !important;
-  background-color: #1b84ff1a !important;
+  background-color: #ffffff !important;
 }
 .interruptButton:hover {
   box-shadow: none !important;
   border: 1px solid #5151511a !important;
-  background-color: #1b84ff1a !important;
+  background-color: #ffffff !important;
 }
 .videoContainer {
   width: 100%;

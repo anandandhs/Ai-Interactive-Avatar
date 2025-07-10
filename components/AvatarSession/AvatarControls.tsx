@@ -1,26 +1,22 @@
 import React from "react";
-import { SelectButton } from "primereact/selectbutton";
+import {SelectButton} from "primereact/selectbutton";
 
-import { useVoiceChat } from "../logic/useVoiceChat";
-import { Button } from "../Button";
-import { useInterrupt } from "../logic/useInterrupt";
+import {useVoiceChat} from "../logic/useVoiceChat";
+import {Button} from "../Button";
+import {useInterrupt} from "../logic/useInterrupt";
 
-import { AudioInput } from "./AudioInput";
-import { TextInput } from "./TextInput";
+import {AudioInput} from "./AudioInput";
+import {TextInput} from "./TextInput";
 import style from "../../styles/commonStyle.module.css";
 
 export const AvatarControls: React.FC = () => {
-  const {
-    isVoiceChatLoading,
-    isVoiceChatActive,
-    startVoiceChat,
-    stopVoiceChat,
-  } = useVoiceChat();
-  const { interrupt } = useInterrupt();
+  const {isVoiceChatLoading, isVoiceChatActive, startVoiceChat, stopVoiceChat} =
+    useVoiceChat();
+  const {interrupt} = useInterrupt();
 
   const chatOptions = [
-    { label: "Voice Chat", value: "voice" },
-    { label: "Text Chat", value: "text" },
+    {label: "Voice Chat", value: "voice"},
+    {label: "Text Chat", value: "text"},
   ];
 
   const currentChatMode =
@@ -45,7 +41,7 @@ export const AvatarControls: React.FC = () => {
       /> */}
       {(isVoiceChatActive || isVoiceChatLoading) && <AudioInput />}
       {/* <TextInput /> */}
-      <div className="absolute" style={{ right: "12px" }}>
+      <div className="absolute" style={{right: "2rem"}}>
         <Button
           // severity="secondary"
           onClick={interrupt}
