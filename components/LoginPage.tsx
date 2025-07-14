@@ -172,7 +172,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
               </div>
 
               <p
-                className={clsx("text-right -mt-3", style.blueText)}
+                className={clsx("text-right -mt-2 mb-5", style.blueText)}
                 style={{
                   color: "#1B84FF",
                   fontWeight: "400",
