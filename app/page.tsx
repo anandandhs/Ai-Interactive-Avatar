@@ -7,7 +7,6 @@ import { useState } from "react";
 
 export default function App() {
   const auth = useAuthContext();
-  const [dashboardSwitch, setDashboardSwitch] = useState<boolean>(false);
 
   // Show loading while initializing auth state
   if (!auth?.isInitialized) {
@@ -74,7 +73,7 @@ export default function App() {
               className="w-full h-full overflow-hidden"
               style={{ height: "100%", maxHeight: "100%" }}
             >
-              <InteractiveAvatar />
+              <InteractiveAvatar page={1} />
             </div>
           </div>
         </div>

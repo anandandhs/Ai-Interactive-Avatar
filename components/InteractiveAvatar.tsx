@@ -9,6 +9,8 @@ import {
 } from "@heygen/streaming-avatar";
 import { useEffect, useRef, useState } from "react";
 import { useMemoizedFn, useUnmount } from "ahooks";
+import { useRouter } from "next/navigation";
+import { Toast } from "primereact/toast";
 
 import { AvatarVideo } from "./AvatarSession/AvatarVideo";
 import { useStreamingAvatarSession } from "./logic/useStreamingAvatarSession";
@@ -22,6 +24,7 @@ import BackgroundImage from "../public/Svg/background_image.svg";
 import Mic from "../public/Svg/mic.svg";
 import Speaker from "../public/Svg/speaker.svg";
 import style from "../styles/commonStyle.module.css";
+import { useMessageHistory } from "../components/logic/index";
 
 import { AVATARS, STT_LANGUAGE_LIST } from "@/app/lib/constants";
 import Image from "next/image";
@@ -30,6 +33,10 @@ import { InputText } from "primereact/inputtext";
 import SendIcon from "../public/Svg/send.svg";
 import AppButton from "./UI/CommonUI/AppButton";
 import { useAuthContext } from "./Prividers/AuthProvider";
+import {
+  getKnowlededgeBase,
+  getRequiredAvatar,
+} from "@/app/lib/genericFunctions";
 
 const DEFAULT_CONFIG: StartAvatarRequest = {
   quality: AvatarQuality.Low,
@@ -47,22 +54,177 @@ const DEFAULT_CONFIG: StartAvatarRequest = {
   },
 };
 
-function InteractiveAvatar() {
+function InteractiveAvatar({ page }: { page: number }) {
   const { initAvatar, startAvatar, stopAvatar, sessionState, stream } =
     useStreamingAvatarSession();
   const { startVoiceChat } = useVoiceChat();
   const auth = useAuthContext();
+  const router = useRouter();
+  const toast = useRef<Toast>(null);
+  const currentAvatarMessage = useRef<string>("");
+  const currentUserMessage = useRef<string>("");
+  const userRequestedNavigation = useRef<string | null>(null);
+  const isAvatarTalking = useRef<boolean>(false);
 
   const mediaStream = useRef<HTMLVideoElement>(null);
+
+  // Function to check if user requested navigation
+  const checkUserNavigationRequest = (userMessage: string) => {
+    const lowerCaseMessage = userMessage.toLowerCase();
+    console.log("👤 User said:", lowerCaseMessage);
+
+    // Check if user requested specific navigation based on knowledge base support pathways
+    if (
+      lowerCaseMessage.includes("resume builder") ||
+      lowerCaseMessage.includes("resume") ||
+      lowerCaseMessage.includes("career advising") ||
+      lowerCaseMessage.includes("career development") ||
+      lowerCaseMessage.includes("career advice")
+    ) {
+      userRequestedNavigation.current = "resume-builder";
+      console.log("🎯 User requested: Resume Builder & Career Advising");
+    } else if (
+      lowerCaseMessage.includes("admission guidance") ||
+      lowerCaseMessage.includes("admission") ||
+      lowerCaseMessage.includes("academic planning") ||
+      lowerCaseMessage.includes("course admission") ||
+      lowerCaseMessage.includes("enrollment")
+    ) {
+      userRequestedNavigation.current = "course-admission";
+      console.log("🎯 User requested: Admission Guidance");
+    } else if (lowerCaseMessage.includes("dashboard")) {
+      userRequestedNavigation.current = "dashboard";
+      console.log("🎯 User requested: Dashboard");
+    } else {
+      userRequestedNavigation.current = null;
+      console.log("❌ No navigation request detected in user message");
+    }
+  };
+
+  // Function to check if avatar confirmed navigation and execute it
+  const checkAvatarNavigationConfirmation = (avatarMessage: string) => {
+    const lowerCaseMessage = avatarMessage.toLowerCase();
+    console.log("🤖 Avatar said:", lowerCaseMessage);
+    console.log(
+      "🎯 User previously requested:",
+      userRequestedNavigation.current
+    );
+
+    // Only proceed if user previously requested navigation
+    if (!userRequestedNavigation.current) {
+      console.log("❌ No pending navigation request from user");
+      return;
+    }
+
+    // Enhanced confirmation phrases based on knowledge base templates
+    const confirmationPhrases = [
+      "taking you to",
+      "navigating to",
+      "redirecting to",
+      "going to",
+      "heading to",
+      "excellent choice",
+      "great choice",
+      "perfect",
+      "sounds good",
+      "let's get started",
+      "let's begin",
+      "i'll help you with",
+      "let me guide you",
+    ];
+
+    const hasConfirmation = confirmationPhrases.some((phrase) =>
+      lowerCaseMessage.includes(phrase)
+    );
+
+    // Enhanced service keywords based on knowledge base support pathways
+    const serviceKeywords: Record<string, string[]> = {
+      "resume-builder": [
+        "resume",
+        "career",
+        "career development",
+        "career advising",
+        "resume builder",
+      ],
+      "course-admission": [
+        "admission",
+        "course",
+        "academic planning",
+        "admission guidance",
+        "enrollment",
+      ],
+      dashboard: ["dashboard", "home", "main"],
+    };
+
+    const requestedService = userRequestedNavigation.current;
+    const mentionsService =
+      requestedService &&
+      serviceKeywords[requestedService]?.some((keyword: string) =>
+        lowerCaseMessage.includes(keyword)
+      );
+
+    if (hasConfirmation && mentionsService) {
+      console.log(
+        "✅ Avatar confirmed navigation - waiting for avatar to finish talking..."
+      );
+
+      // Wait for avatar to completely finish talking before navigating
+      const executeNavigation = () => {
+        if (isAvatarTalking.current) {
+          console.log("⏳ Avatar still talking, waiting...");
+          setTimeout(executeNavigation, 500); // Check again in 500ms
+          return;
+        }
+
+        console.log(
+          "🚀 Avatar finished talking, proceeding with navigation..."
+        );
+
+        const routes: Record<string, string> = {
+          "resume-builder": "/resume-builder",
+          "course-admission": "/course-admission",
+          dashboard: "/dashboard",
+        };
+
+        const routeName: Record<string, string> = {
+          "resume-builder": "Resume Builder & Career Advising",
+          "course-admission": "Admission Guidance",
+          dashboard: "Dashboard",
+        };
+
+        // Show toast notification
+        toast.current?.show({
+          severity: "success",
+          summary: "Navigation Confirmed",
+          detail: `Taking you to ${routeName[requestedService]}...`,
+          life: 3000,
+        });
+
+        // Navigate after avatar completely finishes
+        setTimeout(() => {
+          stopAvatar();
+          router.push(routes[requestedService]);
+          // Reset the navigation request
+          userRequestedNavigation.current = null;
+        }, 2000);
+      };
+
+      // Start checking if avatar finished talking
+      executeNavigation();
+    } else {
+      console.log(
+        "❌ Avatar did not confirm navigation or mention the service"
+      );
+      // Reset navigation request if avatar doesn't confirm
+      userRequestedNavigation.current = null;
+    }
+  };
 
   useEffect(() => {
     if (auth?.user) {
       const predefinedConfig = {
         quality: AvatarQuality.Low,
-        avatarName:
-          auth?.user.username == "irwin.spinello@papyrrus.com"
-            ? AVATARS[0].avatar_id
-            : AVATARS[1].avatar_id,
+        avatarName: getRequiredAvatar(auth?.user.username || "", page),
         voice: {
           rate: 0.8,
           emotion: VoiceEmotion.EXCITED,
@@ -82,133 +244,13 @@ function InteractiveAvatar() {
         },
         activityIdleTimeout: 3600, // comment this after demo
         knowledgeId: "",
-        knowledgeBase:
-          auth?.user.username == "irwin.spinello@papyrrus.com"
-            ? JSON.stringify({
-                PERSONA:
-                  "Pedro is a virtual academic assistant designed to help students stay on track with their coursework. She interacts formally but supportively, encouraging task completion while maintaining a respectful, professional tone. Always address users by their logged in username.",
-                PRIMARY_USE_CASES: {
-                  Automated_Assignment_Alerts:
-                    "Inform users of pending assignments immediately upon login",
-                  Task_Breakdown:
-                    "List each assignment with due dates and provide brief descriptions",
-                  Time_Management:
-                    "Offer to help schedule reminders or suggest the next assignment to work on",
-                  Follow_up_Prompts:
-                    "Gently remind users in later sessions if they postpone assignments",
-                },
-                DIALOGUE_TEMPLATES: {
-                  opening_intro: `Welcome back, ${auth?.user.displayName}! It's time to embark on another productive session as we navigate your upcoming assignments together.`,
-                  return_after_absence:
-                    "Good day. Welcome back. I hope you've been well. I noticed it has been a few days since your last visit.",
-                  assignment_alert:
-                    "You currently have {count} pending assignments this week. Please review the details below:\n\n{assignment_list}\n\nWould you like to begin working on one of them now, or should I remind you later today?",
-                  postpone_response:
-                    "Understood. I will send you a reminder in {reminder_time}. Please be mindful of approaching deadlines to stay on track with your progress.",
-                  start_assignment_response:
-                    "Excellent choice. Starting this module now will give you ample time to review and refine your summary before submission. Launching {module_name} now...",
-                  exit_reminder:
-                    "Thank you. I've saved your progress. You still have the {pending_assignment} pending, due {due_date}. I'll remind you again tomorrow. Have a productive day.",
-                },
-                RESPONSE_RULES: [
-                  "ALWAYS address user by their logged-in username",
-                  "Present assignments in clear format: [Assignment Name] - [Due Date]",
-                  "Offer concrete next-step options (start now/schedule reminder)",
-                  "Maintain formal but supportive tone",
-                  "Track assignment completion status",
-                  "Provide specific timeframes for reminders",
-                ],
-                ASSIGNMENT_FORMAT: [
-                  "Resume Building – Module 2: Writing a Professional Summary\n Due: Friday, June 28th",
-                  "Interview Skills Quiz – Practice Assessment\n Due: Sunday, June 30th",
-                ],
-                REMINDER_OPTIONS: {
-                  default_reminder_delay: "4 hours",
-                  follow_up_times: ["later today", "tomorrow", "in two days"],
-                },
-              })
-            : auth?.user.username == "jason.padilla@papyrrus.com"
-            ? JSON.stringify({
-                PERSONA:
-                  "Marianne es una asistente virtual de carrera integrada en una plataforma para estudiantes o personas que buscan empleo. Realiza un seguimiento de las tendencias y oportunidades laborales según las preferencias guardadas del usuario, el contenido de su currículum o sus intereses profesionales. Al iniciar sesión, Marianne ofrece sugerencias de trabajo personalizadas, fomenta la participación y ofrece asistencia para solicitar empleo o actualizar su currículum. Siempre diríjase al usuario por su nombre de usuario registrado.",
-                PRIMARY_USE_CASES: {
-                  Personalized_Job_Discovery:
-                    "Notificar a los usuarios sobre nuevas ofertas de trabajo que coincidan con su perfil (por ejemplo, industria, ubicación, conjunto de habilidades)",
-                  "Re-engagement_After_Inactivity":
-                    "Proporcionar un registro cálido y actualizaciones sobre nuevas oportunidades cuando los usuarios regresan después de una ausencia",
-                  Resume_Readiness_Prompt:
-                    "Ofrecer revisar o actualizar el currículum del usuario para que coincida con las ofertas de trabajo actuales",
-                  Actionable_Job_Suggestions:
-                    "Proporcionar títulos de trabajo resumidos con opciones para guardar, rastrear o aplicar",
-                },
-                DIALOGUE_EXAMPLES: [
-                  {
-                    context: "User returns after absence",
-                    lines: [
-                      "Hola, me alegra verte de nuevo. Ha pasado un tiempo. ¿Cómo has estado?",
-                      "Durante su tiempo fuera, encontré 8 nuevas oportunidades laborales de HVAC en el área de Dallas que coinciden estrechamente con sus habilidades y preferencias.",
-                      "Oportunidades de muestra:",
-                      "Técnico de servicio de HVAC – Sistemas de enfriamiento de precisión",
-                      "Instalador de HVAC – NorthStar Mechanical",
-                      "¿Quiere ver la lista completa o adaptar su currículum para uno de estos puestos?",
-                    ],
-                  },
-                ],
-                RESPONSE_RULES: [
-                  "SIEMPRE diríjase al usuario por su nombre de usuario registrado",
-                  "Priorizar las oportunidades de trabajo recientes que coincidan con el perfil del usuario",
-                  "Sugerir actualizaciones del currículum cuando sean relevantes para nuevas oportunidades",
-                  "Ofrecer opciones claras para los siguientes pasos después de presentar la información",
-                ],
-                JOB_SUGGESTION_TEMPLATE: {
-                  opening: `Bienvenido de nuevo, ${auth?.user.displayName}. Es genial verte de nuevo. ¿Estás listo para descubrir nuevas y emocionantes oportunidades laborales diseñadas especialmente para ti?`,
-                  reengagement:
-                    "Hola, me alegra volver a verte. Ha pasado un tiempo. ¿Cómo has estado?",
-                  opportunity_announcement:
-                    "Durante su ausencia, encontré {count} nuevas oportunidades laborales en {industry} en el área de {location} que se ajustan estrechamente a sus habilidades y preferencias.",
-                },
-              })
-            : JSON.stringify({
-                PERSONA:
-                  "Marianne is a virtual career assistant embedded in a student or job-seeker platform. She tracks job trends and opportunities based on the user's saved preferences, resume content, or career interests. When a user logs in, Zara delivers personalized job suggestions, gently nudges engagement, and offers assistance in applying or updating their resume accordingly. Always address the user by their logged in user name.",
-                PRIMARY_USE_CASES: {
-                  Personalized_Job_Discovery:
-                    "Notify users about new job listings that align with their profile (e.g., industry, location, skill set)",
-                  "Re-engagement_After_Inactivity":
-                    "Provide warm check-in and updates on new opportunities when users return after absence",
-                  Resume_Readiness_Prompt:
-                    "Offer to review or update user's resume to match current job listings",
-                  Actionable_Job_Suggestions:
-                    "Provide summarized job titles with options to save, track, or apply",
-                },
-                DIALOGUE_EXAMPLES: [
-                  {
-                    context: "User returns after absence",
-                    lines: [
-                      "Hello, it's good to see you again. It's been a while — how have you been?",
-                      "During your time away, I've found 8 new HVAC job opportunities in the Dallas area that closely match your skills and preferences.",
-                      "Sample Opportunities:",
-                      "HVAC Service Technician – Precision Cooling Systems",
-                      "HVAC Installer – NorthStar Mechanical",
-                      "Would you like to view the full list, or have me tailor your resume for one of these positions?",
-                    ],
-                  },
-                ],
-                RESPONSE_RULES: [
-                  "ALWAYS address user by their logged-in username",
-                  "Prioritize recent job opportunities matching user's profile",
-                  "Suggest resume updates when relevant to new opportunities",
-                  "Provide clear next-step options after presenting information",
-                ],
-                JOB_SUGGESTION_TEMPLATE: {
-                  opening: `Welcome back, ${auth?.user.displayName} It's great to see you again—are you ready to uncover some exciting new job opportunities tailored just for you?`,
-                  reengagement:
-                    "Hello, it's good to see you again. It's been a while — how have you been?",
-                  opportunity_announcement:
-                    "During your time away, I've found {count} new {industry} job opportunities in the {location} area that closely match your skills and preferences.",
-                },
-              }),
+        knowledgeBase: getKnowlededgeBase(
+          auth.user.username || "",
+          page,
+          auth.user.displayName || ""
+        ),
       };
+
       startSessionV2(true, predefinedConfig);
     }
   }, [auth]);
@@ -236,10 +278,14 @@ function InteractiveAvatar() {
         const avatar = initAvatar(newToken);
 
         avatar.on(StreamingEvents.AVATAR_START_TALKING, (e) => {
-          console.log("Avatar started talking", e);
+          console.log("🗣️ Avatar started talking", e);
+          // Reset the message accumulator when avatar starts a new message
+          currentAvatarMessage.current = "";
+          isAvatarTalking.current = true;
         });
         avatar.on(StreamingEvents.AVATAR_STOP_TALKING, (e) => {
-          console.log("Avatar stopped talking", e);
+          console.log("🤐 Avatar stopped talking", e);
+          isAvatarTalking.current = false;
         });
         avatar.on(StreamingEvents.STREAM_DISCONNECTED, () => {
           console.log("Stream disconnected");
@@ -249,31 +295,70 @@ function InteractiveAvatar() {
         });
         avatar.on(StreamingEvents.USER_START, (event) => {
           console.log(">>>>> User started talking:", event);
+          // Reset the user message accumulator when user starts a new message
+          currentUserMessage.current = "";
         });
         avatar.on(StreamingEvents.USER_STOP, (event) => {
           console.log(">>>>> User stopped talking:", event);
         });
         avatar.on(StreamingEvents.USER_END_MESSAGE, (event) => {
           console.log(">>>>> User end message:", event);
+
+          // Use the accumulated user message content
+          const userMessageContent = currentUserMessage.current;
+          console.log("User message content:", userMessageContent);
+
+          if (userMessageContent) {
+            checkUserNavigationRequest(userMessageContent);
+          }
+
+          // Reset the user message accumulator for the next message
+          currentUserMessage.current = "";
         });
         avatar.on(StreamingEvents.USER_TALKING_MESSAGE, (event) => {
           console.log(">>>>> User talking message:", event);
+
+          // Accumulate the user's message content as they speak
+          if (event?.detail?.message) {
+            currentUserMessage.current += event.detail.message;
+          }
         });
         avatar.on(StreamingEvents.AVATAR_TALKING_MESSAGE, (event) => {
           console.log(">>>>> Avatar talking message:", event);
+
+          // Accumulate the avatar's message content as it speaks
+          if (event?.detail?.message) {
+            currentAvatarMessage.current += event.detail.message;
+          }
         });
         avatar.on(StreamingEvents.AVATAR_END_MESSAGE, (event) => {
-          console.log(">>>>> Avatar end message:", event);
+          console.log(">>>>> Avatar end message event:", event);
+          console.log(">>>>> Event detail:", event?.detail);
+
+          // Use the accumulated message content from AVATAR_TALKING_MESSAGE
+          const finalMessageContent = currentAvatarMessage.current;
+          console.log(
+            "Final accumulated message content:",
+            finalMessageContent
+          );
+
+          if (finalMessageContent) {
+            // Check if avatar confirmed navigation
+            checkAvatarNavigationConfirmation(finalMessageContent);
+          }
+
+          // Reset the accumulated message for the next avatar response
+          currentAvatarMessage.current = "";
         });
 
         // Create a personalized config with user's display name
         const personalizedConfig = { ...config };
 
-        // await startAvatar(personalizedConfig);
+        await startAvatar(personalizedConfig);
 
-        // if (isVoiceChat) {
-        //   await startVoiceChat();
-        // }
+        if (isVoiceChat) {
+          await startVoiceChat();
+        }
       } catch (error) {
         console.error("Error starting avatar session:", error);
       }
@@ -293,8 +378,50 @@ function InteractiveAvatar() {
     }
   }, [mediaStream, stream]);
 
+  // Expose test functions to global scope for manual testing
+  useEffect(() => {
+    (window as any).testUserRequest = (userMessage: string) => {
+      console.log("🧪 Testing user request:", userMessage);
+      checkUserNavigationRequest(userMessage);
+    };
+
+    (window as any).testAvatarConfirmation = (avatarMessage: string) => {
+      console.log("🧪 Testing avatar confirmation:", avatarMessage);
+      checkAvatarNavigationConfirmation(avatarMessage);
+    };
+
+    (window as any).testFullFlow = (
+      userMessage: string,
+      avatarMessage: string
+    ) => {
+      console.log("🧪 Testing full navigation flow:");
+      console.log("1. User says:", userMessage);
+      checkUserNavigationRequest(userMessage);
+      console.log("2. Avatar responds:", avatarMessage);
+      // Simulate avatar not talking for test
+      isAvatarTalking.current = false;
+      checkAvatarNavigationConfirmation(avatarMessage);
+    };
+
+    (window as any).checkAvatarTalkingStatus = () => {
+      console.log("🎤 Avatar talking status:", isAvatarTalking.current);
+      console.log(
+        "🎯 Pending navigation request:",
+        userRequestedNavigation.current
+      );
+    };
+
+    return () => {
+      delete (window as any).testUserRequest;
+      delete (window as any).testAvatarConfirmation;
+      delete (window as any).testFullFlow;
+      delete (window as any).checkAvatarTalkingStatus;
+    };
+  }, []);
+
   return (
     <div className={style.homeBlur}>
+      <Toast ref={toast} />
       {/* {sessionState === StreamingAvatarSessionState.INACTIVE && (
         <div
           className="flex justify-content-center align-items-center absolute z-1 top-0 left-0 bottom-0 right-0"
@@ -507,10 +634,10 @@ function InteractiveAvatar() {
   );
 }
 
-export default function InteractiveAvatarWrapper() {
+export default function InteractiveAvatarWrapper({ page }: { page: number }) {
   return (
     <StreamingAvatarProvider basePath={process.env.NEXT_PUBLIC_BASE_API_URL}>
-      <InteractiveAvatar />
+      <InteractiveAvatar page={page} />
     </StreamingAvatarProvider>
   );
 }
