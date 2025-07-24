@@ -1,27 +1,33 @@
 export const AVATARS = [
   {
-    avatar_id: "Thaddeus_Black_Suit_public",
-    name: "Thaddues Black Suit",
-  },
-  {
     avatar_id: "Katya_Black_Suit_public",
     name: "Katya Black Suit",
+    avatar_name: "Katya",
+  },
+  {
+    avatar_id: "Thaddeus_Black_Suit_public",
+    name: "Thaddues Black Suit",
+    avatar_name: "Thaddeus",
   },
   {
     avatar_id: "Amina_Black_Suit_public",
     name: "Amina Black Suit",
-  },
-  {
-    avatar_id: "Pedro_Black_Suit_public",
-    name: "Pedro Black Suit",
+    avatar_name: "Amina",
   },
   {
     avatar_id: "Marianne_Black_Suit_public",
     name: "Marianne Black Suit",
+    avatar_name: "Marianne",
   },
   {
     avatar_id: "Alessandra_Black_Suit_public",
     name: "Alessandra Black Suit",
+    avatar_name: "Alessandra",
+  },
+  {
+    avatar_id: "Pedro_Black_Suit_public",
+    name: "Pedro Black Suit",
+    avatar_name: "Pedro",
   },
 ];
 

@@ -197,7 +197,7 @@ function InteractiveAvatar({ page }: { page: number }) {
           severity: "success",
           summary: "Navigation Confirmed",
           detail: `Taking you to ${routeName[requestedService]}...`,
-          life: 3000,
+          life: 6000,
         });
 
         // Navigate after avatar completely finishes
@@ -206,7 +206,7 @@ function InteractiveAvatar({ page }: { page: number }) {
           router.push(routes[requestedService]);
           // Reset the navigation request
           userRequestedNavigation.current = null;
-        }, 2000);
+        }, 6000);
       };
 
       // Start checking if avatar finished talking
@@ -222,22 +222,38 @@ function InteractiveAvatar({ page }: { page: number }) {
 
   useEffect(() => {
     if (auth?.user) {
+      const currentAvatarId = getRequiredAvatar(
+        auth?.user.username || "",
+        auth?.user.username == "jason.padilla@papyrrus.com" ? page + 3 : page
+      );
       const predefinedConfig = {
         quality: AvatarQuality.Low,
-        avatarName: getRequiredAvatar(auth?.user.username || "", page),
+        avatarName: currentAvatarId,
         voice: {
           rate: 0.8,
           emotion: VoiceEmotion.EXCITED,
           model:
-            auth?.user.username == "jason.padilla@papyrrus.com"
+            auth?.user.username == "jason.padilla@papyrrus.com" ||
+            auth?.user.username == "percy.veltman@papyrrus.com"
               ? ElevenLabsModel.eleven_multilingual_v2
               : ElevenLabsModel.eleven_flash_v2_5,
           ...(auth?.user.username == "jason.padilla@papyrrus.com" && {
+            voiceId:
+              page === 1
+                ? "e85822bd14e144e8b6fe73da2fb1085c"
+                : page === 2
+                ? "72cbcf091d9d48998ce10d7b5c2d569e"
+                : "a557ea37036844748016d4cee181c322",
+          }),
+          ...(auth?.user?.username === "percy.veltman@papyrrus.com" && {
             voiceId: "e85822bd14e144e8b6fe73da2fb1085c",
           }),
         },
         language:
-          auth?.user.username == "jason.padilla@papyrrus.com" ? "es" : "en",
+          auth?.user.username == "jason.padilla@papyrrus.com" ||
+          auth?.user.username == "percy.veltman@papyrrus.com"
+            ? "es"
+            : "en",
         voiceChatTransport: VoiceChatTransport.WEBSOCKET,
         sttSettings: {
           provider: STTProvider.DEEPGRAM,
@@ -247,7 +263,8 @@ function InteractiveAvatar({ page }: { page: number }) {
         knowledgeBase: getKnowlededgeBase(
           auth.user.username || "",
           page,
-          auth.user.displayName || ""
+          auth.user.displayName || "",
+          currentAvatarId
         ),
       };
 
@@ -308,7 +325,12 @@ function InteractiveAvatar({ page }: { page: number }) {
           const userMessageContent = currentUserMessage.current;
           console.log("User message content:", userMessageContent);
 
-          if (userMessageContent) {
+          if (
+            userMessageContent &&
+            (auth?.user?.username == "jason.padilla@papyrrus.com" ||
+              auth?.user?.username == "irwin.spinello@papyrrus.com") &&
+            page == 1
+          ) {
             checkUserNavigationRequest(userMessageContent);
           }
 
@@ -342,7 +364,12 @@ function InteractiveAvatar({ page }: { page: number }) {
             finalMessageContent
           );
 
-          if (finalMessageContent) {
+          if (
+            finalMessageContent &&
+            (auth?.user?.username == "jason.padilla@papyrrus.com" ||
+              auth?.user?.username == "irwin.spinello@papyrrus.com") &&
+            page == 1
+          ) {
             // Check if avatar confirmed navigation
             checkAvatarNavigationConfirmation(finalMessageContent);
           }
@@ -371,6 +398,7 @@ function InteractiveAvatar({ page }: { page: number }) {
 
   useEffect(() => {
     if (stream && mediaStream.current) {
+      clsx;
       mediaStream.current.srcObject = stream;
       mediaStream.current.onloadedmetadata = () => {
         mediaStream.current!.play();
@@ -379,45 +407,45 @@ function InteractiveAvatar({ page }: { page: number }) {
   }, [mediaStream, stream]);
 
   // Expose test functions to global scope for manual testing
-  useEffect(() => {
-    (window as any).testUserRequest = (userMessage: string) => {
-      console.log("🧪 Testing user request:", userMessage);
-      checkUserNavigationRequest(userMessage);
-    };
+  // useEffect(() => {
+  //   (window as any).testUserRequest = (userMessage: string) => {
+  //     console.log("🧪 Testing user request:", userMessage);
+  //     checkUserNavigationRequest(userMessage);
+  //   };
 
-    (window as any).testAvatarConfirmation = (avatarMessage: string) => {
-      console.log("🧪 Testing avatar confirmation:", avatarMessage);
-      checkAvatarNavigationConfirmation(avatarMessage);
-    };
+  //   (window as any).testAvatarConfirmation = (avatarMessage: string) => {
+  //     console.log("🧪 Testing avatar confirmation:", avatarMessage);
+  //     checkAvatarNavigationConfirmation(avatarMessage);
+  //   };
 
-    (window as any).testFullFlow = (
-      userMessage: string,
-      avatarMessage: string
-    ) => {
-      console.log("🧪 Testing full navigation flow:");
-      console.log("1. User says:", userMessage);
-      checkUserNavigationRequest(userMessage);
-      console.log("2. Avatar responds:", avatarMessage);
-      // Simulate avatar not talking for test
-      isAvatarTalking.current = false;
-      checkAvatarNavigationConfirmation(avatarMessage);
-    };
+  //   (window as any).testFullFlow = (
+  //     userMessage: string,
+  //     avatarMessage: string
+  //   ) => {
+  //     console.log("🧪 Testing full navigation flow:");
+  //     console.log("1. User says:", userMessage);
+  //     checkUserNavigationRequest(userMessage);
+  //     console.log("2. Avatar responds:", avatarMessage);
+  //     // Simulate avatar not talking for test
+  //     isAvatarTalking.current = false;
+  //     checkAvatarNavigationConfirmation(avatarMessage);
+  //   };
 
-    (window as any).checkAvatarTalkingStatus = () => {
-      console.log("🎤 Avatar talking status:", isAvatarTalking.current);
-      console.log(
-        "🎯 Pending navigation request:",
-        userRequestedNavigation.current
-      );
-    };
+  //   (window as any).checkAvatarTalkingStatus = () => {
+  //     console.log("🎤 Avatar talking status:", isAvatarTalking.current);
+  //     console.log(
+  //       "🎯 Pending navigation request:",
+  //       userRequestedNavigation.current
+  //     );
+  //   };
 
-    return () => {
-      delete (window as any).testUserRequest;
-      delete (window as any).testAvatarConfirmation;
-      delete (window as any).testFullFlow;
-      delete (window as any).checkAvatarTalkingStatus;
-    };
-  }, []);
+  //   return () => {
+  //     delete (window as any).testUserRequest;
+  //     delete (window as any).testAvatarConfirmation;
+  //     delete (window as any).testFullFlow;
+  //     delete (window as any).checkAvatarTalkingStatus;
+  //   };
+  // }, []);
 
   return (
     <div className={style.homeBlur}>
@@ -459,7 +487,7 @@ function InteractiveAvatar({ page }: { page: number }) {
             }}
           >
             {sessionState !== StreamingAvatarSessionState.INACTIVE ? (
-              <AvatarVideo ref={mediaStream} />
+              <AvatarVideo ref={mediaStream} page={page} />
             ) : (
               <div
                 className="w-full h-full flex align-items-center justify-content-center"
