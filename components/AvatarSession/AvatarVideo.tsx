@@ -32,7 +32,11 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     // Determine current ava(tar based on user
-    const currentAvatarId = getRequiredAvatar(auth?.user?.username || "", page);
+    const currentAvatarId = getRequiredAvatar(
+      auth?.user?.username || "",
+      auth?.user?.username == "jason.padilla@papyrrus.com" ? page + 3 : page
+    );
+    console.log("Current avatar id: ", currentAvatarId, page);
 
     // Check if current avatar is Pedro (which needs different positioning)
 
@@ -242,17 +246,17 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
                 auth?.user?.username == "berkley.esherwood@papyrrus.com" ||
                 auth?.user?.username == "percy.veltman@papyrrus.com"
                   ? Texas
-                  : currentAvatarId === AVATARS[0].avatar_id
+                  : currentAvatarId === AVATARS[0].avatar_id //katya
                   ? administrationEnglish
-                  : currentAvatarId === AVATARS[1].avatar_id
+                  : currentAvatarId === AVATARS[1].avatar_id //thaddues
                   ? accademicEnglish
-                  : currentAvatarId === AVATARS[2].avatar_id
+                  : currentAvatarId === AVATARS[2].avatar_id //amina
                   ? admissionEnglish
-                  : currentAvatarId === AVATARS[3].avatar_id
+                  : currentAvatarId === AVATARS[3].avatar_id //marianne
                   ? administrationSpanish
-                  : currentAvatarId === AVATARS[4].avatar_id
+                  : currentAvatarId === AVATARS[4].avatar_id //alessandra
                   ? accademicSpanish
-                  : currentAvatarId === AVATARS[5].avatar_id
+                  : currentAvatarId === AVATARS[5].avatar_id //pedro
                   ? admissionSpanish
                   : Texas
               }
