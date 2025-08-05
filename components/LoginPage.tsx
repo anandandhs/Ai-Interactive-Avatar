@@ -1,16 +1,16 @@
 "use client";
 
-import React, {useState} from "react";
-import {Input} from "./Input";
-import {Card} from "primereact/card";
-import {Message} from "primereact/message";
+import React, { useState } from "react";
+import { Input } from "./Input";
+import { Card } from "primereact/card";
+import { Message } from "primereact/message";
 
 import Image from "next/image";
 import Avatar from "../public/Svg/avatar.svg";
 
-import {InputText} from "primereact/inputtext";
+import { InputText } from "primereact/inputtext";
 import TextInput from "./UI/CommonUI/TextInput";
-import {Button} from "./Button";
+import { Button } from "./Button";
 import AppButton from "./UI/CommonUI/AppButton";
 import style from "../styles/commonStyle.module.css";
 import clsx from "clsx";
@@ -20,7 +20,8 @@ import BackgroundLogo from "../public/Svg/home_2.svg";
 import BackgroundStar from "../public/Svg/home_1.svg";
 import LoginAvatar from "../public/Svg/meliassaLogin.svg";
 import Logo from "../public/Svg/nav_logo.svg";
-import {relative} from "path";
+import LoginRightRectangle from "../public/Svg/loginRightRectangle.svg";
+import LoginLeftRectangle from "../public/Svg/loginLeftRectangle.svg";
 
 interface LoginPageProps {
   onLogin: (username: string, password: string) => Promise<boolean>;
@@ -35,6 +36,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
 }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [imageLoading, setImageLoading] = useState(true);
 
   const handleSubmit = async () => {
     if (!username.trim() || !password.trim()) return;
@@ -44,14 +46,17 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   return (
     <div className="grid h-full">
       {/* Left Side */}
-      <div className="col-12 md:col-6 flex md:align-items-center align-items-start justify-content-center p-5">
-        <div className="w-full relative">
-          <Image
-            src={LoginAvatar}
-            alt="avatar"
-            className="w-full relative"
-            style={{objectFit: "contain", maxHeight: "90vh", left: "-1rem"}}
-          />
+      <div className="col-12 md:col-6 flex md:align-items-center align-items-start justify-content-center">
+        <Image
+          src={LoginAvatar}
+          alt="avatar"
+          className="w-full relative"
+          onLoadingComplete={() => {
+            setImageLoading(false);
+          }}
+          style={{ objectFit: "cover", height: "100vh" }}
+        />
+        {/* <div className="w-full relative">
           <h5
             className="absolute text-center"
             style={{
@@ -71,7 +76,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             Your AI Powered Career Concierge Log In To Begin Your Workforce
             Journey.
           </h5>
-        </div>
+        </div> */}
 
         {/* <div className={style.homeBackground}>
           <h5
@@ -109,6 +114,16 @@ export const LoginPage: React.FC<LoginPageProps> = ({
         </div> */}
       </div>
       <div className="col-6">
+        <Image
+          src={LoginLeftRectangle}
+          alt="rectangleLeft"
+          style={{ position: "absolute", top: "15%", left: "49.5%" }}
+        />
+        <Image
+          src={LoginRightRectangle}
+          alt="rectangleRIght"
+          style={{ position: "absolute", top: "15%", left: "98.5%" }}
+        />
         <div className="h-full flex flex-column justify-content-center">
           <div className="flex flex-column justify-content-center align-items-center relative">
             <Image src={Logo} alt="logo" />
@@ -137,7 +152,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             </div>
             <div
               className="flex flex-column gap-4 mt-5"
-              style={{width: "28rem"}}
+              style={{ width: "28rem" }}
             >
               {error && <div className={style.errorBox}>{error}</div>}
 

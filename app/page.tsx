@@ -33,7 +33,6 @@ export default function App() {
   }
 
   if (!auth?.isAuthenticated) {
-    console.log("Not authenticated", auth?.error);
     return (
       <LoginPage
         onLogin={auth.login}
@@ -46,7 +45,7 @@ export default function App() {
   return (
     <>
       <div
-        className="flex-1 overflow-hidden"
+        className={"flex-1 overflow-hidden"}
         style={{
           backgroundColor: "var(--bg-primary)",
           padding: "var(--space-6) var(--space-8)",

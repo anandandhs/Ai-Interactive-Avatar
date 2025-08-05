@@ -1,11 +1,15 @@
 "use client";
 
 import NavBar from "@/components/NavBar";
-import {useAuthContext} from "@/components/Prividers/AuthProvider";
-import {usePathname} from "next/navigation";
-import {useEffect, useState} from "react";
+import { useAuthContext } from "@/components/Prividers/AuthProvider";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
-export default function LayoutContent({children}: {children: React.ReactNode}) {
+export default function LayoutContent({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const pathname = usePathname();
   const auth = useAuthContext();
   const [dashboardSwitch, setDashboardSwitch] = useState<boolean>(false);
@@ -28,14 +32,22 @@ export default function LayoutContent({children}: {children: React.ReactNode}) {
             ? "overflow-x-hidden overflow-y-scroll"
             : "overflow-hidden"
         }`}
-        style={{
-          backgroundColor: "#fff",
-          padding: "var(--space-6) var(--space-8)",
-          height: auth?.isAuthenticated ? "calc(100vh - 5rem)" : "calc(100vh)",
-          maxHeight: auth?.isAuthenticated
-            ? "calc(100vh - 5rem)"
-            : "calc(100vh)",
-        }}
+        style={
+          !auth?.isAuthenticated && pathname === "/"
+            ? {
+                backgroundColor: "var(--bg-primary)",
+              }
+            : {
+                backgroundColor: "var(--bg-primary)",
+                padding: "var(--space-6) var(--space-8)",
+                height: auth?.isAuthenticated
+                  ? "calc(100vh - 5rem)"
+                  : "calc(100vh)",
+                maxHeight: auth?.isAuthenticated
+                  ? "calc(100vh - 5rem)"
+                  : "calc(100vh)",
+              }
+        }
       >
         {children}
       </div>

@@ -248,6 +248,14 @@ function InteractiveAvatar({ page }: { page: number }) {
           ...(auth?.user?.username === "percy.veltman@papyrrus.com" && {
             voiceId: "e85822bd14e144e8b6fe73da2fb1085c",
           }),
+          ...(auth?.user?.username === "irwin.spinello@papyrrus.com" && {
+            voiceId:
+              currentAvatarId === AVATARS[0].avatar_id
+                ? "d41b5163f39044129d06aca88d7a8f4f"
+                : currentAvatarId === AVATARS[1].avatar_id
+                ? "808a781f0c8e43dcb89636df6040143c" //male voice
+                : "207e0fdec4e645d287803503706e107d",
+          }),
         },
         language:
           auth?.user.username == "jason.padilla@papyrrus.com" ||

@@ -89,12 +89,12 @@ const StreamingAvatarContext = React.createContext<StreamingAvatarContextProps>(
     setIsAvatarTalking: () => {},
     connectionQuality: ConnectionQuality.UNKNOWN,
     setConnectionQuality: () => {},
-  },
+  }
 );
 
 const useStreamingAvatarSessionState = () => {
   const [sessionState, setSessionState] = useState(
-    StreamingAvatarSessionState.INACTIVE,
+    StreamingAvatarSessionState.INACTIVE
   );
   const [stream, setStream] = useState<MediaStream | null>(null);
 
@@ -213,7 +213,7 @@ const useStreamingAvatarTalkingState = () => {
 
 const useStreamingAvatarConnectionQualityState = () => {
   const [connectionQuality, setConnectionQuality] = useState(
-    ConnectionQuality.UNKNOWN,
+    ConnectionQuality.UNKNOWN
   );
 
   return { connectionQuality, setConnectionQuality };
