@@ -143,11 +143,12 @@ export const MessageHistory: React.FC = () => {
                     wordBreak: "break-word",
                   }}
                 >
-                  <ReactTyped
+                  {message.content}
+                  {/* <ReactTyped
                     strings={[message.content]}
                     typeSpeed={48}
                     smartBackspace={false}
-                  />
+                  /> */}
                 </div>
               </div>
             </div>

@@ -16,7 +16,11 @@ import { AvatarVideo } from "./AvatarSession/AvatarVideo";
 import { useStreamingAvatarSession } from "./logic/useStreamingAvatarSession";
 import { AvatarControls } from "./AvatarSession/AvatarControls";
 import { useVoiceChat } from "./logic/useVoiceChat";
-import { StreamingAvatarProvider, StreamingAvatarSessionState } from "./logic";
+import {
+  StreamingAvatarProvider,
+  StreamingAvatarSessionState,
+  useInterrupt,
+} from "./logic";
 import { LoadingIcon } from "./Icons";
 import { MessageHistory } from "./AvatarSession/MessageHistory";
 import Avatar from "../public/Svg/home_avatar.svg";
@@ -25,6 +29,7 @@ import Mic from "../public/Svg/mic.svg";
 import Speaker from "../public/Svg/speaker.svg";
 import style from "../styles/commonStyle.module.css";
 import { useMessageHistory } from "../components/logic/index";
+import { FloatingChatInterface } from "./FloatingChatInterface";
 
 import { AVATARS, STT_LANGUAGE_LIST } from "@/app/lib/constants";
 import Image from "next/image";
@@ -57,6 +62,7 @@ const DEFAULT_CONFIG: StartAvatarRequest = {
 function InteractiveAvatar({ page }: { page: number }) {
   const { initAvatar, startAvatar, stopAvatar, sessionState, stream } =
     useStreamingAvatarSession();
+  const { interrupt } = useInterrupt();
   const { startVoiceChat } = useVoiceChat();
   const auth = useAuthContext();
   const router = useRouter();
@@ -202,6 +208,7 @@ function InteractiveAvatar({ page }: { page: number }) {
 
         // Navigate after avatar completely finishes
         setTimeout(() => {
+          interrupt();
           stopAvatar();
           router.push(routes[requestedService]);
           // Reset the navigation request
@@ -220,12 +227,18 @@ function InteractiveAvatar({ page }: { page: number }) {
     }
   };
 
+  const [currentAvatarId, setCurrentAvatarId] = useState<string>(
+    AVATARS[0].avatar_id
+  );
+
   useEffect(() => {
     if (auth?.user) {
       const currentAvatarId = getRequiredAvatar(
         auth?.user.username || "",
         auth?.user.username == "jason.padilla@papyrrus.com" ? page + 3 : page
       );
+      setCurrentAvatarId(currentAvatarId);
+
       const predefinedConfig = {
         quality: AvatarQuality.Low,
         avatarName: currentAvatarId,
@@ -239,11 +252,11 @@ function InteractiveAvatar({ page }: { page: number }) {
               : ElevenLabsModel.eleven_flash_v2_5,
           ...(auth?.user.username == "jason.padilla@papyrrus.com" && {
             voiceId:
-              page === 1
+              currentAvatarId === AVATARS[3].avatar_id
                 ? "e85822bd14e144e8b6fe73da2fb1085c"
-                : page === 2
-                ? "72cbcf091d9d48998ce10d7b5c2d569e"
-                : "a557ea37036844748016d4cee181c322",
+                : currentAvatarId === AVATARS[4].avatar_id
+                ? "a557ea37036844748016d4cee181c322"
+                : "72cbcf091d9d48998ce10d7b5c2d569e",
           }),
           ...(auth?.user?.username === "percy.veltman@papyrrus.com" && {
             voiceId: "e85822bd14e144e8b6fe73da2fb1085c",
@@ -276,7 +289,9 @@ function InteractiveAvatar({ page }: { page: number }) {
         ),
       };
 
-      startSessionV2(true, predefinedConfig);
+      console.log("Predefined Config:", predefinedConfig);
+
+      //startSessionV2(true, predefinedConfig);
     }
   }, [auth]);
 
@@ -401,6 +416,7 @@ function InteractiveAvatar({ page }: { page: number }) {
   );
 
   useUnmount(() => {
+    interrupt();
     stopAvatar();
   });
 
@@ -666,6 +682,16 @@ function InteractiveAvatar({ page }: { page: number }) {
           )}
         </div>
       </div>
+
+      {/* Floating Chat Interface */}
+      {(auth?.user?.username === "jason.padilla@papyrrus.com" ||
+        auth?.user?.username === "irwin.spinello@papyrrus.com") && (
+        <FloatingChatInterface
+          sessionState={sessionState}
+          page={page}
+          currentAvatarId={currentAvatarId}
+        />
+      )}
     </div>
   );
 }

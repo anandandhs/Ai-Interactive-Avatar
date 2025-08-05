@@ -7,6 +7,7 @@
   width: 25rem;
   font-size: 1rem;
 }
+
 .errorInputContainer {
   height: 2.813rem;
   border: 1px solid #c80a0a !important;
@@ -16,9 +17,11 @@
   width: 25rem;
   font-size: 1rem;
 }
+
 .errorInputContainer:focus {
   box-shadow: none;
 }
+
 .inputContainer:hover {
   border: 1px solid #515151 !important;
 }
@@ -45,9 +48,11 @@
   height: 50px;
   border-radius: 10px !important;
 }
+
 .buttonContainer:hover {
   background-color: #515151 !important;
 }
+
 .secondaryButton {
   border: 1px solid #fffefe1a !important;
   background-color: transparent !important;
@@ -61,4 +66,38 @@
   background-color: transparent !important;
   font-weight: 700 !important;
   height: 50px;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+}
+
+.images {
+  display: flex;
+}
+
+.circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid white;
+}
+
+.circle:not(:first-child) {
+  margin-left: -16px;
+}
+
+.dots {
+  display: flex;
+  margin-left: 8px;
+  gap: 4px;
+}
+
+.dots span {
+  width: 3px;
+  height: 3px;
+  background-color: #D9D9D9;
+  border-radius: 50%;
 }

@@ -1,17 +1,21 @@
 "use client";
 
-import {Toolbar} from "primereact/toolbar";
-import {Button} from "primereact/button";
+import { Toolbar } from "primereact/toolbar";
+import { Button } from "primereact/button";
 import Image from "next/image";
 import Logo from "../public/Svg/nav_logo.svg";
 import Settings from "../public/Svg/settings.svg";
 import AiChat from "../public/Svg/aiChat.svg";
 import Dasboard from "../public/Svg/dashboard.svg";
 import Profile from "../public/Svg/profile.svg";
-import {StreamingAvatarSessionState, useStreamingAvatarSession} from "./logic";
+import {
+  StreamingAvatarSessionState,
+  useInterrupt,
+  useStreamingAvatarSession,
+} from "./logic";
 import Link from "next/link";
-import {useAuthContext} from "./Prividers/AuthProvider";
-import {useRouter} from "next/navigation";
+import { useAuthContext } from "./Prividers/AuthProvider";
+import { useRouter } from "next/navigation";
 
 export default function NavBar({
   dashboardSwitch,
@@ -22,9 +26,11 @@ export default function NavBar({
 }) {
   const auth = useAuthContext();
   const router = useRouter();
-  const {stopAvatar, sessionState} = useStreamingAvatarSession();
+  const { stopAvatar, sessionState } = useStreamingAvatarSession();
+  const { interrupt } = useInterrupt();
   const handleLogout = () => {
     if (sessionState !== StreamingAvatarSessionState.INACTIVE) {
+      interrupt();
       stopAvatar();
     }
     auth?.logout();
@@ -38,7 +44,7 @@ export default function NavBar({
   );
 
   const endContent = (
-    <div className="flex align-items-center" style={{gap: "50px"}}>
+    <div className="flex align-items-center" style={{ gap: "50px" }}>
       {dashboardSwitch ? (
         <Image
           src={AiChat}
@@ -66,7 +72,7 @@ export default function NavBar({
         className="p-button-text p-button-rounded"
         onClick={handleLogout}
         tooltip="Sign out"
-        tooltipOptions={{position: "bottom"}}
+        tooltipOptions={{ position: "bottom" }}
         style={{
           color: "var(--error-color)",
           backgroundColor: "transparent",
