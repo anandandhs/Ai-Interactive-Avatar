@@ -6,8 +6,18 @@ export const useInterrupt = () => {
   const { avatarRef } = useStreamingAvatarContext();
 
   const interrupt = useCallback(() => {
-    if (!avatarRef.current) return;
-    avatarRef.current.interrupt();
+    try {
+      if (!avatarRef.current) {
+        console.warn("Cannot interrupt: Avatar reference is null");
+        return;
+      }
+
+      console.log("🛑 Interrupting avatar...");
+      avatarRef.current.interrupt();
+    } catch (error) {
+      console.error("Error during interrupt:", error);
+      // Don't re-throw as interrupt should be non-blocking
+    }
   }, [avatarRef]);
 
   return { interrupt };

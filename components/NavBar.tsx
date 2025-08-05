@@ -28,13 +28,22 @@ export default function NavBar({
   const router = useRouter();
   const { stopAvatar, sessionState } = useStreamingAvatarSession();
   const { interrupt } = useInterrupt();
-  const handleLogout = () => {
-    if (sessionState !== StreamingAvatarSessionState.INACTIVE) {
-      interrupt();
-      stopAvatar();
+  const handleLogout = async () => {
+    try {
+      if (sessionState !== StreamingAvatarSessionState.INACTIVE) {
+        console.log("🔌 Cleaning up avatar session before logout...");
+        interrupt();
+        // Wait a bit for interrupt to take effect
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        await stopAvatar();
+      }
+    } catch (error) {
+      console.error("Error during logout cleanup:", error);
+      // Continue with logout even if cleanup fails
+    } finally {
+      auth?.logout();
+      window.location.href = "/";
     }
-    auth?.logout();
-    window.location.href = "/";
   };
 
   const startContent = (

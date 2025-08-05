@@ -150,20 +150,46 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
   const handleAssistantSelect = async (
     assistant: (typeof AI_ASSISTANTS)[0]
   ) => {
-    await interrupt();
-    await stopAvatar();
-    if (
-      assistant.id === AVATARS[0].avatar_id ||
-      assistant.id === AVATARS[3].avatar_id
-    ) {
-      router.push("/");
-    } else if (
-      assistant.id === AVATARS[1].avatar_id ||
-      assistant.id === AVATARS[4].avatar_id
-    ) {
-      router.push("/resume-builder");
-    } else {
-      router.push("/course-admission");
+    try {
+      // Gracefully stop the current avatar session
+      if (sessionState !== StreamingAvatarSessionState.INACTIVE) {
+        console.log("🔄 Switching avatar, stopping current session...");
+        interrupt();
+        // Wait a bit for interrupt to take effect
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        await stopAvatar();
+      }
+
+      // Navigate to the appropriate page
+      if (
+        assistant.id === AVATARS[0].avatar_id ||
+        assistant.id === AVATARS[3].avatar_id
+      ) {
+        router.push("/");
+      } else if (
+        assistant.id === AVATARS[1].avatar_id ||
+        assistant.id === AVATARS[4].avatar_id
+      ) {
+        router.push("/resume-builder");
+      } else {
+        router.push("/course-admission");
+      }
+    } catch (error) {
+      console.error("Error during assistant switch:", error);
+      // Still navigate even if cleanup fails
+      if (
+        assistant.id === AVATARS[0].avatar_id ||
+        assistant.id === AVATARS[3].avatar_id
+      ) {
+        router.push("/");
+      } else if (
+        assistant.id === AVATARS[1].avatar_id ||
+        assistant.id === AVATARS[4].avatar_id
+      ) {
+        router.push("/resume-builder");
+      } else {
+        router.push("/course-admission");
+      }
     }
 
     // setSelectedAssistant(assistant);

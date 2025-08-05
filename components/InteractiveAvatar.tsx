@@ -108,6 +108,31 @@ function InteractiveAvatar({ page }: { page: number }) {
   };
 
   // Function to check if avatar confirmed navigation and execute it
+  // Graceful avatar session cleanup function
+  const stopAvatarGracefully = async () => {
+    try {
+      // Only interrupt if avatar is currently talking
+      if (isAvatarTalking.current) {
+        console.log("🛑 Interrupting avatar speech...");
+        interrupt();
+        // Wait a bit for interrupt to take effect
+        await new Promise((resolve) => setTimeout(resolve, 500));
+      }
+
+      // Check if session is still active before stopping
+      if (sessionState !== StreamingAvatarSessionState.INACTIVE) {
+        console.log("🔌 Stopping avatar session...");
+        await stopAvatar();
+      } else {
+        console.log("ℹ️ Avatar session already inactive");
+      }
+    } catch (error) {
+      console.error("Error during graceful avatar stop:", error);
+      // Re-throw to let caller handle
+      throw error;
+    }
+  };
+
   const checkAvatarNavigationConfirmation = (avatarMessage: string) => {
     const lowerCaseMessage = avatarMessage.toLowerCase();
     console.log("🤖 Avatar said:", lowerCaseMessage);
@@ -207,12 +232,19 @@ function InteractiveAvatar({ page }: { page: number }) {
         });
 
         // Navigate after avatar completely finishes
-        setTimeout(() => {
-          interrupt();
-          stopAvatar();
-          router.push(routes[requestedService]);
-          // Reset the navigation request
-          userRequestedNavigation.current = null;
+        setTimeout(async () => {
+          try {
+            // Gracefully stop the avatar session
+            await stopAvatarGracefully();
+            router.push(routes[requestedService]);
+            // Reset the navigation request
+            userRequestedNavigation.current = null;
+          } catch (error) {
+            console.error("Error during navigation cleanup:", error);
+            // Still navigate even if cleanup fails
+            router.push(routes[requestedService]);
+            userRequestedNavigation.current = null;
+          }
         }, 6000);
       };
 
@@ -291,7 +323,7 @@ function InteractiveAvatar({ page }: { page: number }) {
 
       console.log("Predefined Config:", predefinedConfig);
 
-      //startSessionV2(true, predefinedConfig);
+      startSessionV2(true, predefinedConfig);
     }
   }, [auth]);
 
@@ -416,8 +448,10 @@ function InteractiveAvatar({ page }: { page: number }) {
   );
 
   useUnmount(() => {
-    interrupt();
-    stopAvatar();
+    // Use graceful cleanup on component unmount
+    stopAvatarGracefully().catch((error) => {
+      console.error("Error during component unmount cleanup:", error);
+    });
   });
 
   useEffect(() => {

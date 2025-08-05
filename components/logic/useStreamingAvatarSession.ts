@@ -42,7 +42,7 @@ export const useStreamingAvatarSession = () => {
 
       return avatarRef.current;
     },
-    [basePath, avatarRef],
+    [basePath, avatarRef]
   );
 
   const handleStream = useCallback(
@@ -50,20 +50,51 @@ export const useStreamingAvatarSession = () => {
       setStream(detail);
       setSessionState(StreamingAvatarSessionState.CONNECTED);
     },
-    [setSessionState, setStream],
+    [setSessionState, setStream]
   );
 
   const stop = useCallback(async () => {
-    avatarRef.current?.off(StreamingEvents.STREAM_READY, handleStream);
-    avatarRef.current?.off(StreamingEvents.STREAM_DISCONNECTED, stop);
-    clearMessages();
-    stopVoiceChat();
-    setIsListening(false);
-    setIsUserTalking(false);
-    setIsAvatarTalking(false);
-    setStream(null);
-    await avatarRef.current?.stopAvatar();
-    setSessionState(StreamingAvatarSessionState.INACTIVE);
+    try {
+      // Remove event listeners first to prevent further events
+      avatarRef.current?.off(StreamingEvents.STREAM_READY, handleStream);
+      avatarRef.current?.off(StreamingEvents.STREAM_DISCONNECTED, stop);
+
+      // Clear UI state
+      clearMessages();
+      setIsListening(false);
+      setIsUserTalking(false);
+      setIsAvatarTalking(false);
+      setStream(null);
+
+      // Stop voice chat
+      try {
+        stopVoiceChat();
+      } catch (voiceChatError) {
+        console.warn("Error stopping voice chat:", voiceChatError);
+      }
+
+      // Stop avatar session with timeout protection
+      if (avatarRef.current) {
+        const stopPromise = avatarRef.current.stopAvatar();
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error("Stop avatar timeout")), 5000)
+        );
+
+        try {
+          await Promise.race([stopPromise, timeoutPromise]);
+        } catch (stopError) {
+          console.error("Error stopping avatar:", stopError);
+          // Continue with cleanup even if stop fails
+        }
+      }
+
+      setSessionState(StreamingAvatarSessionState.INACTIVE);
+    } catch (error) {
+      console.error("Error in stop function:", error);
+      // Ensure we always set to inactive state
+      setSessionState(StreamingAvatarSessionState.INACTIVE);
+      throw error; // Re-throw to let caller handle
+    }
   }, [
     handleStream,
     setSessionState,
@@ -99,7 +130,7 @@ export const useStreamingAvatarSession = () => {
       avatarRef.current.on(
         StreamingEvents.CONNECTION_QUALITY_CHANGED,
         ({ detail }: { detail: ConnectionQuality }) =>
-          setConnectionQuality(detail),
+          setConnectionQuality(detail)
       );
       avatarRef.current.on(StreamingEvents.USER_START, () => {
         setIsUserTalking(true);
@@ -115,16 +146,16 @@ export const useStreamingAvatarSession = () => {
       });
       avatarRef.current.on(
         StreamingEvents.USER_TALKING_MESSAGE,
-        handleUserTalkingMessage,
+        handleUserTalkingMessage
       );
       avatarRef.current.on(
         StreamingEvents.AVATAR_TALKING_MESSAGE,
-        handleStreamingTalkingMessage,
+        handleStreamingTalkingMessage
       );
       avatarRef.current.on(StreamingEvents.USER_END_MESSAGE, handleEndMessage);
       avatarRef.current.on(
         StreamingEvents.AVATAR_END_MESSAGE,
-        handleEndMessage,
+        handleEndMessage
       );
 
       await avatarRef.current.createStartAvatar(config);
@@ -144,7 +175,7 @@ export const useStreamingAvatarSession = () => {
       handleStreamingTalkingMessage,
       handleEndMessage,
       setIsAvatarTalking,
-    ],
+    ]
   );
 
   return {
