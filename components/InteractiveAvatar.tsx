@@ -105,6 +105,27 @@ function InteractiveAvatar({ page }: { page: number }) {
       "cambio de programa",
       "apoyo académico",
       "orientación académica",
+      "carrera",
+      "profesión",
+      "carrera técnica",
+      "escuela técnica",
+      "politécnico",
+      "escuela técnica",
+      "politécnico",
+      "desarrollo profesional",
+      "desarrollo de carrera",
+      "asesoramiento académico",
+      "orientación académica",
+      "orientación profesional",
+      "orientación vocacional",
+      "asesor académico",
+      "creador de CV",
+      "creador de hoja de vida",
+      "creador de curriculum vitae",
+      "currículum vitae",
+      "CV",
+      "hoja de vida",
+      "recepcionista",
     ];
 
     const admissionKeywords = [
@@ -145,6 +166,7 @@ function InteractiveAvatar({ page }: { page: number }) {
       "clases de climatización",
       "opciones de formación en hvac",
       "calefacción ventilación aire acondicionado",
+      "admisión",
     ];
 
     if (advisingKeywords.some((kw) => lowerCaseMessage.includes(kw))) {
