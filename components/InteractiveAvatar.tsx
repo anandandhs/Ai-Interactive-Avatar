@@ -78,24 +78,57 @@ function InteractiveAvatar({ page }: { page: number }) {
   const checkUserNavigationRequest = (userMessage: string) => {
     const lowerCaseMessage = userMessage.toLowerCase();
     console.log("👤 User said:", lowerCaseMessage);
+    const hvacKeywords = [
+      "hvac",
+      "hvac training",
+      "hvac certification",
+      "hvac technician",
+      "hvac program",
+      "hvac classes",
+      "hvac training options",
+      "heating ventilation air conditioning",
+    ];
 
     // Check if user requested specific navigation based on knowledge base support pathways
-    if (
-      lowerCaseMessage.includes("resume builder") ||
-      lowerCaseMessage.includes("resume") ||
-      lowerCaseMessage.includes("career advising") ||
-      lowerCaseMessage.includes("career development") ||
-      lowerCaseMessage.includes("career advice")
-    ) {
+    const advisingKeywords = [
+      "major change",
+      "major change inquiries",
+      "course selection",
+      "course selection help",
+      "degree requirements",
+      "academic advising",
+      "advising",
+      "change major",
+      "change my major",
+      "program change",
+      "academic support",
+    ];
+
+    const admissionKeywords = [
+      "application",
+      "application questions",
+      "enrollment",
+      "enrollment process",
+      "deadline",
+      "deadline inquiries",
+      "admissions",
+      "admission guidance",
+      "apply",
+      "registration",
+      "hvac",
+      "hvac training",
+      "hvac certification",
+      "hvac technician",
+      "hvac program",
+      "hvac classes",
+      "hvac training options",
+      "heating ventilation air conditioning",
+    ];
+
+    if (advisingKeywords.some((kw) => lowerCaseMessage.includes(kw))) {
       userRequestedNavigation.current = "resume-builder";
       console.log("🎯 User requested: Resume Builder & Career Advising");
-    } else if (
-      lowerCaseMessage.includes("admission guidance") ||
-      lowerCaseMessage.includes("admission") ||
-      lowerCaseMessage.includes("academic planning") ||
-      lowerCaseMessage.includes("course admission") ||
-      lowerCaseMessage.includes("enrollment")
-    ) {
+    } else if (admissionKeywords.some((kw) => lowerCaseMessage.includes(kw))) {
       userRequestedNavigation.current = "course-admission";
       console.log("🎯 User requested: Admission Guidance");
     } else if (lowerCaseMessage.includes("dashboard")) {
@@ -133,21 +166,169 @@ function InteractiveAvatar({ page }: { page: number }) {
     }
   };
 
+  // const checkAvatarNavigationConfirmation = (avatarMessage: string) => {
+  //   const lowerCaseMessage = avatarMessage.toLowerCase();
+  //   console.log("🤖 Avatar said:", lowerCaseMessage);
+  //   console.log(
+  //     "🎯 User previously requested:",
+  //     userRequestedNavigation.current
+  //   );
+
+  //   // Only proceed if user previously requested navigation
+  //   if (!userRequestedNavigation.current) {
+  //     console.log("❌ No pending navigation request from user");
+  //     return;
+  //   }
+
+  //   // Enhanced confirmation phrases based on knowledge base templates
+  //   const confirmationPhrases = [
+  //     "taking you to",
+  //     "navigating to",
+  //     "redirecting to",
+  //     "going to",
+  //     "heading to",
+  //     "excellent choice",
+  //     "great choice",
+  //     "perfect",
+  //     "sounds good",
+  //     "let's get started",
+  //     "let's begin",
+  //     "i'll help you with",
+  //     "let me guide you",
+  //     "Connecting you with",
+  //     "Routing you to",
+  //     "Let me connect you with",
+  //   ];
+
+  //   const hasConfirmation = confirmationPhrases.some((phrase) =>
+  //     lowerCaseMessage.includes(phrase)
+  //   );
+
+  //   // Enhanced service keywords based on knowledge base support pathways
+  //   const serviceKeywords: Record<string, string[]> = {
+  //     "resume-builder": [
+  //       // "resume",
+  //       // "career",
+  //       // "career development",
+  //       // "career advising",
+  //       // "resume builder",
+  //       // "advising",
+  //       // "academic advising",
+  //       // "academic planning",
+  //       "major change",
+  //       "major change inquiries",
+  //       "course selection",
+  //       "course selection help",
+  //       "degree requirements",
+  //       "academic advising",
+  //       "advising",
+  //       "change major",
+  //       "program change",
+  //       "academic support",
+  //     ],
+  //     "course-admission": [
+  //       // "admission",
+  //       // "course",
+  //       // "academic planning",
+  //       // "admission guidance",
+  //       // "enrollment",
+  //       "application",
+  //       "application questions",
+  //       "enrollment",
+  //       "enrollment process",
+  //       "deadline",
+  //       "deadline inquiries",
+  //       "admissions",
+  //       "admission guidance",
+  //       "apply",
+  //       "registration",
+  //     ],
+  //     dashboard: ["dashboard", "home", "main"],
+  //   };
+
+  //   const requestedService = userRequestedNavigation.current;
+  //   const mentionsService =
+  //     requestedService &&
+  //     serviceKeywords[requestedService]?.some((keyword: string) =>
+  //       lowerCaseMessage.includes(keyword)
+  //     );
+
+  //   if (hasConfirmation && mentionsService) {
+  //     console.log(
+  //       "✅ Avatar confirmed navigation - waiting for avatar to finish talking..."
+  //     );
+
+  //     // Wait for avatar to completely finish talking before navigating
+  //     const executeNavigation = () => {
+  //       if (isAvatarTalking.current) {
+  //         console.log("⏳ Avatar still talking, waiting...");
+  //         setTimeout(executeNavigation, 500); // Check again in 500ms
+  //         return;
+  //       }
+
+  //       console.log(
+  //         "🚀 Avatar finished talking, proceeding with navigation..."
+  //       );
+
+  //       const routes: Record<string, string> = {
+  //         "resume-builder": "/resume-builder",
+  //         "course-admission": "/course-admission",
+  //         dashboard: "/dashboard",
+  //       };
+
+  //       const routeName: Record<string, string> = {
+  //         "resume-builder": "Resume Builder & Career Advising",
+  //         "course-admission": "Admission Guidance",
+  //         dashboard: "Dashboard",
+  //       };
+
+  //       // Show toast notification
+  //       toast.current?.show({
+  //         severity: "success",
+  //         summary: "Navigation Confirmed",
+  //         detail: `Taking you to ${routeName[requestedService]}...`,
+  //         life: 6000,
+  //       });
+
+  //       // Navigate after avatar completely finishes
+  //       setTimeout(async () => {
+  //         try {
+  //           // Gracefully stop the avatar session
+  //           await stopAvatarGracefully();
+  //           router.push(routes[requestedService]);
+  //           // Reset the navigation request
+  //           userRequestedNavigation.current = null;
+  //         } catch (error) {
+  //           console.error("Error during navigation cleanup:", error);
+  //           // Still navigate even if cleanup fails
+  //           router.push(routes[requestedService]);
+  //           userRequestedNavigation.current = null;
+  //         }
+  //       }, 6000);
+  //     };
+
+  //     // Start checking if avatar finished talking
+  //     executeNavigation();
+  //   } else {
+  //     console.log(
+  //       "❌ Avatar did not confirm navigation or mention the service"
+  //     );
+  //     // Reset navigation request if avatar doesn't confirm
+  //     userRequestedNavigation.current = null;
+  //   }
+  // };
+
   const checkAvatarNavigationConfirmation = (avatarMessage: string) => {
     const lowerCaseMessage = avatarMessage.toLowerCase();
-    console.log("🤖 Avatar said:", lowerCaseMessage);
-    console.log(
-      "🎯 User previously requested:",
-      userRequestedNavigation.current
-    );
+    console.log("🤖 Avatar said:", avatarMessage); // Keep original for debugging
 
     // Only proceed if user previously requested navigation
     if (!userRequestedNavigation.current) {
-      console.log("❌ No pending navigation request from user");
+      console.log("❌ No pending navigation request");
       return;
     }
 
-    // Enhanced confirmation phrases based on knowledge base templates
+    // Unified confirmation phrases
     const confirmationPhrases = [
       "taking you to",
       "navigating to",
@@ -162,101 +343,132 @@ function InteractiveAvatar({ page }: { page: number }) {
       "let's begin",
       "i'll help you with",
       "let me guide you",
+      "connecting you with",
+      "routing you to",
+      "let me connect you with",
+      "right this way",
+      "follow me",
+      "i'll take you to",
+      "here we go",
+      "transferring you",
+      "taking you over to",
     ];
 
+    // Service mapping to actual routes
+    const serviceMap: Record<
+      string,
+      { route: string; name: string; keywords: string[] }
+    > = {
+      "resume-builder": {
+        route: "/resume-builder",
+        name: "Advising",
+        keywords: [
+          "advising",
+          "academic advising",
+          "academic planning",
+          "career",
+          "career development",
+          "career advising",
+        ],
+      },
+      "course-admission": {
+        route: "/course-admission",
+        name: "Admission",
+        keywords: [
+          "admission",
+          "course",
+          "academic planning",
+          "admission guidance",
+          "enrollment",
+          "HVAC training",
+          "HVAC",
+        ],
+      },
+      dashboard: {
+        route: "/dashboard",
+        name: "Dashboard",
+        keywords: ["dashboard", "home", "main menu"],
+      },
+    };
+
+    const requestedService = userRequestedNavigation.current;
+    const serviceConfig = serviceMap[requestedService];
+
+    if (!serviceConfig) {
+      console.log("⚠️ Unknown service requested:", requestedService);
+      userRequestedNavigation.current = null;
+      return;
+    }
+
+    // Check for confirmation
     const hasConfirmation = confirmationPhrases.some((phrase) =>
       lowerCaseMessage.includes(phrase)
     );
 
-    // Enhanced service keywords based on knowledge base support pathways
-    const serviceKeywords: Record<string, string[]> = {
-      "resume-builder": [
-        "resume",
-        "career",
-        "career development",
-        "career advising",
-        "resume builder",
-      ],
-      "course-admission": [
-        "admission",
-        "course",
-        "academic planning",
-        "admission guidance",
-        "enrollment",
-      ],
-      dashboard: ["dashboard", "home", "main"],
-    };
+    // Check if service is mentioned (case-insensitive)
+    const mentionsService = serviceConfig.keywords.some((keyword) =>
+      lowerCaseMessage.includes(keyword.toLowerCase())
+    );
 
-    const requestedService = userRequestedNavigation.current;
-    const mentionsService =
-      requestedService &&
-      serviceKeywords[requestedService]?.some((keyword: string) =>
-        lowerCaseMessage.includes(keyword)
-      );
+    console.log(
+      `🔍 Confirmation: ${hasConfirmation}, Mentions Service: ${mentionsService}`
+    );
 
-    if (hasConfirmation && mentionsService) {
-      console.log(
-        "✅ Avatar confirmed navigation - waiting for avatar to finish talking..."
-      );
+    // More flexible condition: either confirmation phrase OR service mention
+    if (hasConfirmation || mentionsService) {
+      console.log("✅ Navigation confirmed - preparing transition...");
 
-      // Wait for avatar to completely finish talking before navigating
-      const executeNavigation = () => {
+      // // Immediate visual feedback
+      // toast.current?.show({
+      //   severity: "info",
+      //   summary: "Preparing Navigation",
+      //   detail: `Almost ready for ${serviceConfig.name}...`,
+      //   life: 3000,
+      // });
+
+      // Wait for avatar to stop talking
+      const checkTalkingStatus = () => {
         if (isAvatarTalking.current) {
-          console.log("⏳ Avatar still talking, waiting...");
-          setTimeout(executeNavigation, 500); // Check again in 500ms
-          return;
+          console.log("🗣️ Avatar still speaking...");
+          setTimeout(checkTalkingStatus, 300);
+        } else {
+          console.log("🚀 Avatar finished speaking - navigating!");
+          executeNavigation(serviceConfig);
         }
-
-        console.log(
-          "🚀 Avatar finished talking, proceeding with navigation..."
-        );
-
-        const routes: Record<string, string> = {
-          "resume-builder": "/resume-builder",
-          "course-admission": "/course-admission",
-          dashboard: "/dashboard",
-        };
-
-        const routeName: Record<string, string> = {
-          "resume-builder": "Resume Builder & Career Advising",
-          "course-admission": "Admission Guidance",
-          dashboard: "Dashboard",
-        };
-
-        // Show toast notification
-        toast.current?.show({
-          severity: "success",
-          summary: "Navigation Confirmed",
-          detail: `Taking you to ${routeName[requestedService]}...`,
-          life: 6000,
-        });
-
-        // Navigate after avatar completely finishes
-        setTimeout(async () => {
-          try {
-            // Gracefully stop the avatar session
-            await stopAvatarGracefully();
-            router.push(routes[requestedService]);
-            // Reset the navigation request
-            userRequestedNavigation.current = null;
-          } catch (error) {
-            console.error("Error during navigation cleanup:", error);
-            // Still navigate even if cleanup fails
-            router.push(routes[requestedService]);
-            userRequestedNavigation.current = null;
-          }
-        }, 6000);
       };
 
-      // Start checking if avatar finished talking
-      executeNavigation();
+      checkTalkingStatus();
     } else {
-      console.log(
-        "❌ Avatar did not confirm navigation or mention the service"
-      );
-      // Reset navigation request if avatar doesn't confirm
+      console.log("❌ No navigation confirmation detected");
       userRequestedNavigation.current = null;
     }
+  };
+
+  // Navigation executor
+  const executeNavigation = (serviceConfig: {
+    route: string;
+    name: string;
+  }) => {
+    // Final confirmation toast
+    toast.current?.show({
+      severity: "success",
+      summary: "Navigation Confirmed",
+      detail: `Transferring the chat to ${serviceConfig.name}...`,
+      life: 4000,
+    });
+
+    // Stop avatar and navigate
+    setTimeout(async () => {
+      try {
+        await stopAvatarGracefully();
+        router.push(serviceConfig.route);
+      } catch (error) {
+        console.error("Navigation error:", error);
+        router.push(serviceConfig.route); // Navigate anyway
+      } finally {
+        userRequestedNavigation.current = null;
+      }
+    }, 4000);
   };
 
   const [currentAvatarId, setCurrentAvatarId] = useState<string>(
@@ -416,7 +628,8 @@ function InteractiveAvatar({ page }: { page: number }) {
           const finalMessageContent = currentAvatarMessage.current;
           console.log(
             "Final accumulated message content:",
-            finalMessageContent
+            finalMessageContent,
+            currentAvatarMessage.current
           );
 
           if (

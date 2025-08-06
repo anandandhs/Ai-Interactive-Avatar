@@ -87,11 +87,11 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
       ) {
         return {
           ...baseStyles,
-          top: "20%", // Same as video positioning
+          top: "30%", // Same as video positioning
           left: "47%",
           transform: "translateX(-50%)", // Center horizontally
           width: "80%", // Same as video scaling
-          height: "80%",
+          height: "70%",
           objectFit: "cover" as const,
         };
       }
@@ -103,8 +103,8 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
       ) {
         return {
           ...baseStyles,
-          top: "29%", // Same as video positioning
-          left: "54%",
+          top: "32%", // Same as video positioning
+          left: "52%",
           transform: "translateX(-50%)", // Center horizontally
           width: "52%", // Same as video scaling
           height: "52%",
@@ -119,8 +119,8 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
         //Thaddeus & Alessandra
         return {
           ...baseStyles,
-          top: "33.5%", // Same as video positioning
-          left: "45.4%",
+          top: "36.5%", // Same as video positioning
+          left: "44.5%",
           transform: "translateX(-50%)", // Center horizontally
           width: "53%", // Same as video scaling
           height: "53%",
@@ -131,8 +131,8 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
       // Pedro && Amina
       return {
         ...baseStyles,
-        top: "26%", // Same as video positioning
-        left: "50%",
+        top: "29.7%", // Same as video positioning
+        left: "52%",
         transform: "translateX(-50%)", // Center horizontally
         width: "52%", // Same as video scaling
         height: "52%",
@@ -263,10 +263,10 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
               alt="office background"
               style={{
                 position: "absolute",
-                top: "0",
-                left: "0",
-                width: "100%",
-                height: "100%",
+                top: "7%",
+                left: "1.5%",
+                width: "97%",
+                height: "97%",
                 objectFit: "contain",
                 zIndex: 0,
               }}
