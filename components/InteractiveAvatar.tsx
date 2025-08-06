@@ -167,6 +167,9 @@ function InteractiveAvatar({ page }: { page: number }) {
       "opciones de formación en hvac",
       "calefacción ventilación aire acondicionado",
       "admisión",
+      "aire acondicionado",
+      "refrigeración",
+      "técnico",
     ];
 
     if (advisingKeywords.some((kw) => lowerCaseMessage.includes(kw))) {
