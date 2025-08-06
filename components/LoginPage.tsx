@@ -46,18 +46,15 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   return (
     <div className="grid h-full">
       {/* Left Side */}
-      <div
-        className="col-12 md:col-6 flex md:align-items-center align-items-start justify-content-center"
-        style={{ height: "101vh", overflow: "hidden" }}
-      >
+      <div className="col-12 md:col-6 relative p-0" style={{ height: "107vh" }}>
         <Image
           src={LoginAvatar}
           alt="avatar"
-          className="w-full h-auto"
+          fill
           onLoadingComplete={() => {
             setImageLoading(false);
           }}
-          style={{ objectFit: "cover", width: "100%", height: "100%" }}
+          style={{ objectFit: "cover" }}
         />
         {/* <div className="w-full relative">
           <h5

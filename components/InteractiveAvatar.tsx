@@ -78,16 +78,6 @@ function InteractiveAvatar({ page }: { page: number }) {
   const checkUserNavigationRequest = (userMessage: string) => {
     const lowerCaseMessage = userMessage.toLowerCase();
     console.log("👤 User said:", lowerCaseMessage);
-    const hvacKeywords = [
-      "hvac",
-      "hvac training",
-      "hvac certification",
-      "hvac technician",
-      "hvac program",
-      "hvac classes",
-      "hvac training options",
-      "heating ventilation air conditioning",
-    ];
 
     // Check if user requested specific navigation based on knowledge base support pathways
     const advisingKeywords = [
@@ -102,6 +92,19 @@ function InteractiveAvatar({ page }: { page: number }) {
       "change my major",
       "program change",
       "academic support",
+      // Spanish
+      "cambio de carrera",
+      "cambio de especialización",
+      "selección de cursos",
+      "ayuda con cursos",
+      "requisitos de grado",
+      "asesoría académica",
+      "consejería",
+      "cambiar de carrera",
+      "cambiar mi especialización",
+      "cambio de programa",
+      "apoyo académico",
+      "orientación académica",
     ];
 
     const admissionKeywords = [
@@ -123,6 +126,25 @@ function InteractiveAvatar({ page }: { page: number }) {
       "hvac classes",
       "hvac training options",
       "heating ventilation air conditioning",
+      // Spanish
+      "solicitud",
+      "preguntas sobre aplicación",
+      "inscripción",
+      "proceso de inscripción",
+      "fecha límite",
+      "consulta de plazos",
+      "admisiones",
+      "orientación para admisión",
+      "aplicar",
+      "registro",
+      "climatización",
+      "formación en climatización",
+      "certificación hvac",
+      "técnico en climatización",
+      "programa de hvac",
+      "clases de climatización",
+      "opciones de formación en hvac",
+      "calefacción ventilación aire acondicionado",
     ];
 
     if (advisingKeywords.some((kw) => lowerCaseMessage.includes(kw))) {
@@ -352,6 +374,39 @@ function InteractiveAvatar({ page }: { page: number }) {
       "here we go",
       "transferring you",
       "taking you over to",
+      // Spanish phrases
+      "llevándote a",
+      "dirigiéndote a",
+      "redirigiéndote a",
+      "yendo a",
+      "encaminándote a",
+      "excelente elección",
+      "gran elección",
+      "perfecto",
+      "suena bien",
+      "empecemos",
+      "comencemos",
+      "te ayudaré con",
+      "déjame guiarte",
+      "conectándote con",
+      "encaminándote a",
+      "déjame conectarte con",
+      "por aquí",
+      "sígueme",
+      "te llevaré a",
+      "aquí vamos",
+      "transfiriéndote",
+      "llevándote hacia",
+      "vamos a",
+      "perfecto, vamos a",
+      "muy bien, vamos a",
+      "estupendo, vamos a",
+      "de acuerdo, vamos a",
+      "ahora te llevo a",
+      "permíteme llevarte a",
+      "te redirijo a",
+      "te guiaré a",
+      "te acompañaré a",
     ];
 
     // Service mapping to actual routes
@@ -369,6 +424,19 @@ function InteractiveAvatar({ page }: { page: number }) {
           "career",
           "career development",
           "career advising",
+          // Spanish equivalents
+          "asesoramiento",
+          "asesoría académica",
+          "planificación académica",
+          "carrera",
+          "desarrollo profesional",
+          "orientación profesional",
+          "consejería",
+          "asesoría de carrera",
+          "plan de estudios",
+          "orientación vocacional",
+          "orientación académica",
+          "asesoría educativa",
         ],
       },
       "course-admission": {
@@ -382,6 +450,24 @@ function InteractiveAvatar({ page }: { page: number }) {
           "enrollment",
           "HVAC training",
           "HVAC",
+          // Spanish equivalents
+          "admisión",
+          "inscripción",
+          "matrícula", // Alternate for enrollment
+          "curso",
+          "asignatura", // Alternate for course (more academic)
+          "planificación académica",
+          "orientación para admisión",
+          "guía de admisión",
+          "formación en HVAC",
+          "climatización", // Common term for HVAC in Spanish
+          "calefacción y aire acondicionado", // Full translation
+          "curso de climatización",
+          "certificación HVAC",
+          "técnico en climatización",
+          "programa HVAC",
+          "capacitación en HVAC",
+          "sistema de climatización",
         ],
       },
       dashboard: {
