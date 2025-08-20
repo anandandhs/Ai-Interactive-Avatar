@@ -187,6 +187,186 @@ function InteractiveAvatar({ page }: { page: number }) {
     }
   };
 
+  // Function to check if avatar message contains navigation keywords (fallback detection)
+  const checkAvatarNavigationRequest = (avatarMessage: string) => {
+    const lowerCaseMessage = avatarMessage.toLowerCase();
+    console.log(
+      "🤖 Avatar said (checking for navigation keywords):",
+      lowerCaseMessage
+    );
+
+    // Only check if there's no pending navigation request from user
+    if (userRequestedNavigation.current) {
+      console.log(
+        "⏭️ User navigation request already pending, skipping avatar keyword detection"
+      );
+      return;
+    }
+
+    // Use the same keywords as user navigation detection
+    const advisingKeywords = [
+      "major change",
+      "major change inquiries",
+      "course selection",
+      "course selection help",
+      "degree requirements",
+      "academic advising",
+      "advising",
+      "change major",
+      "change my major",
+      "program change",
+      "academic support",
+      // Spanish
+      "cambio de carrera",
+      "cambio de especialización",
+      "selección de cursos",
+      "ayuda con cursos",
+      "requisitos de grado",
+      "asesoría académica",
+      "consejería",
+      "cambiar de carrera",
+      "cambiar mi especialización",
+      "cambio de programa",
+      "apoyo académico",
+      "orientación académica",
+      "carrera",
+      "profesión",
+      "carrera técnica",
+      "escuela técnica",
+      "politécnico",
+      "desarrollo profesional",
+    ];
+
+    const admissionKeywords = [
+      "application",
+      "application questions",
+      "enrollment",
+      "enrollment process",
+      "deadline",
+      "deadline inquiries",
+      "admissions",
+      "admission guidance",
+      "apply",
+      "registration",
+      "hvac",
+      "hvac training",
+      "hvac certification",
+      "hvac technician",
+      "hvac program",
+      "hvac classes",
+      "hvac training options",
+      "heating ventilation air conditioning",
+      // Spanish
+      "solicitud",
+      "preguntas sobre aplicación",
+      "inscripción",
+      "proceso de inscripción",
+      "fecha límite",
+      "consulta de plazos",
+      "admisiones",
+      "orientación para admisión",
+      "aplicar",
+      "registro",
+      "climatización",
+      "formación en climatización",
+      "certificación hvac",
+      "técnico en climatización",
+      "programa de hvac",
+      "clases de climatización",
+      "opciones de formación en hvac",
+      "calefacción ventilación aire acondicionado",
+      "admisión",
+      "aire acondicionado",
+      "refrigeración",
+      "técnico",
+    ];
+
+    if (advisingKeywords.some((kw) => lowerCaseMessage.includes(kw))) {
+      userRequestedNavigation.current = "resume-builder";
+      console.log(
+        "🎯 Avatar mentioned: Resume Builder & Career Advising - setting navigation request"
+      );
+
+      // Since avatar already mentioned the service, we can proceed with navigation
+      // after avatar stops talking
+      const serviceConfig = {
+        route: "/resume-builder",
+        name: "Resume Builder & Career Advising",
+        keywords: ["resume", "career", "advising", "academic planning"],
+      };
+
+      const checkTalkingStatus = () => {
+        if (isAvatarTalking.current) {
+          console.log("🗣️ Avatar still speaking...");
+          setTimeout(checkTalkingStatus, 300);
+        } else {
+          console.log(
+            "🚀 Avatar finished speaking - navigating based on avatar keywords!"
+          );
+          executeNavigation(serviceConfig);
+        }
+      };
+
+      checkTalkingStatus();
+    } else if (admissionKeywords.some((kw) => lowerCaseMessage.includes(kw))) {
+      userRequestedNavigation.current = "course-admission";
+      console.log(
+        "🎯 Avatar mentioned: Admission Guidance - setting navigation request"
+      );
+
+      // Since avatar already mentioned the service, we can proceed with navigation
+      // after avatar stops talking
+      const serviceConfig = {
+        route: "/course-admission",
+        name: "Admission Guidance",
+        keywords: ["admission", "enrollment", "application", "hvac"],
+      };
+
+      const checkTalkingStatus = () => {
+        if (isAvatarTalking.current) {
+          console.log("🗣️ Avatar still speaking...");
+          setTimeout(checkTalkingStatus, 300);
+        } else {
+          console.log(
+            "🚀 Avatar finished speaking - navigating based on avatar keywords!"
+          );
+          executeNavigation(serviceConfig);
+        }
+      };
+
+      checkTalkingStatus();
+    } else if (lowerCaseMessage.includes("dashboard")) {
+      userRequestedNavigation.current = "dashboard";
+      console.log(
+        "🎯 Avatar mentioned: Dashboard - setting navigation request"
+      );
+
+      // Since avatar already mentioned the service, we can proceed with navigation
+      // after avatar stops talking
+      const serviceConfig = {
+        route: "/dashboard",
+        name: "Dashboard",
+        keywords: ["dashboard", "home", "main menu"],
+      };
+
+      const checkTalkingStatus = () => {
+        if (isAvatarTalking.current) {
+          console.log("🗣️ Avatar still speaking...");
+          setTimeout(checkTalkingStatus, 300);
+        } else {
+          console.log(
+            "🚀 Avatar finished speaking - navigating based on avatar keywords!"
+          );
+          executeNavigation(serviceConfig);
+        }
+      };
+
+      checkTalkingStatus();
+    } else {
+      console.log("❌ No navigation keywords detected in avatar message");
+    }
+  };
+
   // Function to check if avatar confirmed navigation and execute it
   // Graceful avatar session cleanup function
   const stopAvatarGracefully = async () => {
@@ -759,7 +939,12 @@ function InteractiveAvatar({ page }: { page: number }) {
                 "irwin.spinello@papyrrus.com") &&
             page == 1
           ) {
-            // Check if avatar confirmed navigation
+            // First check if avatar message contains navigation keywords (fallback detection)
+            // This will detect navigation keywords in avatar messages if user message detection failed
+            checkAvatarNavigationRequest(finalMessageContent);
+
+            // Then check if avatar confirmed navigation (original logic)
+            // This handles the case where user requested navigation and avatar is confirming
             checkAvatarNavigationConfirmation(finalMessageContent);
           }
 

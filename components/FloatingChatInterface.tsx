@@ -65,7 +65,7 @@ const AI_ASSISTANTS_SPANISH = [
   {
     id: "Alessandra_Black_Suit_public",
     name: "Alessandra",
-    role: "Asesora",
+    role: "Asesora Académica",
     description:
       "Hola, soy Alessandra, tu asesora virtual. Estoy aquí para guiarte en tu recorrido académico y responder cualquier pregunta que tengas durante el proceso.",
     avatar: "/Svg/alessandraIcon.svg",
