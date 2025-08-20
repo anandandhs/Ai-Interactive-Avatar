@@ -70,73 +70,64 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
         zIndex: 2,
       };
 
-      // Match the video positioning for chroma key canvas
-      // return {
-      //   ...baseStyles,
-      //   top: "31.5%", // Same as video positioning
-      //   left: "45%",
-      //   transform: "translateX(-50%)", // Center horizontally
-      //   width: "55%", // Same as video scaling
-      //   height: "55%",
-      //   objectFit: "cover" as const,
-      // };
-
-      if (
-        auth?.user?.username?.toLowerCase() == "Matteo.gobeaux@papyrrus.com" ||
+      // Check if user needs special background (Texas/deskBg) - these users get different positioning
+      const needsSpecialBackground =
+        auth?.user?.username?.toLowerCase() == "matteo.gobeaux@papyrrus.com" ||
         auth?.user?.username?.toLowerCase() ==
           "berkley.esherwood@papyrrus.com" ||
-        auth?.user?.username?.toLowerCase() == "percy.veltman@papyrrus.com"
-      ) {
+        auth?.user?.username?.toLowerCase() == "percy.veltman@papyrrus.com";
+
+      if (needsSpecialBackground) {
         return {
           ...baseStyles,
-          top: "30%", // Same as video positioning
+          top: "30%", // Positioning for Texas/deskBg background
           left: "47%",
           transform: "translateX(-50%)", // Center horizontally
-          width: "80%", // Same as video scaling
+          width: "80%", // Larger size for this background
           height: "70%",
           objectFit: "cover" as const,
         };
       }
 
-      //Katya && Marrianne
+      // Katya && Marianne (Administration avatars)
       if (
         currentAvatarId === AVATARS[0].avatar_id ||
         currentAvatarId === AVATARS[3].avatar_id
       ) {
         return {
           ...baseStyles,
-          top: "32%", // Same as video positioning
+          top: "32%", // Positioning for administration background
           left: "52%",
           transform: "translateX(-50%)", // Center horizontally
-          width: "52%", // Same as video scaling
+          width: "52%", // Standard size for administration
           height: "52%",
           objectFit: "cover" as const,
         };
       }
 
+      // Thaddeus & Alessandra (Academic avatars)
       if (
         currentAvatarId === AVATARS[1].avatar_id ||
         currentAvatarId === AVATARS[4].avatar_id
       ) {
-        //Thaddeus & Alessandra
         return {
           ...baseStyles,
-          top: "36.5%", // Same as video positioning
+          top: "36.5%", // Positioning for academic background
           left: "44.5%",
           transform: "translateX(-50%)", // Center horizontally
-          width: "53%", // Same as video scaling
+          width: "53%", // Standard size for academic
           height: "53%",
           objectFit: "cover" as const,
         };
       }
 
-      // Pedro && Amina
+      // Pedro && Amina (Admission avatars) - Default case
       return {
         ...baseStyles,
-        top: "29.7%", // Same as video positioning
+        top: "29.7%", // Positioning for admission background
         left: "52%",
         transform: "translateX(-50%)", // Center horizontally
-        width: "52%", // Same as video scaling
+        width: "52%", // Standard size for admission
         height: "52%",
         objectFit: "cover" as const,
       };
@@ -243,28 +234,38 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
           >
             {/* Background office environment */}
             <Image
-              src={
-                auth?.user?.username?.toLowerCase() ==
-                  "Matteo.gobeaux@papyrrus.com" ||
-                auth?.user?.username?.toLowerCase() ==
-                  "berkley.esherwood@papyrrus.com" ||
-                auth?.user?.username?.toLowerCase() ==
-                  "percy.veltman@papyrrus.com"
-                  ? Texas
-                  : currentAvatarId === AVATARS[0].avatar_id //katya
-                  ? administrationEnglish
-                  : currentAvatarId === AVATARS[1].avatar_id //thaddues
-                  ? accademicEnglish
-                  : currentAvatarId === AVATARS[2].avatar_id //amina
-                  ? admissionEnglish
-                  : currentAvatarId === AVATARS[3].avatar_id //marianne
-                  ? administrationSpanish
-                  : currentAvatarId === AVATARS[4].avatar_id //alessandra
-                  ? accademicSpanish
-                  : currentAvatarId === AVATARS[5].avatar_id //pedro
-                  ? admissionSpanish
-                  : Texas
-              }
+              src={(() => {
+                // Check if user needs special background (Texas/deskBg)
+                const needsSpecialBackground =
+                  auth?.user?.username?.toLowerCase() ==
+                    "matteo.gobeaux@papyrrus.com" ||
+                  auth?.user?.username?.toLowerCase() ==
+                    "berkley.esherwood@papyrrus.com" ||
+                  auth?.user?.username?.toLowerCase() ==
+                    "percy.veltman@papyrrus.com";
+
+                if (needsSpecialBackground) {
+                  return Texas;
+                }
+
+                // Select background based on avatar type
+                switch (currentAvatarId) {
+                  case AVATARS[0].avatar_id: // Katya - Administration English
+                    return administrationEnglish;
+                  case AVATARS[1].avatar_id: // Thaddeus - Academic English
+                    return accademicEnglish;
+                  case AVATARS[2].avatar_id: // Amina - Admission English
+                    return admissionEnglish;
+                  case AVATARS[3].avatar_id: // Marianne - Administration Spanish
+                    return administrationSpanish;
+                  case AVATARS[4].avatar_id: // Alessandra - Academic Spanish
+                    return accademicSpanish;
+                  case AVATARS[5].avatar_id: // Pedro - Admission Spanish
+                    return admissionSpanish;
+                  default:
+                    return Texas; // Fallback
+                }
+              })()}
               alt="office background"
               style={{
                 position: "absolute",
