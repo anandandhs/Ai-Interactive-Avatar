@@ -187,6 +187,9 @@ function InteractiveAvatar({ page }: { page: number }) {
     }
   };
 
+  // Add a flag to prevent duplicate navigation
+  const navigationInProgress = useRef(false);
+
   // Function to check if avatar message contains navigation keywords (fallback detection)
   const checkAvatarNavigationRequest = (avatarMessage: string) => {
     const lowerCaseMessage = avatarMessage.toLowerCase();
@@ -195,10 +198,10 @@ function InteractiveAvatar({ page }: { page: number }) {
       lowerCaseMessage
     );
 
-    // Only check if there's no pending navigation request from user
-    if (userRequestedNavigation.current) {
+    // Check if navigation is already in progress
+    if (navigationInProgress.current) {
       console.log(
-        "⏭️ User navigation request already pending, skipping avatar keyword detection"
+        "⏭️ Navigation already in progress, skipping avatar keyword detection"
       );
       return;
     }
@@ -549,9 +552,11 @@ function InteractiveAvatar({ page }: { page: number }) {
     const lowerCaseMessage = avatarMessage.toLowerCase();
     console.log("🤖 Avatar said:", avatarMessage); // Keep original for debugging
 
-    // Only proceed if user previously requested navigation
-    if (!userRequestedNavigation.current) {
-      console.log("❌ No pending navigation request");
+    // Only proceed if user previously requested navigation and no navigation is in progress
+    if (!userRequestedNavigation.current || navigationInProgress.current) {
+      console.log(
+        "❌ No pending navigation request or navigation already in progress"
+      );
       return;
     }
 
@@ -740,6 +745,23 @@ function InteractiveAvatar({ page }: { page: number }) {
     route: string;
     name: string;
   }) => {
+    console.log("🚀 executeNavigation called for:", serviceConfig.name);
+    console.log(
+      "🚀 navigationInProgress.current:",
+      navigationInProgress.current
+    );
+
+    // Check if navigation is already in progress to prevent duplicate execution
+    if (navigationInProgress.current) {
+      console.log(
+        "⚠️ Navigation already in progress, skipping duplicate execution"
+      );
+      return;
+    }
+
+    // Set flag immediately to prevent duplicate calls
+    navigationInProgress.current = true;
+
     // Final confirmation toast
     toast.current?.show({
       severity: "success",
@@ -758,6 +780,7 @@ function InteractiveAvatar({ page }: { page: number }) {
         router.push(serviceConfig.route); // Navigate anyway
       } finally {
         userRequestedNavigation.current = null;
+        navigationInProgress.current = false;
       }
     }, 4000);
   };
@@ -939,13 +962,20 @@ function InteractiveAvatar({ page }: { page: number }) {
                 "irwin.spinello@papyrrus.com") &&
             page == 1
           ) {
-            // First check if avatar message contains navigation keywords (fallback detection)
-            // This will detect navigation keywords in avatar messages if user message detection failed
-            checkAvatarNavigationRequest(finalMessageContent);
-
-            // Then check if avatar confirmed navigation (original logic)
-            // This handles the case where user requested navigation and avatar is confirming
-            checkAvatarNavigationConfirmation(finalMessageContent);
+            // Check if there was a user navigation request first
+            if (userRequestedNavigation.current) {
+              // User already requested navigation, check if avatar confirmed it
+              console.log(
+                "🔄 User navigation request exists, checking avatar confirmation"
+              );
+              checkAvatarNavigationConfirmation(finalMessageContent);
+            } else {
+              // No user navigation request, check if avatar message contains navigation keywords (fallback detection)
+              console.log(
+                "🔍 No user navigation request, checking avatar for navigation keywords"
+              );
+              checkAvatarNavigationRequest(finalMessageContent);
+            }
           }
 
           // Reset the accumulated message for the next avatar response
