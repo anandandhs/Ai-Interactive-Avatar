@@ -33,10 +33,11 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
 
     // Determine current ava(tar based on user
     const currentAvatarId = getRequiredAvatar(
-      auth?.user?.username || "",
-      auth?.user?.username == "jason.padilla@papyrrus.com" ? page + 3 : page
+      auth?.user?.username?.toLowerCase() || "",
+      auth?.user?.username?.toLowerCase() == "jason.padilla@papyrrus.com"
+        ? page + 3
+        : page
     );
-    console.log("Current avatar id: ", currentAvatarId, page);
 
     // Check if current avatar is Pedro (which needs different positioning)
 
@@ -81,9 +82,10 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
       // };
 
       if (
-        auth?.user?.username == "Matteo.gobeaux@papyrrus.com" ||
-        auth?.user?.username == "berkley.esherwood@papyrrus.com" ||
-        auth?.user?.username == "percy.veltman@papyrrus.com"
+        auth?.user?.username?.toLowerCase() == "Matteo.gobeaux@papyrrus.com" ||
+        auth?.user?.username?.toLowerCase() ==
+          "berkley.esherwood@papyrrus.com" ||
+        auth?.user?.username?.toLowerCase() == "percy.veltman@papyrrus.com"
       ) {
         return {
           ...baseStyles,
@@ -242,9 +244,12 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
             {/* Background office environment */}
             <Image
               src={
-                auth?.user?.username == "Matteo.gobeaux@papyrrus.com" ||
-                auth?.user?.username == "berkley.esherwood@papyrrus.com" ||
-                auth?.user?.username == "percy.veltman@papyrrus.com"
+                auth?.user?.username?.toLowerCase() ==
+                  "Matteo.gobeaux@papyrrus.com" ||
+                auth?.user?.username?.toLowerCase() ==
+                  "berkley.esherwood@papyrrus.com" ||
+                auth?.user?.username?.toLowerCase() ==
+                  "percy.veltman@papyrrus.com"
                   ? Texas
                   : currentAvatarId === AVATARS[0].avatar_id //katya
                   ? administrationEnglish

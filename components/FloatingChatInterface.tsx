@@ -97,7 +97,7 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
 }) => {
   const auth = useAuthContext();
   const aiAssistants =
-    auth?.user?.username === "jason.padilla@papyrrus.com"
+    auth?.user?.username?.toLowerCase() === "jason.padilla@papyrrus.com"
       ? AI_ASSISTANTS_SPANISH
       : AI_ASSISTANTS;
   const [isExpanded, setIsExpanded] = useState(false);

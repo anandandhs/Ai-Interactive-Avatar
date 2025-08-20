@@ -589,8 +589,10 @@ function InteractiveAvatar({ page }: { page: number }) {
   useEffect(() => {
     if (auth?.user) {
       const currentAvatarId = getRequiredAvatar(
-        auth?.user.username || "",
-        auth?.user.username == "jason.padilla@papyrrus.com" ? page + 3 : page
+        auth?.user?.username.toLowerCase() || "",
+        auth?.user?.username.toLowerCase() == "jason.padilla@papyrrus.com"
+          ? page + 3
+          : page
       );
       setCurrentAvatarId(currentAvatarId);
 
@@ -601,11 +603,13 @@ function InteractiveAvatar({ page }: { page: number }) {
           rate: 0.8,
           emotion: VoiceEmotion.EXCITED,
           model:
-            auth?.user.username == "jason.padilla@papyrrus.com" ||
-            auth?.user.username == "percy.veltman@papyrrus.com"
+            auth?.user?.username?.toLowerCase() ==
+              "jason.padilla@papyrrus.com" ||
+            auth?.user?.username?.toLowerCase() == "percy.veltman@papyrrus.com"
               ? ElevenLabsModel.eleven_multilingual_v2
               : ElevenLabsModel.eleven_flash_v2_5,
-          ...(auth?.user.username == "jason.padilla@papyrrus.com" && {
+          ...(auth?.user?.username?.toLowerCase() ==
+            "jason.padilla@papyrrus.com" && {
             voiceId:
               currentAvatarId === AVATARS[3].avatar_id
                 ? "e85822bd14e144e8b6fe73da2fb1085c"
@@ -613,10 +617,12 @@ function InteractiveAvatar({ page }: { page: number }) {
                 ? "a557ea37036844748016d4cee181c322"
                 : "72cbcf091d9d48998ce10d7b5c2d569e",
           }),
-          ...(auth?.user?.username === "percy.veltman@papyrrus.com" && {
+          ...(auth?.user?.username?.toLowerCase() ===
+            "percy.veltman@papyrrus.com" && {
             voiceId: "e85822bd14e144e8b6fe73da2fb1085c",
           }),
-          ...(auth?.user?.username === "irwin.spinello@papyrrus.com" && {
+          ...(auth?.user?.username?.toLowerCase() ===
+            "irwin.spinello@papyrrus.com" && {
             voiceId:
               currentAvatarId === AVATARS[0].avatar_id
                 ? "d41b5163f39044129d06aca88d7a8f4f"
@@ -626,8 +632,8 @@ function InteractiveAvatar({ page }: { page: number }) {
           }),
         },
         language:
-          auth?.user.username == "jason.padilla@papyrrus.com" ||
-          auth?.user.username == "percy.veltman@papyrrus.com"
+          auth?.user?.username?.toLowerCase() == "jason.padilla@papyrrus.com" ||
+          auth?.user?.username?.toLowerCase() == "percy.veltman@papyrrus.com"
             ? "es"
             : "en",
         voiceChatTransport: VoiceChatTransport.WEBSOCKET,
@@ -637,7 +643,7 @@ function InteractiveAvatar({ page }: { page: number }) {
         activityIdleTimeout: 3600, // comment this after demo
         knowledgeId: "",
         knowledgeBase: getKnowlededgeBase(
-          auth.user.username || "",
+          auth?.user?.username?.toLowerCase() || "",
           page,
           auth.user.displayName || "",
           currentAvatarId
@@ -705,8 +711,10 @@ function InteractiveAvatar({ page }: { page: number }) {
 
           if (
             userMessageContent &&
-            (auth?.user?.username == "jason.padilla@papyrrus.com" ||
-              auth?.user?.username == "irwin.spinello@papyrrus.com") &&
+            (auth?.user?.username?.toLowerCase() ==
+              "jason.padilla@papyrrus.com" ||
+              auth?.user?.username?.toLocaleLowerCase() ==
+                "irwin.spinello@papyrrus.com") &&
             page == 1
           ) {
             checkUserNavigationRequest(userMessageContent);
@@ -745,8 +753,10 @@ function InteractiveAvatar({ page }: { page: number }) {
 
           if (
             finalMessageContent &&
-            (auth?.user?.username == "jason.padilla@papyrrus.com" ||
-              auth?.user?.username == "irwin.spinello@papyrrus.com") &&
+            (auth?.user?.username?.toLowerCase() ==
+              "jason.padilla@papyrrus.com" ||
+              auth?.user?.username?.toLowerCase() ==
+                "irwin.spinello@papyrrus.com") &&
             page == 1
           ) {
             // Check if avatar confirmed navigation
@@ -1042,8 +1052,9 @@ function InteractiveAvatar({ page }: { page: number }) {
       </div>
 
       {/* Floating Chat Interface */}
-      {(auth?.user?.username === "jason.padilla@papyrrus.com" ||
-        auth?.user?.username === "irwin.spinello@papyrrus.com") && (
+      {(auth?.user?.username?.toLowerCase() === "jason.padilla@papyrrus.com" ||
+        auth?.user?.username?.toLowerCase() ===
+          "irwin.spinello@papyrrus.com") && (
         <FloatingChatInterface
           sessionState={sessionState}
           page={page}
