@@ -1,12 +1,9 @@
 "use client";
 
-import { Toolbar } from "primereact/toolbar";
-import { Button } from "primereact/button";
+import {Toolbar} from "primereact/toolbar";
+import {Button} from "primereact/button";
 import Image from "next/image";
-import Logo from "../public/Svg/nav_logo.svg";
-import Settings from "../public/Svg/settings.svg";
-import AiChat from "../public/Svg/aiChat.svg";
-import Dasboard from "../public/Svg/dashboard.svg";
+
 import Profile from "../public/Svg/profile.svg";
 import {
   StreamingAvatarSessionState,
@@ -14,8 +11,9 @@ import {
   useStreamingAvatarSession,
 } from "./logic";
 import Link from "next/link";
-import { useAuthContext } from "./Prividers/AuthProvider";
-import { useRouter } from "next/navigation";
+import {useAuthContext} from "./Prividers/AuthProvider";
+import {useRouter} from "next/navigation";
+import {useThemeIcons} from "./logic/useThemeIcon";
 
 export default function NavBar({
   dashboardSwitch,
@@ -26,8 +24,9 @@ export default function NavBar({
 }) {
   const auth = useAuthContext();
   const router = useRouter();
-  const { stopAvatar, sessionState } = useStreamingAvatarSession();
-  const { interrupt } = useInterrupt();
+  const {stopAvatar, sessionState} = useStreamingAvatarSession();
+  const {settingsIcon, dashboardIcon, aiChatIcon} = useThemeIcons();
+  const {interrupt} = useInterrupt();
   const handleLogout = async () => {
     try {
       if (sessionState !== StreamingAvatarSessionState.INACTIVE) {
@@ -48,15 +47,20 @@ export default function NavBar({
 
   const startContent = (
     <>
-      <Image src={Logo} alt="logo" />
+      <Image
+        src={process.env.NEXT_PUBLIC_LOGO!}
+        alt="logo"
+        width={160}
+        height={38}
+      />
     </>
   );
 
   const endContent = (
-    <div className="flex align-items-center" style={{ gap: "50px" }}>
+    <div className="flex align-items-center" style={{gap: "50px"}}>
       {dashboardSwitch ? (
         <Image
-          src={AiChat}
+          src={aiChatIcon}
           alt="dashboard"
           className="cursor-pointer"
           onClick={() => {
@@ -65,7 +69,7 @@ export default function NavBar({
         />
       ) : (
         <Image
-          src={Dasboard}
+          src={dashboardIcon}
           alt="ai-chat"
           className="cursor-pointer"
           onClick={() => {
@@ -74,14 +78,14 @@ export default function NavBar({
         />
       )}
 
-      <Image src={Settings} alt="settings" />
+      <Image src={settingsIcon} alt="settings" />
       <Image src={Profile} alt="profile" />
       <Button
         icon="pi pi-sign-out"
         className="p-button-text p-button-rounded"
         onClick={handleLogout}
         tooltip="Sign out"
-        tooltipOptions={{ position: "bottom" }}
+        tooltipOptions={{position: "bottom"}}
         style={{
           color: "var(--error-color)",
           backgroundColor: "transparent",

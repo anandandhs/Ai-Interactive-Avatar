@@ -2,20 +2,11 @@
 import React from "react";
 import style from "../../styles/commonStyle.module.css";
 import Avatar from "../../public/Svg/dasboard_avatar.svg";
-import Home from "../../public/Svg/home.svg";
-import Resume from "../../public/Svg/resume.svg";
-import JobMatch from "../../public/Svg/job_match.svg";
-import Interview from "../../public/Svg/interview.svg";
-import Skills from "../../public/Svg/skills.svg";
-import SettingsIcon from "../../public/Svg/setting_icon.svg";
-import NotiIcon from "../../public/Svg/noti_icon.svg";
-import Assignment from "../../public/Svg/assignment.svg";
+
 import Back from "../../public/Svg/back_icon.svg";
 import Logo1 from "../../public/Svg/job_logo_1.svg";
 import Logo2 from "../../public/Svg/job_logo_2.svg";
 import Logo3 from "../../public/Svg/job_logo_3.svg";
-import ArrowLeft from "../../public/Svg/left_arrow.svg";
-import ArrowRight from "../../public/Svg/right_arrow.svg";
 import StarIcon from "../../public/Svg/yellow_star.svg";
 import MailBox from "../../public/Svg/mail_box.svg";
 import Notification from "../../public/Svg/notification.svg";
@@ -33,49 +24,76 @@ import AppBreadCrumb from "@/components/AppBreadCrumb/AppBreadCrumb";
 import AssignmentTable from "@/components/AssignmentTable/AssignmentTable";
 import SimpleBarChart from "@/components/SimpleChart/SimpleChart";
 import NavBar from "@/components/NavBar";
+import {useThemeIcons} from "@/components/logic/useThemeIcon";
 
 export default function Dashboard() {
+  const {
+    homeIcon,
+    resumeIcon,
+    jobMatchIcon,
+    interviewIcon,
+    skillsIcon,
+    settingsideIcon,
+    notiIcon,
+    assignmentIcon,
+  } = useThemeIcons();
   const options = [
     {
       name: "Dashboard",
-      icon: <Image src={Home} alt="home" width={20} height={20} />,
+      icon: <Image src={homeIcon} alt="home" width={20} height={20} />,
     },
     {
       name: "Resume Builder",
-      icon: <Image src={Resume} alt="Resume Builder" width={20} height={20} />,
+      icon: (
+        <Image src={resumeIcon} alt="Resume Builder" width={20} height={20} />
+      ),
     },
     {
       name: "Job Matches",
-      icon: <Image src={JobMatch} alt="Job Match" width={20} height={20} />,
+      icon: <Image src={jobMatchIcon} alt="Job Match" width={20} height={20} />,
     },
     {
       name: "Interview Practice",
       icon: (
-        <Image src={Interview} alt="nterview Practice" width={20} height={20} />
+        <Image
+          src={interviewIcon}
+          alt="nterview Practice"
+          width={20}
+          height={20}
+        />
       ),
     },
     {
       name: "Skills & Training",
       icon: (
-        <Image src={Skills} alt="Skills & Training" width={20} height={20} />
+        <Image
+          src={skillsIcon}
+          alt="Skills & Training"
+          width={20}
+          height={20}
+        />
       ),
     },
     {
       name: "Assignments",
-      icon: <Image src={Assignment} alt="Assignments" width={20} height={20} />,
+      icon: (
+        <Image src={assignmentIcon} alt="Assignments" width={20} height={20} />
+      ),
     },
     {
       name: "Notifications",
-      icon: <Image src={NotiIcon} alt="Notifications" width={20} height={20} />,
+      icon: <Image src={notiIcon} alt="Notifications" width={20} height={20} />,
     },
     {
       name: "Settings",
-      icon: <Image src={SettingsIcon} alt="Settings" width={20} height={20} />,
+      icon: (
+        <Image src={settingsideIcon} alt="Settings" width={20} height={20} />
+      ),
     },
   ];
   const items = [{label: "Dasshboard", id: "dashboard", url: "/dashboard"}];
   const home = {
-    icon: <Image src={Home} alt="home" width={20} height={20} />,
+    icon: <Image src={homeIcon} alt="home" width={20} height={20} />,
     url: "/",
   };
 
@@ -135,9 +153,8 @@ export default function Dashboard() {
     coverImage: StaticImageData;
     index: number;
   }) => {
-    const isEven = index % 2 === 0;
     return (
-      <div className={isEven ? style.pageGreyCard : style.pageCard}>
+      <div className={style.pageCard}>
         <div className="inline-block relative">
           {/* <Image src={coverImage} alt={courseTitle} /> */}
           <Image
