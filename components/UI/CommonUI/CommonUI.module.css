@@ -1,8 +1,8 @@
 .inputContainer {
   height: 2.813rem;
   border: 1px solid #51515126 !important;
-  border-radius: 10px !important;
-  color: #515151;
+  border-radius: 15px !important;
+  color: var(--text-primary-color);
   font-weight: 400;
   width: 25rem;
   font-size: 1rem;
@@ -11,8 +11,8 @@
 .errorInputContainer {
   height: 2.813rem;
   border: 1px solid #c80a0a !important;
-  border-radius: 10px !important;
-  color: #515151;
+  border-radius: 15px !important;
+  color: var(--text-primary-color);
   font-weight: 400;
   width: 25rem;
   font-size: 1rem;
@@ -23,16 +23,15 @@
 }
 
 .inputContainer:hover {
-  border: 1px solid #515151 !important;
+  border: 1px solid var(--text-primary-color) !important;
 }
 
 .inputContainer:focus {
-  border: 1px solid #515151 !important;
+  border: 1px solid var(--text-primary-color) !important;
   box-shadow: none !important;
 }
-
 .label {
-  color: #515151;
+  color: var(--text-primary-color);
 }
 
 .error {
@@ -42,15 +41,15 @@
 
 /* Button */
 .buttonContainer {
-  background-color: #515151;
+  background-color: var(--text-primary-color);
   color: #fff;
   font-weight: 700;
   height: 50px;
-  border-radius: 10px !important;
+  border-radius: 15px !important;
 }
 
 .buttonContainer:hover {
-  background-color: #515151 !important;
+  background-color: var(--text-primary-color) !important;
 }
 
 .secondaryButton {
@@ -58,7 +57,7 @@
   background-color: transparent !important;
   font-weight: 700 !important;
   height: 50px;
-  border-radius: 10px !important;
+  border-radius: 15px !important;
 }
 
 .secondaryButton:hover {
@@ -98,6 +97,6 @@
 .dots span {
   width: 3px;
   height: 3px;
-  background-color: #D9D9D9;
+  background-color: #d9d9d9;
   border-radius: 50%;
 }

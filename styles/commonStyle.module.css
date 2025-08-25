@@ -1,11 +1,11 @@
 .normalText {
-  color: #515151;
+  color: var(--text-primary-color);
 }
 .blueText {
   color: #1b84ff;
 }
 .lightText {
-  color: #515151cc;
+  color: var(--text-secondary-color);
 }
 .blueLightText {
   color: #67748e;
@@ -136,7 +136,7 @@
 .interruptButton {
   border: 1px solid #5151511a !important;
   background-color: #ffffff !important;
-  color: #515151 !important;
+  color: var(--text-primary-color) !important;
 }
 .interruptButton:focus {
   box-shadow: none !important;
@@ -186,7 +186,7 @@
 }
 .headCard {
   background-color: #eeeeee;
-  color: #515151;
+  color: var(--text-primary-color);
   font-weight: 700;
   padding: 1rem;
   border-top-left-radius: 30px;
@@ -216,7 +216,7 @@
   background-color: #fffdef;
   border: 1px solid #ffde05;
   border-radius: 20px;
-  color: #515151;
+  color: var(--text-primary-color);
   font-size: 10px;
   max-width: 4rem;
   white-space: nowrap;
@@ -224,8 +224,8 @@
   overflow: hidden;
 }
 .tableHead {
-  background-color: #eeeeee;
-  color: #515151;
+  background-color: var(--bg-secondary-color);
+  color: var(--text-primary-color);
   padding: 1rem;
   border-top-left-radius: 30px;
   border-top-right-radius: 30px;
@@ -238,7 +238,7 @@
   width: 100%;
 }
 .tab {
-  color: #515151;
+  color: var(--text-primary-color);
   cursor: pointer;
 }
 .activeTab {
@@ -255,7 +255,7 @@
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: #515151;
+  background: var(--text-primary-color);
   display: flex;
   align-items: center;
   justify-content: center;

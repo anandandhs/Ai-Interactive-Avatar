@@ -35,7 +35,7 @@ const TextInput: React.FC<TextInputProps> = ({
         className={style.label}
         style={{
           fontWeight: "400",
-          fontSize: " 0.875rem",
+          fontSize: "1rem",
           lineHeight: "100%",
           marginBottom: "0.625rem",
         }}

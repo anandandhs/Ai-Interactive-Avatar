@@ -1,35 +1,43 @@
-import React, { forwardRef, useEffect, useRef, useState } from "react";
-import { ConnectionQuality } from "@heygen/streaming-avatar";
+import React, {forwardRef, useEffect, useRef, useState} from "react";
+import {ConnectionQuality} from "@heygen/streaming-avatar";
 
-import { useConnectionQuality } from "../logic/useConnectionQuality";
-import { useStreamingAvatarSession } from "../logic/useStreamingAvatarSession";
-import { StreamingAvatarSessionState } from "../logic";
-import { CloseIcon } from "../Icons";
-import { Button } from "../Button";
-import { AVATARS } from "@/app/lib/constants";
+import {useConnectionQuality} from "../logic/useConnectionQuality";
+import {useStreamingAvatarSession} from "../logic/useStreamingAvatarSession";
+import {StreamingAvatarSessionState} from "../logic";
+import {CloseIcon} from "../Icons";
+import {Button} from "../Button";
+import {AVATARS} from "@/app/lib/constants";
 // import Texas from "../../public/Svg/texas.svg";
 import Texas from "../../public/Svg/deskBg.svg";
-import accademicEnglish from "../../public/Svg/accademicEnglish.png";
-import accademicSpanish from "../../public/Svg/accademicSpanish.png";
-import administrationEnglish from "../../public/Svg/administrationEnglish.png";
-import administrationSpanish from "../../public/Svg/administrationSpanish.png";
-import admissionEnglish from "../../public/Svg/admissionEnglish.png";
-import admissionSpanish from "../../public/Svg/admissionSpanish.png";
 import Image from "next/image";
-import { useAuthContext } from "../Prividers/AuthProvider";
-import { getRequiredAvatar } from "@/app/lib/genericFunctions";
+import {useAuthContext} from "../Prividers/AuthProvider";
+import {getRequiredAvatar} from "@/app/lib/genericFunctions";
 interface AvatarVideoProps {
   page: number;
 }
 
 export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
-  ({ page }, ref) => {
-    const { sessionState, stream } = useStreamingAvatarSession();
-    const { connectionQuality } = useConnectionQuality();
+  ({page}, ref) => {
+    const {sessionState, stream} = useStreamingAvatarSession();
+    const {connectionQuality} = useConnectionQuality();
     const auth = useAuthContext();
     const [removeBG] = useState(true);
 
     const canvasRef = useRef<HTMLCanvasElement>(null);
+
+    const administrationEnglish =
+      process.env.NEXT_PUBLIC_ADMINISTRATION_ENGLISH;
+
+    const accademicEnglish = process.env.NEXT_PUBLIC_ACADEMIC_ENGLISH;
+
+    const admissionEnglish = process.env.NEXT_PUBLIC_ADMISSION_ENGLISH;
+
+    const administrationSpanish =
+      process.env.NEXT_PUBLIC_ADMINISTRATION_SPANISH;
+
+    const accademicSpanish = process.env.NEXT_PUBLIC_ACADEMIC_SPANISH;
+
+    const admissionSpanish = process.env.NEXT_PUBLIC_ADMISSION_SPANISH;
 
     // Determine current ava(tar based on user
     const currentAvatarId = getRequiredAvatar(
@@ -151,7 +159,7 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
           return requestAnimationFrame(renderCanvas);
         }
 
-        const ctx = canvas.getContext("2d", { willReadFrequently: true });
+        const ctx = canvas.getContext("2d", {willReadFrequently: true});
         if (!ctx) return;
 
         canvas.width = video.videoWidth;
@@ -290,7 +298,7 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
         {!isLoaded && (
           <div
             className="w-full h-full flex align-items-center justify-content-center absolute"
-            style={{ top: 0, left: 0 }}
+            style={{top: 0, left: 0}}
           >
             <div className="loader"></div>
           </div>

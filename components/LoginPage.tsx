@@ -1,27 +1,23 @@
 "use client";
 
-import React, { useState } from "react";
-import { Input } from "./Input";
-import { Card } from "primereact/card";
-import { Message } from "primereact/message";
+import React, {useState} from "react";
+import {Input} from "./Input";
+import {Card} from "primereact/card";
+import {Message} from "primereact/message";
 
 import Image from "next/image";
 import Avatar from "../public/Svg/avatar.svg";
 
-import { InputText } from "primereact/inputtext";
+import {InputText} from "primereact/inputtext";
 import TextInput from "./UI/CommonUI/TextInput";
-import { Button } from "./Button";
+import {Button} from "./Button";
 import AppButton from "./UI/CommonUI/AppButton";
 import style from "../styles/commonStyle.module.css";
 import clsx from "clsx";
-import Mail from "../public/Svg/mail.svg";
-import Password from "../public/Svg/password.svg";
-import BackgroundLogo from "../public/Svg/home_2.svg";
-import BackgroundStar from "../public/Svg/home_1.svg";
-import LoginAvatar from "../public/Svg/meliassaLogin.svg";
-import Logo from "../public/Svg/nav_logo.svg";
+
 import LoginRightRectangle from "../public/Svg/loginRightRectangle.svg";
 import LoginLeftRectangle from "../public/Svg/loginLeftRectangle.svg";
+import {useThemeIcons} from "./logic/useThemeIcon";
 
 interface LoginPageProps {
   onLogin: (username: string, password: string) => Promise<boolean>;
@@ -38,6 +34,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   const [password, setPassword] = useState("");
   const [imageLoading, setImageLoading] = useState(true);
 
+  const {mailIcon, passwordIcon} = useThemeIcons();
   const handleSubmit = async () => {
     if (!username.trim() || !password.trim()) return;
     await onLogin(username, password);
@@ -46,15 +43,15 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   return (
     <div className="grid h-full">
       {/* Left Side */}
-      <div className="col-12 md:col-6 relative p-0" style={{ height: "107vh" }}>
+      <div className="col-12 md:col-6 relative p-0" style={{height: "107vh"}}>
         <Image
-          src={LoginAvatar}
+          src={process.env.NEXT_PUBLIC_LOGIN_LOGO!}
           alt="avatar"
           fill
           onLoadingComplete={() => {
             setImageLoading(false);
           }}
-          style={{ objectFit: "cover" }}
+          style={{objectFit: "cover"}}
         />
         {/* <div className="w-full relative">
           <h5
@@ -117,20 +114,25 @@ export const LoginPage: React.FC<LoginPageProps> = ({
         <Image
           src={LoginLeftRectangle}
           alt="rectangleLeft"
-          style={{ position: "absolute", top: "15%", left: "49.5%" }}
+          style={{position: "absolute", top: "15%", left: "49.5%"}}
         />
         <Image
           src={LoginRightRectangle}
           alt="rectangleRIght"
-          style={{ position: "absolute", top: "15%", left: "98.5%" }}
+          style={{position: "absolute", top: "15%", left: "98.5%"}}
         />
         <div className="h-full flex flex-column justify-content-center">
           <div className="flex flex-column justify-content-center align-items-center relative">
-            <Image src={Logo} alt="logo" />
+            <Image
+              src={process.env.NEXT_PUBLIC_LOGO!}
+              alt="logo"
+              width={180}
+              height={35}
+            />
             <div className="flex flex-column justify-content-center align-items-center gap-2 mt-5">
               <h2
                 style={{
-                  color: "#515151",
+                  color: "var(--text-primary-color)",
                   fontWeight: "500",
                   fontSize: "2.25rem",
                   lineHeight: "100%",
@@ -152,12 +154,12 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             </div>
             <div
               className="flex flex-column gap-4 mt-5"
-              style={{ width: "28rem" }}
+              style={{width: "28rem"}}
             >
               {error && <div className={style.errorBox}>{error}</div>}
 
               <div className="flex relative">
-                <Image src={Mail} alt="mail" className={style.imageInput} />
+                <Image src={mailIcon} alt="mail" className={style.imageInput} />
                 <TextInput
                   label="Email"
                   width="100%"
@@ -170,7 +172,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
               </div>
               <div className="flex relative">
                 <Image
-                  src={Password}
+                  src={passwordIcon}
                   alt="password"
                   className={style.imageInput}
                 />
@@ -208,7 +210,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
               <span
                 className="flex justify-content-center"
                 style={{
-                  color: "#515151",
+                  color: "var(--text-primary-color)",
                   fontWeight: "400",
                   fontSize: "1rem",
                   lineHeight: "100%",
