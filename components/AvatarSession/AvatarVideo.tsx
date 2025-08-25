@@ -1,25 +1,25 @@
-import React, {forwardRef, useEffect, useRef, useState} from "react";
-import {ConnectionQuality} from "@heygen/streaming-avatar";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
+import { ConnectionQuality } from "@heygen/streaming-avatar";
 
-import {useConnectionQuality} from "../logic/useConnectionQuality";
-import {useStreamingAvatarSession} from "../logic/useStreamingAvatarSession";
-import {StreamingAvatarSessionState} from "../logic";
-import {CloseIcon} from "../Icons";
-import {Button} from "../Button";
-import {AVATARS} from "@/app/lib/constants";
+import { useConnectionQuality } from "../logic/useConnectionQuality";
+import { useStreamingAvatarSession } from "../logic/useStreamingAvatarSession";
+import { StreamingAvatarSessionState } from "../logic";
+import { CloseIcon } from "../Icons";
+import { Button } from "../Button";
+import { AVATARS } from "@/app/lib/constants";
 // import Texas from "../../public/Svg/texas.svg";
 import Texas from "../../public/Svg/deskBg.svg";
 import Image from "next/image";
-import {useAuthContext} from "../Prividers/AuthProvider";
-import {getRequiredAvatar} from "@/app/lib/genericFunctions";
+import { useAuthContext } from "../Prividers/AuthProvider";
+import { getRequiredAvatar } from "@/app/lib/genericFunctions";
 interface AvatarVideoProps {
   page: number;
 }
 
 export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
-  ({page}, ref) => {
-    const {sessionState, stream} = useStreamingAvatarSession();
-    const {connectionQuality} = useConnectionQuality();
+  ({ page }, ref) => {
+    const { sessionState, stream } = useStreamingAvatarSession();
+    const { connectionQuality } = useConnectionQuality();
     const auth = useAuthContext();
     const [removeBG] = useState(true);
 
@@ -159,7 +159,7 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
           return requestAnimationFrame(renderCanvas);
         }
 
-        const ctx = canvas.getContext("2d", {willReadFrequently: true});
+        const ctx = canvas.getContext("2d", { willReadFrequently: true });
         if (!ctx) return;
 
         canvas.width = video.videoWidth;
@@ -242,6 +242,8 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
           >
             {/* Background office environment */}
             <Image
+              width={1920}
+              height={1080}
               src={(() => {
                 // Check if user needs special background (Texas/deskBg)
                 const needsSpecialBackground =
@@ -298,7 +300,7 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
         {!isLoaded && (
           <div
             className="w-full h-full flex align-items-center justify-content-center absolute"
-            style={{top: 0, left: 0}}
+            style={{ top: 0, left: 0 }}
           >
             <div className="loader"></div>
           </div>

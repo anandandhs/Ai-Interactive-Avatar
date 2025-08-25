@@ -144,11 +144,11 @@ export const MessageHistory: React.FC = () => {
                   }}
                 >
                   {message.content}
-                  {/* <ReactTyped
+                  <ReactTyped
                     strings={[message.content]}
                     typeSpeed={48}
                     smartBackspace={false}
-                  /> */}
+                  />
                 </div>
               </div>
             </div>
