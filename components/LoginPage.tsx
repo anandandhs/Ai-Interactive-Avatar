@@ -6,7 +6,6 @@ import {Card} from "primereact/card";
 import {Message} from "primereact/message";
 
 import Image from "next/image";
-import Avatar from "../public/Svg/avatar.svg";
 
 import {InputText} from "primereact/inputtext";
 import TextInput from "./UI/CommonUI/TextInput";
@@ -15,8 +14,6 @@ import AppButton from "./UI/CommonUI/AppButton";
 import style from "../styles/commonStyle.module.css";
 import clsx from "clsx";
 
-import LoginRightRectangle from "../public/Svg/loginRightRectangle.svg";
-import LoginLeftRectangle from "../public/Svg/loginLeftRectangle.svg";
 import {useThemeIcons} from "./logic/useThemeIcon";
 
 interface LoginPageProps {
@@ -34,12 +31,14 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   const [password, setPassword] = useState("");
   const [imageLoading, setImageLoading] = useState(true);
 
-  const {mailIcon, passwordIcon} = useThemeIcons();
+  const {mailIcon, passwordIcon, RectangleLeftImage, RectangleRightImage} =
+    useThemeIcons();
   const handleSubmit = async () => {
     if (!username.trim() || !password.trim()) return;
     await onLogin(username, password);
   };
 
+  const isVictorValleyTheme = process.env.NEXT_PUBLIC_THEME === "victorvalley";
   return (
     <div className="grid h-full">
       {/* Left Side */}
@@ -112,12 +111,12 @@ export const LoginPage: React.FC<LoginPageProps> = ({
       </div>
       <div className="col-6">
         <Image
-          src={LoginLeftRectangle}
+          src={RectangleLeftImage}
           alt="rectangleLeft"
           style={{position: "absolute", top: "15%", left: "49.5%"}}
         />
         <Image
-          src={LoginRightRectangle}
+          src={RectangleRightImage}
           alt="rectangleRIght"
           style={{position: "absolute", top: "15%", left: "98.5%"}}
         />
@@ -126,8 +125,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             <Image
               src={process.env.NEXT_PUBLIC_LOGO!}
               alt="logo"
-              width={180}
-              height={35}
+              width={isVictorValleyTheme ? 108 : 180}
+              height={isVictorValleyTheme ? 108 : 35}
             />
             <div className="flex flex-column justify-content-center align-items-center gap-2 mt-5">
               <h2

@@ -6,9 +6,10 @@ import {Column} from "primereact/column";
 import clsx from "clsx";
 import style from "../../styles/commonStyle.module.css";
 import Image from "next/image";
-import Eye from "../../public/Svg/eye.svg";
+import {useThemeIcons} from "../logic/useThemeIcon";
 
 export default function AssignmentTable() {
+  const {eyeIcon} = useThemeIcons();
   const mockRow = [
     {
       name: "Safety Procedure Quiz",
@@ -33,7 +34,7 @@ export default function AssignmentTable() {
   const actionTemplate = () => {
     return (
       <div className="text-center">
-        <Image src={Eye} alt="eye" />
+        <Image src={eyeIcon} alt="eye" />
       </div>
     );
   };

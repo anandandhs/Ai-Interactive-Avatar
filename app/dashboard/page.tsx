@@ -2,8 +2,6 @@
 import React from "react";
 import style from "../../styles/commonStyle.module.css";
 import Avatar from "../../public/Svg/dasboard_avatar.svg";
-
-import Back from "../../public/Svg/back_icon.svg";
 import Logo1 from "../../public/Svg/job_logo_1.svg";
 import Logo2 from "../../public/Svg/job_logo_2.svg";
 import Logo3 from "../../public/Svg/job_logo_3.svg";
@@ -11,7 +9,6 @@ import StarIcon from "../../public/Svg/yellow_star.svg";
 import MailBox from "../../public/Svg/mail_box.svg";
 import Notification from "../../public/Svg/notification.svg";
 import Calendar from "../../public/Svg/calender_green.svg";
-import Eye from "../../public/Svg/eye.svg";
 import Thumbnail from "../../public/Svg/thumbnail_sample.png";
 import Thumbnail1 from "../../public/Svg/thumbnail_1.png";
 import Thumbnail2 from "../../public/Svg/thumbnail_2.png";
@@ -36,6 +33,7 @@ export default function Dashboard() {
     settingsideIcon,
     notiIcon,
     assignmentIcon,
+    backIcon,
   } = useThemeIcons();
   const options = [
     {
@@ -173,7 +171,7 @@ export default function Dashboard() {
         >
           <h3 className={style.normalText}>{courseTitle}</h3>
           <p className={style.blueText}>{user}</p>
-          <p className={style.normalText}>{courseDescription}</p>
+          <p className={style.alternateText}>{courseDescription}</p>
         </div>
       </div>
     );
@@ -230,7 +228,7 @@ export default function Dashboard() {
           <div style={{width: "80%"}}>
             {/* header */}
             <div className="flex gap-3 align-items-center">
-              <Image src={Back} alt="back" />
+              <Image src={backIcon} alt="back" />
               <div className="flex flex-column gap-1">
                 <h3 className={clsx("ml-2", style.normalText)}>Dashboard</h3>
                 <AppBreadCrumb items={items} home={home} />
