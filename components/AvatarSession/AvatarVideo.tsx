@@ -12,6 +12,7 @@ import Texas from "../../public/Svg/deskBg.svg";
 import Image from "next/image";
 import { useAuthContext } from "../Prividers/AuthProvider";
 import { getRequiredAvatar } from "@/app/lib/genericFunctions";
+import { useZoomLevel } from "../logic/useZoomLevel";
 interface AvatarVideoProps {
   page: number;
 }
@@ -70,7 +71,8 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
       };
     };
 
-    const getCanvasStyles = (currentAvatarId: string) => {
+    const getCanvasStyles = (currentAvatarId: string, zoomLevel: number) => {
+      const is125Zoom = zoomLevel === 1.25; // detect 125% scaling
       const baseStyles = {
         display: removeBG ? "block" : "none",
         backgroundColor: "transparent",
@@ -104,7 +106,7 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
       ) {
         return {
           ...baseStyles,
-          top: "32%", // Positioning for administration background
+          top: is125Zoom ? "33.8%" : "32%",
           left: "52%",
           transform: "translateX(-50%)", // Center horizontally
           width: "52%", // Standard size for administration
@@ -120,7 +122,7 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
       ) {
         return {
           ...baseStyles,
-          top: "36.5%", // Positioning for academic background
+          top: is125Zoom ? "37.9%" : "36.4%", // adjusted top for zoom
           left: "44.5%",
           transform: "translateX(-50%)", // Center horizontally
           width: "53%", // Standard size for academic
@@ -132,7 +134,7 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
       // Pedro && Amina (Admission avatars) - Default case
       return {
         ...baseStyles,
-        top: "29.7%", // Positioning for admission background
+        top: is125Zoom ? "31.2%" : "29.7%", // adjusted top for zoom
         left: "52%",
         transform: "translateX(-50%)", // Center horizontally
         width: "52%", // Standard size for admission
@@ -140,6 +142,9 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
         objectFit: "cover" as const,
       };
     };
+
+    const zoomLevel = useZoomLevel();
+    const canvasStyles = getCanvasStyles(currentAvatarId, zoomLevel);
 
     const isLoaded =
       sessionState === StreamingAvatarSessionState.CONNECTED && stream !== null;
@@ -294,7 +299,7 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
             </video>
 
             {/* Chroma key canvas with same positioning */}
-            <canvas ref={canvasRef} style={getCanvasStyles(currentAvatarId)} />
+            <canvas ref={canvasRef} style={canvasStyles} />
           </div>
         )}
         {!isLoaded && (

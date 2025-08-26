@@ -843,7 +843,7 @@ function InteractiveAvatar({ page }: { page: number }) {
         sttSettings: {
           provider: STTProvider.DEEPGRAM,
         },
-        activityIdleTimeout: 100, // comment this after demo
+        activityIdleTimeout: 3600, // comment this after demo
         knowledgeId: "",
         knowledgeBase: getKnowlededgeBase(
           auth?.user?.username?.toLowerCase() || "",
@@ -852,8 +852,6 @@ function InteractiveAvatar({ page }: { page: number }) {
           currentAvatarId
         ),
       };
-
-      console.log("Predefined Config:", predefinedConfig);
 
       startSessionV2(true, predefinedConfig);
     }

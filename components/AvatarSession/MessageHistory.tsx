@@ -143,7 +143,7 @@ export const MessageHistory: React.FC = () => {
                     wordBreak: "break-word",
                   }}
                 >
-                  {message.content}
+                  {/* {message.content} */}
                   <ReactTyped
                     strings={[message.content]}
                     typeSpeed={48}
