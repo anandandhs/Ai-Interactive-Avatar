@@ -1,6 +1,9 @@
 .normalText {
   color: var(--text-primary-color);
 }
+.alternateText {
+  color: var(--text-alternate-color);
+}
 .blueText {
   color: #1b84ff;
 }

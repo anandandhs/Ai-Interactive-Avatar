@@ -42,7 +42,11 @@ export default function SimpleBarChart() {
         <YAxis
           dataKey="name"
           type="category"
-          tick={{fill: "#252B41E5", fontSize: 14, fontWeight: 400}}
+          tick={{
+            fill: "var(--text-alternate-color)",
+            fontSize: 14,
+            fontWeight: 400,
+          }}
         />
         <Tooltip />
         <Bar dataKey="part1" stackId="a" fill="url(#gradient1)" barSize={20} />
