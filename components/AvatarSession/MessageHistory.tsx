@@ -65,11 +65,11 @@ export const MessageHistory: React.FC = () => {
           >
             <i
               className="pi pi-comments text-4xl"
-              style={{color: "var(--gray-400)"}}
+              style={{color: "var(--text-primary-color)"}}
             />
             <p
               className="text-body-medium text-center text-light"
-              style={{color: "#515151"}}
+              style={{color: "var(--text-primary-color)"}}
             >
               Your conversation will appear here
             </p>
