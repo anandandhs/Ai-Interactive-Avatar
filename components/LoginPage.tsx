@@ -50,7 +50,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
           onLoadingComplete={() => {
             setImageLoading(false);
           }}
-          style={{objectFit: "cover"}}
+          // style={{objectFit: "cover"}}
         />
         {/* <div className="w-full relative">
           <h5
@@ -113,7 +113,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
         <Image
           src={RectangleLeftImage}
           alt="rectangleLeft"
-          style={{position: "absolute", top: "15%", left: "49.5%"}}
+          style={{position: "absolute", top: "15%", left: "50%"}}
         />
         <Image
           src={RectangleRightImage}
