@@ -1,7 +1,7 @@
 import "@/styles/globals.css";
-import { Metadata } from "next";
-import { Fira_Code as FontMono, Inter as FontSans } from "next/font/google";
-import { Open_Sans } from "next/font/google";
+import {Metadata} from "next";
+import {Fira_Code as FontMono, Inter as FontSans} from "next/font/google";
+import {Open_Sans} from "next/font/google";
 
 import NavBar from "@/components/NavBar";
 import {
@@ -26,22 +26,27 @@ const fontMono = FontMono({
   subsets: ["latin"],
   variable: "--font-geist-mono",
 });
-
+const isOnCreativTheme = process.env.NEXT_PUBLIC_THEME === "oncreativ";
+const isVictorValleyTheme = process.env.NEXT_PUBLIC_THEME === "victorvalley";
 export const metadata: Metadata = {
   title: {
-    default: "WorkInTEXAS.com",
+    default: isOnCreativTheme
+      ? "Oncreativ.com"
+      : isVictorValleyTheme
+      ? "VictorValley.com"
+      : "WorkInTEXAS.com",
     template: `%s - HeyGen Interactive Avatar SDK Demo`,
   },
   icons: {
-    icon: "/metalogo.png",
+    icon: isOnCreativTheme
+      ? "/onCreativ_Fav icon_blue.svg"
+      : isVictorValleyTheme
+      ? "/victor_red.svg"
+      : "/metalogo.png",
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <html
       suppressHydrationWarning
