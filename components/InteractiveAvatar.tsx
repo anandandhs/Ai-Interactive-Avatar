@@ -825,6 +825,10 @@ function InteractiveAvatar({ page }: { page: number }) {
             voiceId: "e85822bd14e144e8b6fe73da2fb1085c",
           }),
           ...(auth?.user?.username?.toLowerCase() ===
+            "erica.romaguera@papyrrus.com" && {
+            voiceId: "e85822bd14e144e8b6fe73da2fb1085c",
+          }),
+          ...(auth?.user?.username?.toLowerCase() ===
             "irwin.spinello@papyrrus.com" && {
             voiceId:
               currentAvatarId === AVATARS[0].avatar_id
