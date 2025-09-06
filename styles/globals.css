@@ -256,12 +256,12 @@ body {
   --transition-slow: 350ms ease-in-out;
 
   /* work in texas */
-  /* --text-primary-color: #515151;
+  --text-primary-color: #515151;
   --text-secondary-color: #51515180;
   --text-alternate-color: #515151;
   --bg-secondary-color: #eeeeee;
   --bg-sender-color: #5151511a;
-  --bg-receiver-color: #1b84ff1a; */
+  --bg-receiver-color: #1b84ff1a;
 
   /* onCreativ */
   /* --text-primary-color: #002138;
@@ -272,12 +272,12 @@ body {
   --bg-receiver-color: #1b84ff1a; */
 
   /* victor valley */
-  --text-primary-color: #8a2d42;
+  /* --text-primary-color: #8a2d42;
   --text-secondary-color: #51515180;
   --text-alternate-color: #998449;
   --bg-secondary-color: #8a2e430d;
   --bg-sender-color: #9984491a;
-  --bg-receiver-color: #8a2e431a;
+  --bg-receiver-color: #8a2e431a; */
 }
 
 /* Enhanced PrimeReact Component Overrides */
@@ -592,6 +592,7 @@ body {
 }
 
 @keyframes pulse {
+
   0%,
   100% {
     opacity: 1;
@@ -716,6 +717,7 @@ body {
 
 /* Avatar responsive positioning */
 @media (max-width: 1200px) {
+
   /* Adjust avatar positioning for medium screens */
   .avatar-video-section {
     min-height: 350px !important;
@@ -723,6 +725,7 @@ body {
 }
 
 @media (max-width: 768px) {
+
   /* Mobile-specific avatar adjustments */
   .avatar-video-section {
     min-height: 300px !important;
@@ -785,6 +788,7 @@ li {
 }
 
 @keyframes bblFadInOut {
+
   0%,
   80%,
   100% {
@@ -807,14 +811,14 @@ li {
   margin-left: 10px !important;
 }
 
-.custom-table .p-datatable-thead > tr > th {
+.custom-table .p-datatable-thead>tr>th {
   color: var(--text-primary-color);
   font-weight: 700;
   font-size: 16px;
   padding: 1rem;
 }
 
-.custom-table .p-datatable-tbody > tr > td {
+.custom-table .p-datatable-tbody>tr>td {
   color: var(--text-alternate-color);
   font-weight: 500;
   font-size: 16px;
@@ -859,12 +863,12 @@ li {
   overflow: hidden;
 }
 
-.custom-table .p-datatable-thead > tr > th:not(:last-child),
-.custom-table .p-datatable-tbody > tr > td:not(:last-child) {
+.custom-table .p-datatable-thead>tr>th:not(:last-child),
+.custom-table .p-datatable-tbody>tr>td:not(:last-child) {
   border-right: 1px solid #5151511a;
 }
 
-.custom-table .p-datatable-tbody > tr:not(:last-child) {
+.custom-table .p-datatable-tbody>tr:not(:last-child) {
   border-bottom: 1px solid #5151511a;
 }
 

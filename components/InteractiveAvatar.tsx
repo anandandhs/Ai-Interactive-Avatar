@@ -853,7 +853,9 @@ function InteractiveAvatar({ page }: { page: number }) {
         ),
       };
 
-      startSessionV2(true, predefinedConfig);
+      console.log("Predefined Config:", predefinedConfig);
+
+      //startSessionV2(true, predefinedConfig);
     }
   }, [auth]);
 
