@@ -855,7 +855,7 @@ function InteractiveAvatar({ page }: { page: number }) {
 
       console.log("Predefined Config:", predefinedConfig);
 
-      //startSessionV2(true, predefinedConfig);
+      startSessionV2(true, predefinedConfig);
     }
   }, [auth]);
 
