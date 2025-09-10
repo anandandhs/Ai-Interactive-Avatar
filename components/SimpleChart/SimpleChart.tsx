@@ -13,9 +13,9 @@ import {
 
 export default function SimpleBarChart() {
   const rawData = [
-    {name: "Electrical Systems", blue: 30},
-    {name: "Refrigiration Cycle", blue: 20},
-    {name: "Thermostat Installation", blue: 5},
+    { name: "Electrical Systems", blue: 30 },
+    { name: "Refrigeration Cycle", blue: 20 },
+    { name: "Thermostat Installation", blue: 5 },
   ];
 
   const data = rawData.map((item) => ({
@@ -29,7 +29,7 @@ export default function SimpleBarChart() {
       <BarChart
         data={data}
         layout="vertical"
-        margin={{top: 20, right: 30, left: 40, bottom: 5}}
+        margin={{ top: 20, right: 30, left: 40, bottom: 5 }}
       >
         <defs>
           <linearGradient id="gradient1" x1="0" y1="0" x2="1" y2="0">

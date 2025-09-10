@@ -18,9 +18,9 @@ import Eye from "../../../public/Svg/eye.svg";
 import Thumbnail from "../../../public/Svg/thumbnail_sample.png";
 import Image from "next/image";
 import clsx from "clsx";
-import {BreadCrumb} from "primereact/breadcrumb";
-import {DataTable} from "primereact/datatable";
-import {Column} from "primereact/column";
+import { BreadCrumb } from "primereact/breadcrumb";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
 import {
   BarChart,
   Bar,
@@ -70,7 +70,7 @@ const Dashboard: React.FC = () => {
       icon: <Image src={Interview} alt="Settings" width={20} height={20} />,
     },
   ];
-  const items = [{label: "Dashboard"}];
+  const items = [{ label: "Dashboard" }];
   const home = {
     icon: () => <Image src={Home} alt="home" width={20} height={20} />,
   };
@@ -102,10 +102,10 @@ const Dashboard: React.FC = () => {
     );
   };
   const mockColumn = [
-    {header: "Assignment Name", field: "name"},
-    {header: "Class", field: "class"},
-    {header: "Due", field: "date"},
-    {header: "Action", field: "action", body: actionTemplate},
+    { header: "Assignment Name", field: "name" },
+    { header: "Class", field: "class" },
+    { header: "Due", field: "date" },
+    { header: "Action", field: "action", body: actionTemplate },
   ];
   const tableHeader = () => {
     return (
@@ -147,7 +147,7 @@ const Dashboard: React.FC = () => {
     </div>
   );
 
-  const Tab = ({title, active}: {title: string; active: boolean}) => {
+  const Tab = ({ title, active }: { title: string; active: boolean }) => {
     return (
       <span className={clsx(style.tab, active && style.activeTab)}>
         {title}
@@ -176,9 +176,9 @@ const Dashboard: React.FC = () => {
   };
 
   const rawData = [
-    {name: "Electrical Systems", blue: 30},
-    {name: "Refrigiration Cycle", blue: 20},
-    {name: "Thermostat Installation", blue: 5},
+    { name: "Electrical Systems", blue: 30 },
+    { name: "Refrigeration Cycle", blue: 20 },
+    { name: "Thermostat Installation", blue: 5 },
   ];
   const data = rawData.map((item) => ({
     name: item.name,
@@ -192,7 +192,7 @@ const Dashboard: React.FC = () => {
         <BarChart
           data={data}
           layout="vertical"
-          margin={{top: 20, right: 30, left: 40, bottom: 5}}
+          margin={{ top: 20, right: 30, left: 40, bottom: 5 }}
         >
           <defs>
             <linearGradient id="gradient1" x1="0" y1="0" x2="1" y2="0">
@@ -205,7 +205,7 @@ const Dashboard: React.FC = () => {
           <YAxis
             dataKey="name"
             type="category"
-            tick={{fill: "#252B41E5", fontSize: 14, fontWeight: 400}}
+            tick={{ fill: "#252B41E5", fontSize: 14, fontWeight: 400 }}
           />
           <Tooltip />
           <Bar
@@ -257,7 +257,7 @@ const Dashboard: React.FC = () => {
         <div className="flex gap-4 flex-column">
           {/* firstpart */}
           <div className="flex gap-4 mt-4">
-            <div className={style.pageCard} style={{width: "80%"}}>
+            <div className={style.pageCard} style={{ width: "80%" }}>
               <h3 className={clsx("text-lg", style.headCard)}>
                 Job Opportunities
               </h3>
@@ -295,7 +295,7 @@ const Dashboard: React.FC = () => {
             </div>
             <div
               className={clsx("flex flex-column gap-4 p-5", style.pageCard)}
-              style={{width: "20%"}}
+              style={{ width: "20%" }}
             >
               <div className="flex gap-4 justify-content-between">
                 <Image src={MailBox} alt="mail_box" />
@@ -319,7 +319,7 @@ const Dashboard: React.FC = () => {
               value={mockRow}
               showGridlines
               className="custom-table"
-              style={{width: "60%"}}
+              style={{ width: "60%" }}
             >
               {mockColumn.map((col, index) => (
                 <Column
@@ -330,10 +330,13 @@ const Dashboard: React.FC = () => {
                 />
               ))}
             </DataTable>
-            <div className={clsx("p-3", style.pageCard)} style={{width: "40%"}}>
+            <div
+              className={clsx("p-3", style.pageCard)}
+              style={{ width: "40%" }}
+            >
               <div className="flex justify-content-between">
                 <div
-                  style={{display: "flex", alignItems: "center", gap: "8px"}}
+                  style={{ display: "flex", alignItems: "center", gap: "8px" }}
                 >
                   <span className={style.circleOuter}>
                     <span className={style.circleInner}></span>
@@ -343,7 +346,7 @@ const Dashboard: React.FC = () => {
                   </span>
                 </div>
                 <div
-                  style={{display: "flex", alignItems: "center", gap: "8px"}}
+                  style={{ display: "flex", alignItems: "center", gap: "8px" }}
                 >
                   <span className={style.circleOuter}>
                     <span className={style.circleInner}></span>
@@ -360,7 +363,7 @@ const Dashboard: React.FC = () => {
           <div className="flex flex-column gap-4">
             <div
               className={clsx("flex gap-4", style.tabContainer)}
-              style={{height: "2.5rem"}}
+              style={{ height: "2.5rem" }}
             >
               <Tab title="Recommended Course" active={true} />
             </div>
