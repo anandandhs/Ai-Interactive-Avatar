@@ -869,7 +869,7 @@ function InteractiveAvatar({ page }: { page: number }) {
         quality: AvatarQuality.Low,
         avatarName: currentAvatarId,
         voice: {
-          rate: 0.8,
+          rate: newLanguage === "es" ? 1.2 : 0.8,
           emotion: VoiceEmotion.EXCITED,
           model: newModel,
           ...(auth?.user?.username?.toLowerCase() ===
