@@ -807,13 +807,16 @@ function InteractiveAvatar({ page }: { page: number }) {
           model: newModel,
           ...(auth?.user?.username?.toLowerCase() ===
             "john.keating@papyrrus.com" &&
-          currentAvatarId === AVATARS[0].avatar_id
-            ? {
-                voiceId: "e85822bd14e144e8b6fe73da2fb1085c", // Default voice for john.keating kathya
-              }
-            : {
-                voiceId: "72cbcf091d9d48998ce10d7b5c2d569e", // Default voice for john.keating pedro
-              }),
+            currentAvatarId === AVATARS[0].avatar_id &&
+            newLanguage === "es" && {
+              voiceId: "e85822bd14e144e8b6fe73da2fb1085c", // Default voice for john.keating kathya
+            }),
+          ...(auth?.user?.username?.toLowerCase() ===
+            "john.keating@papyrrus.com" &&
+            currentAvatarId === AVATARS[5].avatar_id &&
+            newLanguage === "es" && {
+              voiceId: "72cbcf091d9d48998ce10d7b5c2d569e", // Default voice for john.keating kathya
+            }),
         },
         language: newLanguage,
         voiceChatTransport: VoiceChatTransport.WEBSOCKET,
