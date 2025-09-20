@@ -7,7 +7,7 @@ import {
   STTProvider,
   ElevenLabsModel,
 } from "@heygen/streaming-avatar";
-import { useEffect, useRef, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import { useMemoizedFn, useUnmount } from "ahooks";
 import { useRouter } from "next/navigation";
 import { Toast } from "primereact/toast";
@@ -42,22 +42,7 @@ import {
   getKnowlededgeBase,
   getRequiredAvatar,
 } from "@/app/lib/genericFunctions";
-
-const DEFAULT_CONFIG: StartAvatarRequest = {
-  quality: AvatarQuality.Low,
-  avatarName: AVATARS[0].avatar_id,
-  knowledgeId: undefined,
-  voice: {
-    rate: 1.5,
-    emotion: VoiceEmotion.EXCITED,
-    model: ElevenLabsModel.eleven_flash_v2_5,
-  },
-  language: "en",
-  voiceChatTransport: VoiceChatTransport.WEBSOCKET,
-  sttSettings: {
-    provider: STTProvider.DEEPGRAM,
-  },
-};
+import { useTextChat } from "./logic/useTextChat";
 
 function InteractiveAvatar({ page }: { page: number }) {
   const { initAvatar, startAvatar, stopAvatar, sessionState, stream } =
@@ -67,10 +52,16 @@ function InteractiveAvatar({ page }: { page: number }) {
   const auth = useAuthContext();
   const router = useRouter();
   const toast = useRef<Toast>(null);
+  const { sendMessage } = useTextChat();
   const currentAvatarMessage = useRef<string>("");
   const currentUserMessage = useRef<string>("");
   const userRequestedNavigation = useRef<string | null>(null);
   const isAvatarTalking = useRef<boolean>(false);
+  const [currentLanguage, setCurrentLanguage] = useState<string>("en");
+  const [currentModel, setCurrentModel] = useState<ElevenLabsModel>(
+    ElevenLabsModel.eleven_flash_v2_5
+  );
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
   const mediaStream = useRef<HTMLVideoElement>(null);
 
@@ -789,6 +780,92 @@ function InteractiveAvatar({ page }: { page: number }) {
     AVATARS[0].avatar_id
   );
 
+  // Function to restart avatar with new configuration
+  const restartAvatarWithNewConfig = async (
+    newModel: ElevenLabsModel,
+    newLanguage: string
+  ) => {
+    if (!auth?.user) return;
+
+    try {
+      setCurrentModel(newModel);
+      setCurrentLanguage(newLanguage);
+
+      // Stop current avatar session gracefully
+      await stopAvatarGracefully();
+
+      // Wait a moment for cleanup
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Create new configuration with updated model and language
+      const updatedConfig = {
+        quality: AvatarQuality.Low,
+        avatarName: currentAvatarId,
+        voice: {
+          rate: 0.8,
+          emotion: VoiceEmotion.EXCITED,
+          model: newModel,
+          ...(auth?.user?.username?.toLowerCase() ===
+            "john.keating@papyrrus.com" &&
+          currentAvatarId === AVATARS[0].avatar_id
+            ? {
+                voiceId: "e85822bd14e144e8b6fe73da2fb1085c", // Default voice for john.keating kathya
+              }
+            : {
+                voiceId: "72cbcf091d9d48998ce10d7b5c2d569e", // Default voice for john.keating pedro
+              }),
+        },
+        language: newLanguage,
+        voiceChatTransport: VoiceChatTransport.WEBSOCKET,
+        sttSettings: {
+          provider: STTProvider.DEEPGRAM,
+        },
+        activityIdleTimeout: 3600,
+        knowledgeId:
+          auth?.user?.username?.toLowerCase() != "john.keating@papyrrus.com"
+            ? ""
+            : newLanguage === "en" && currentAvatarId === AVATARS[0].avatar_id
+              ? "02ef215a87ca49f1bb05fb7833bf8afe"
+              : newLanguage === "en" && currentAvatarId === AVATARS[5].avatar_id
+                ? "10d1db10e297474386646f8611eea248"
+                : newLanguage === "es" &&
+                    currentAvatarId === AVATARS[0].avatar_id
+                  ? "826c4781815548e98a9059daffbf84e6"
+                  : "d873e488c23e4475b3bddbaef90016c6",
+        knowledgeBase:
+          auth?.user?.username?.toLowerCase() != "john.keating@papyrrus.com"
+            ? getKnowlededgeBase(
+                auth?.user?.username?.toLowerCase() || "",
+                page,
+                auth.user.displayName || "",
+                currentAvatarId
+              )
+            : "",
+      } as StartAvatarRequest;
+
+      console.log("🔄 Restarting avatar with new config:", updatedConfig);
+
+      // Start avatar with new configuration
+      await startSessionV2(true, updatedConfig);
+
+      // Show success toast
+      toast.current?.show({
+        severity: "success",
+        summary: "Configuration Updated",
+        detail: `Avatar restarted with ${newLanguage === "en" ? "English" : "Spanish"} language.`,
+        life: 5000,
+      });
+    } catch (error) {
+      console.error("Error restarting avatar with new config:", error);
+      toast.current?.show({
+        severity: "error",
+        summary: "Configuration Update Failed",
+        detail: "Failed to update avatar configuration. Please try again.",
+        life: 5000,
+      });
+    }
+  };
+
   useEffect(() => {
     if (auth?.user) {
       const currentAvatarId = getRequiredAvatar(
@@ -799,6 +876,19 @@ function InteractiveAvatar({ page }: { page: number }) {
       );
       setCurrentAvatarId(currentAvatarId);
 
+      // Initialize model and language for john.keating@papyrrus.com (only once)
+      if (
+        auth?.user?.username?.toLowerCase() === "john.keating@papyrrus.com" &&
+        !isInitialized
+      ) {
+        console.log(
+          "🔧 Initializing john.keating@papyrrus.com with default settings"
+        );
+        setCurrentModel(ElevenLabsModel.eleven_flash_v2_5); // Default to flash model
+        setCurrentLanguage("en"); // Default to English
+        setIsInitialized(true);
+      }
+
       const predefinedConfig = {
         quality: AvatarQuality.Low,
         avatarName: currentAvatarId,
@@ -806,11 +896,14 @@ function InteractiveAvatar({ page }: { page: number }) {
           rate: 0.8,
           emotion: VoiceEmotion.EXCITED,
           model:
-            auth?.user?.username?.toLowerCase() ==
-              "jason.padilla@papyrrus.com" ||
-            auth?.user?.username?.toLowerCase() == "percy.veltman@papyrrus.com"
-              ? ElevenLabsModel.eleven_multilingual_v2
-              : ElevenLabsModel.eleven_flash_v2_5,
+            auth?.user?.username?.toLowerCase() === "john.keating@papyrrus.com"
+              ? currentModel // Use current model for john.keating
+              : auth?.user?.username?.toLowerCase() ==
+                    "jason.padilla@papyrrus.com" ||
+                  auth?.user?.username?.toLowerCase() ==
+                    "percy.veltman@papyrrus.com"
+                ? ElevenLabsModel.eleven_multilingual_v2
+                : ElevenLabsModel.eleven_flash_v2_5,
           ...(auth?.user?.username?.toLowerCase() ==
             "jason.padilla@papyrrus.com" && {
             voiceId:
@@ -824,6 +917,11 @@ function InteractiveAvatar({ page }: { page: number }) {
             "percy.veltman@papyrrus.com" && {
             voiceId: "e85822bd14e144e8b6fe73da2fb1085c",
           }),
+          ...(auth?.user?.username?.toLowerCase() ===
+            "john.keating@papyrrus.com" &&
+            currentLanguage === "es" && {
+              voiceId: "e85822bd14e144e8b6fe73da2fb1085c", // Default voice for john.keating
+            }),
           ...(auth?.user?.username?.toLowerCase() ===
             "erica.romaguera@papyrrus.com" && {
             voiceId: "e85822bd14e144e8b6fe73da2fb1085c",
@@ -839,29 +937,71 @@ function InteractiveAvatar({ page }: { page: number }) {
           }),
         },
         language:
-          auth?.user?.username?.toLowerCase() == "jason.padilla@papyrrus.com" ||
-          auth?.user?.username?.toLowerCase() == "percy.veltman@papyrrus.com"
-            ? "es"
-            : "en",
+          auth?.user?.username?.toLowerCase() === "john.keating@papyrrus.com"
+            ? currentLanguage // Use current language for john.keating
+            : auth?.user?.username?.toLowerCase() ==
+                  "jason.padilla@papyrrus.com" ||
+                auth?.user?.username?.toLowerCase() ==
+                  "percy.veltman@papyrrus.com"
+              ? "es"
+              : "en",
         voiceChatTransport: VoiceChatTransport.WEBSOCKET,
         sttSettings: {
           provider: STTProvider.DEEPGRAM,
         },
         activityIdleTimeout: 3600, // comment this after demo
-        knowledgeId: "",
-        knowledgeBase: getKnowlededgeBase(
-          auth?.user?.username?.toLowerCase() || "",
-          page,
-          auth.user.displayName || "",
-          currentAvatarId
-        ),
-      };
+        knowledgeId:
+          auth?.user?.username?.toLowerCase() != "john.keating@papyrrus.com"
+            ? ""
+            : currentLanguage === "en" &&
+                currentAvatarId === AVATARS[0].avatar_id
+              ? "02ef215a87ca49f1bb05fb7833bf8afe"
+              : currentLanguage === "en" &&
+                  currentAvatarId === AVATARS[5].avatar_id
+                ? "10d1db10e297474386646f8611eea248"
+                : currentLanguage === "es" &&
+                    currentAvatarId === AVATARS[0].avatar_id
+                  ? "826c4781815548e98a9059daffbf84e6"
+                  : "d873e488c23e4475b3bddbaef90016c6",
+        knowledgeBase:
+          auth?.user?.username?.toLowerCase() != "john.keating@papyrrus.com"
+            ? getKnowlededgeBase(
+                auth?.user?.username?.toLowerCase() || "",
+                page,
+                auth.user.displayName || "",
+                currentAvatarId
+              )
+            : "",
+      } as StartAvatarRequest;
 
       console.log("Predefined Config:", predefinedConfig);
 
-      startSessionV2(true, predefinedConfig);
+      // Auto-start the avatar session for initial load (only when auth changes)
+      if (sessionState === StreamingAvatarSessionState.INACTIVE) {
+        startSessionV2(true, predefinedConfig);
+      }
     }
   }, [auth]);
+
+  // Debug useEffect to track language changes
+  useEffect(() => {
+    console.log("🌐 Current language state changed to:", currentLanguage);
+  }, [currentLanguage]);
+
+  // Debug useEffect to track model changes
+  useEffect(() => {
+    console.log("🔄 Current model state changed to:", currentModel);
+  }, [currentModel]);
+
+  useEffect(() => {
+    if (sessionState === StreamingAvatarSessionState.CONNECTED) {
+      if (currentLanguage === "es") {
+        sendMessage(`Hola, me llamo ${auth?.user?.displayName}`);
+      } else {
+        sendMessage(`Hi, my name is ${auth?.user?.displayName}`);
+      }
+    }
+  }, [sessionState]);
 
   async function fetchAccessToken() {
     try {
@@ -1159,7 +1299,12 @@ function InteractiveAvatar({ page }: { page: number }) {
             }}
           >
             {sessionState === StreamingAvatarSessionState.CONNECTED ? (
-              <AvatarControls />
+              <AvatarControls
+                currentLanguage={currentLanguage}
+                setCurrentLanguage={setCurrentLanguage}
+                currentModel={currentModel}
+                onModelChange={restartAvatarWithNewConfig}
+              />
             ) : sessionState === StreamingAvatarSessionState.INACTIVE ? (
               <></>
             ) : (
@@ -1271,15 +1416,17 @@ function InteractiveAvatar({ page }: { page: number }) {
       </div>
 
       {/* Floating Chat Interface */}
-      {(auth?.user?.username?.toLowerCase() === "jason.padilla@papyrrus.com" ||
-        auth?.user?.username?.toLowerCase() ===
-          "irwin.spinello@papyrrus.com") && (
-        <FloatingChatInterface
-          sessionState={sessionState}
-          page={page}
-          currentAvatarId={currentAvatarId}
-        />
-      )}
+      {auth?.user?.username?.toLowerCase() === "jason.padilla@papyrrus.com" ||
+        auth?.user?.username?.toLowerCase() === "irwin.spinello@papyrrus.com" ||
+        (auth?.user?.username?.toLowerCase() ===
+          "john.keating@papyrrus.com" && (
+          <FloatingChatInterface
+            sessionState={sessionState}
+            page={page}
+            currentAvatarId={currentAvatarId}
+            currentLanguage={currentLanguage}
+          />
+        ))}
     </div>
   );
 }

@@ -1,11 +1,13 @@
-import React, {useEffect, useRef} from "react";
+import React, { useEffect, useRef } from "react";
 
-import {useMessageHistory, MessageSender} from "../logic";
-import {ReactTyped} from "react-typed";
+import { useMessageHistory, MessageSender } from "../logic";
+import { ReactTyped } from "react-typed";
+import { useAuthContext } from "../Prividers/AuthProvider";
 
 export const MessageHistory: React.FC = () => {
-  const {messages} = useMessageHistory();
+  const { messages } = useMessageHistory();
   const containerRef = useRef<HTMLDivElement>(null);
+  const auth = useAuthContext();
 
   useEffect(() => {
     const container = containerRef.current;
@@ -33,13 +35,13 @@ export const MessageHistory: React.FC = () => {
       >
         <h3
           className=" text-2xl font-bold relative z-1  p-4"
-          style={{color: "var(--text-primary-color)"}}
+          style={{ color: "var(--text-primary-color)" }}
         >
           Conversation History
         </h3>
         <span
           className="text-caption p-4"
-          style={{color: "var(--text-secondary)"}}
+          style={{ color: "var(--text-secondary)" }}
         >
           {messages.length} {messages.length === 1 ? "message" : "messages"}
         </span>
@@ -65,94 +67,102 @@ export const MessageHistory: React.FC = () => {
           >
             <i
               className="pi pi-comments text-4xl"
-              style={{color: "var(--text-primary-color)"}}
+              style={{ color: "var(--text-primary-color)" }}
             />
             <p
               className="text-body-medium text-center text-light"
-              style={{color: "var(--text-primary-color)"}}
+              style={{ color: "var(--text-primary-color)" }}
             >
               Your conversation will appear here
             </p>
           </div>
         ) : (
-          messages.map((message, index) => (
-            <div
-              key={message.id}
-              className={`flex ${
-                message.sender === MessageSender.CLIENT
-                  ? "justify-content-end"
-                  : "justify-content-start"
-              }`}
-              style={{
-                animation: `fadeIn 0.3s ease-in-out ${index * 0.1}s both`,
-              }}
-            >
+          messages
+            .filter(
+              (msg) =>
+                msg.content !== `Hi, my name is ${auth?.user?.displayName}` &&
+                msg.content !== `Hola, me llamo ${auth?.user?.displayName}`
+            )
+            .map((message, index) => (
               <div
-                className={`flex flex-column ${
+                key={message.id}
+                className={`flex ${
                   message.sender === MessageSender.CLIENT
-                    ? "align-items-end"
-                    : "align-items-start"
+                    ? "justify-content-end"
+                    : "justify-content-start"
                 }`}
                 style={{
-                  maxWidth: "70%",
-                  gap: "var(--space-1)",
+                  animation: `fadeIn 0.3s ease-in-out ${index * 0.1}s both`,
                 }}
               >
                 <div
-                  className="flex align-items-center"
-                  style={{gap: "var(--space-2)"}}
+                  className={`flex flex-column ${
+                    message.sender === MessageSender.CLIENT
+                      ? "align-items-end"
+                      : "align-items-start"
+                  }`}
+                  style={{
+                    maxWidth: "70%",
+                    gap: "var(--space-1)",
+                  }}
                 >
                   <div
-                    className="w-2 h-2 border-round-full"
+                    className="flex align-items-center"
+                    style={{ gap: "var(--space-2)" }}
+                  >
+                    <div
+                      className="w-2 h-2 border-round-full"
+                      style={{
+                        backgroundColor:
+                          message.sender === MessageSender.CLIENT
+                            ? "var(--primary-color)"
+                            : "var(--success-color)",
+                      }}
+                    />
+                    <span
+                      className="text-caption font-medium"
+                      style={{
+                        color: "#fff",
+                        fontWeight: "300",
+                      }}
+                    >
+                      {message.sender === MessageSender.AVATAR
+                        ? "AI Avatar"
+                        : "You"}
+                    </span>
+                  </div>
+
+                  <div
+                    className="p-3 border-round-lg"
                     style={{
                       backgroundColor:
                         message.sender === MessageSender.CLIENT
-                          ? "var(--primary-color)"
-                          : "var(--success-color)",
-                    }}
-                  />
-                  <span
-                    className="text-caption font-medium"
-                    style={{
-                      color: "#fff",
-                      fontWeight: "300",
+                          ? "var(--bg-sender-color)"
+                          : "var(--bg-receiver-color)",
+                      color:
+                        message.sender === MessageSender.CLIENT
+                          ? "var(--text-primary-color)"
+                          : "var(--text-primary-color)",
+                      border:
+                        message.sender === MessageSender.CLIENT
+                          ? "none"
+                          : "none",
+                      boxShadow: "var(--shadow-sm)",
+                      fontSize: "var(--font-size-base)",
+                      lineHeight: "var(--line-height-relaxed)",
+                      wordBreak: "break-word",
                     }}
                   >
-                    {message.sender === MessageSender.AVATAR
-                      ? "AI Avatar"
-                      : "You"}
-                  </span>
-                </div>
-
-                <div
-                  className="p-3 border-round-lg"
-                  style={{
-                    backgroundColor:
-                      message.sender === MessageSender.CLIENT
-                        ? "var(--bg-sender-color)"
-                        : "var(--bg-receiver-color)",
-                    color:
-                      message.sender === MessageSender.CLIENT
-                        ? "var(--text-primary-color)"
-                        : "var(--text-primary-color)",
-                    border:
-                      message.sender === MessageSender.CLIENT ? "none" : "none",
-                    boxShadow: "var(--shadow-sm)",
-                    fontSize: "var(--font-size-base)",
-                    lineHeight: "var(--line-height-relaxed)",
-                    wordBreak: "break-word",
-                  }}
-                >
-                  {/* {message.content} */}
-                  <ReactTyped
-                    strings={[message.content]}
-                    typeSpeed={48}
-                    smartBackspace={false}
-                  />
+                    {/* {message.content} */}
+                    <ReactTyped
+                      strings={[message.content]}
+                      typeSpeed={48}
+                      smartBackspace={false}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
+            ))
         )}
       </div>
     </div>
