@@ -14,14 +14,14 @@ import Thumbnail1 from "../../public/Svg/thumbnail_1.png";
 import Thumbnail2 from "../../public/Svg/thumbnail_2.png";
 import Thumbnail3 from "../../public/Svg/thumbnail_3.png";
 import Image from "next/image";
-import type { StaticImageData } from "next/image";
+import type {StaticImageData} from "next/image";
 
 import clsx from "clsx";
 import AppBreadCrumb from "@/components/AppBreadCrumb/AppBreadCrumb";
 import AssignmentTable from "@/components/AssignmentTable/AssignmentTable";
 import SimpleBarChart from "@/components/SimpleChart/SimpleChart";
 import NavBar from "@/components/NavBar";
-import { useThemeIcons } from "@/components/logic/useThemeIcon";
+import {useThemeIcons} from "@/components/logic/useThemeIcon";
 
 export default function Dashboard() {
   const {
@@ -89,7 +89,7 @@ export default function Dashboard() {
       ),
     },
   ];
-  const items = [{ label: "Dasshboard", id: "dashboard", url: "/dashboard" }];
+  const items = [{label: "Dasshboard", id: "dashboard", url: "/dashboard"}];
   const home = {
     icon: <Image src={homeIcon} alt="home" width={20} height={20} />,
     url: "/",
@@ -110,7 +110,7 @@ export default function Dashboard() {
   }) => (
     <div
       className={clsx("flex flex-column gap-3 p-5", style.pageCard)}
-      style={{ width: "15vw" }}
+      style={{width: "15vw"}}
     >
       <div className="flex justify-content-between">
         <Image src={logo} alt="logo" />
@@ -131,7 +131,7 @@ export default function Dashboard() {
     </div>
   );
 
-  const Tab = ({ title, active }: { title: string; active: boolean }) => {
+  const Tab = ({title, active}: {title: string; active: boolean}) => {
     return (
       <span className={clsx(style.tab, active && style.activeTab)}>
         {title}
@@ -159,7 +159,7 @@ export default function Dashboard() {
             src={coverImage}
             alt={courseTitle}
             className="w-full h-auto object-cover rounded-t"
-            style={{ maxHeight: "12rem" }} // Optional: to keep a consistent height
+            style={{maxHeight: "12rem"}} // Optional: to keep a consistent height
           />
 
           <span className={style.imageOverlayText}>HVAC Installation</span>
@@ -205,7 +205,7 @@ export default function Dashboard() {
         > */}
         <div
           className="w-full h-full"
-          style={{ height: "100%", maxHeight: "100%" }}
+          style={{height: "100%", maxHeight: "100%"}}
         ></div>
         <div className="flex">
           <div className={clsx("p-4 relative", style.dashboardLeft)}>
@@ -225,10 +225,15 @@ export default function Dashboard() {
               ))}
             </div>
           </div>
-          <div style={{ width: "80%" }}>
+          <div style={{width: "80%"}}>
             {/* header */}
             <div className="flex gap-3 align-items-center">
-              <Image src={backIcon} alt="back" />
+              <Image
+                src={backIcon}
+                alt="back"
+                className="cursor-pointer"
+                title="back"
+              />
               <div className="flex flex-column gap-1">
                 <h3 className={clsx("ml-2", style.normalText)}>Dashboard</h3>
                 <AppBreadCrumb items={items} home={home} />
@@ -241,7 +246,7 @@ export default function Dashboard() {
               <div className="flex gap-5 mt-4">
                 <div
                   className={clsx("flex  gap-5 p-5", style.pageCard)}
-                  style={{ width: "40%" }}
+                  style={{width: "40%"}}
                 >
                   <div className={clsx("flex p-4", style.statusGreen)}>
                     <div className="flex flex-column">
@@ -260,7 +265,7 @@ export default function Dashboard() {
                   </div>
                   <div
                     className="flex flex-column gap-4 justify-content-between"
-                    style={{ width: "53%" }}
+                    style={{width: "53%"}}
                   >
                     <div
                       className={clsx(
@@ -305,10 +310,7 @@ export default function Dashboard() {
                   </div>
                 </div>
 
-                <div
-                  className="flex flex-column gap-4"
-                  style={{ width: "60%" }}
-                >
+                <div className="flex flex-column gap-4" style={{width: "60%"}}>
                   <div className="flex justify-content-between">
                     <h3 className={clsx("text-base", style.normalText)}>
                       Job Opportunities
@@ -343,7 +345,7 @@ export default function Dashboard() {
               {/* second part */}
               <div className="flex gap-5">
                 <AssignmentTable></AssignmentTable>
-                <div className={style.pageCard} style={{ width: "40%" }}>
+                <div className={style.pageCard} style={{width: "40%"}}>
                   <div
                     className={clsx(
                       "flex justify-content-between px-5",

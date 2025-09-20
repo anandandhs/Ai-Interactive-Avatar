@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, {useState} from "react";
 import InteractiveAvatar from "@/components/InteractiveAvatar";
 
 export default function ResumeBuilder() {
@@ -9,7 +9,7 @@ export default function ResumeBuilder() {
       <div
         className="flex-1 overflow-hidden"
         style={{
-          backgroundColor: "var(--bg-primary)",
+          backgroundColor: "#0d151c",
           padding: "var(--space-6) var(--space-8)",
           height: "calc(100vh - 5rem)", // Account for navbar
           maxHeight: "calc(100vh - 5rem)",
@@ -32,7 +32,7 @@ export default function ResumeBuilder() {
           >
             <div
               className="w-full h-full overflow-hidden"
-              style={{ height: "100%", maxHeight: "100%" }}
+              style={{height: "100%", maxHeight: "100%"}}
             >
               <InteractiveAvatar page={2} />
             </div>

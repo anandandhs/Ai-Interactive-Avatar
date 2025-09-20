@@ -1,19 +1,19 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Button } from "primereact/button";
-import { InputText } from "primereact/inputtext";
-import { MessageHistory } from "./AvatarSession/MessageHistory";
-import { useMessageHistory, MessageSender, useInterrupt } from "./logic";
-import { useTextChat } from "./logic/useTextChat";
-import { StreamingAvatarSessionState } from "./logic";
-import { useStreamingAvatarSession } from "./logic/useStreamingAvatarSession";
+import React, {useState, useRef, useEffect} from "react";
+import {Button} from "primereact/button";
+import {InputText} from "primereact/inputtext";
+import {MessageHistory} from "./AvatarSession/MessageHistory";
+import {useMessageHistory, MessageSender, useInterrupt} from "./logic";
+import {useTextChat} from "./logic/useTextChat";
+import {StreamingAvatarSessionState} from "./logic";
+import {useStreamingAvatarSession} from "./logic/useStreamingAvatarSession";
 import clsx from "clsx";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import {useRouter} from "next/navigation";
 
 import styles from "./UI/CommonUI/CommonUI.module.css";
-import { useAuthContext } from "./Prividers/AuthProvider";
-import { AVATARS } from "@/app/lib/constants";
-import { useThemeIcons } from "./logic/useThemeIcon";
+import {useAuthContext} from "./Prividers/AuthProvider";
+import {AVATARS} from "@/app/lib/constants";
+import {useThemeIcons} from "./logic/useThemeIcon";
 
 // AI Assistant profiles
 const AI_ASSISTANTS = [
@@ -151,11 +151,11 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
     currentLanguage === "en"
       ? AI_ASSISTANTS_BILINGUAL_ENGLISH
       : auth?.user?.username === "john.keating@papyrrus.com" &&
-          currentLanguage === "es"
-        ? AI_ASSISTANTS_BILINGUAL_SPANSIH
-        : auth?.user?.username?.toLowerCase() === "jason.padilla@papyrrus.com"
-          ? AI_ASSISTANTS_SPANISH
-          : AI_ASSISTANTS;
+        currentLanguage === "es"
+      ? AI_ASSISTANTS_BILINGUAL_SPANSIH
+      : auth?.user?.username?.toLowerCase() === "jason.padilla@papyrrus.com"
+      ? AI_ASSISTANTS_SPANISH
+      : AI_ASSISTANTS;
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [showAssistantSelection, setShowAssistantSelection] = useState(true);
@@ -163,18 +163,18 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
     (typeof AI_ASSISTANTS)[0] | null
   >(null);
   const [message, setMessage] = useState("");
-  const { sendMessage } = useTextChat();
-  const { messages } = useMessageHistory();
+  const {sendMessage} = useTextChat();
+  const {messages} = useMessageHistory();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const { stopAvatar } = useStreamingAvatarSession();
-  const { interrupt } = useInterrupt();
+  const {stopAvatar} = useStreamingAvatarSession();
+  const {interrupt} = useInterrupt();
   const router = useRouter();
-  const { chatCloseIcon, chatOpenIcon, exportIcon, whiteLogoIcon } =
+  const {chatCloseIcon, chatOpenIcon, exportIcon, whiteLogoIcon} =
     useThemeIcons();
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({behavior: "smooth"});
   };
 
   useEffect(() => {
@@ -367,7 +367,7 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
     );
   }
 
-  function OverlappingImages({ isSpanish }: { isSpanish: boolean }) {
+  function OverlappingImages({isSpanish}: {isSpanish: boolean}) {
     const emglishImages = [
       "/Svg/katyaIcon.svg",
       "/Svg/thaddeusIcon.svg",
@@ -427,10 +427,11 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
           style={{
             padding: "1.719rem 2.25rem 1.156rem 1.813rem",
             borderBottom: "1px solid #5151511a",
-            backgroundColor: "var(--text-primary-color)",
+            // backgroundColor: "var(--text-primary-color)",
+            backgroundColor: "#0d151c",
           }}
         >
-          <div className="flex align-items-center" style={{ gap: "0.5rem" }}>
+          <div className="flex align-items-center" style={{gap: "0.5rem"}}>
             {/* {!showAssistantSelection && selectedAssistant && (
               <Button
                 onClick={handleBackToSelection}
@@ -452,7 +453,7 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
               alt="Chat"
               width={142}
               height={35}
-              style={{ display: "block", margin: "0 auto" }}
+              style={{display: "block", margin: "0 auto"}}
             />
             {/* <i
               className={
@@ -476,7 +477,7 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
               isSpanish={auth?.user?.username === "jason.padilla@papyrrus.com"}
             />
           </div>
-          <div className="flex align-items-center" style={{ gap: "0.5rem" }}>
+          <div className="flex align-items-center" style={{gap: "0.5rem"}}>
             {/* Status indicator */}
             {/* {!showAssistantSelection && (
               <div
@@ -510,7 +511,8 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
           className="flex-1 overflow-y-auto"
           style={{
             // padding: showAssistantSelection ? "0" : "1rem",
-            backgroundColor: "#fff",
+            // backgroundColor: "#fff",
+            backgroundColor: "#0d151c",
           }}
         >
           {showAssistantSelection ? (
@@ -520,7 +522,7 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
                 style={{
                   fontWeight: "400",
                   fontSize: "1rem",
-                  color: "var(--text-primary-color)",
+                  color: "#fff",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -545,7 +547,9 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
                       // padding: "1rem",
                       // marginBottom: "0.75rem",
                       backgroundColor:
-                        assistant.id === currentAvatarId ? "#5151511A" : "#fff",
+                        assistant.id === currentAvatarId
+                          ? "#5151511A"
+                          : "transparent",
                       borderBottom:
                         index === AI_ASSISTANTS.length - 1
                           ? "none"
@@ -568,7 +572,7 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
                     }}
                     onMouseLeave={(e) => {
                       if (assistant.id !== currentAvatarId) {
-                        e.currentTarget.style.backgroundColor = "#fff";
+                        e.currentTarget.style.backgroundColor = "#transparent";
                         // e.currentTarget.style.borderColor = "#5151511a";
                         e.currentTarget.style.transform = "translateY(0)";
                         e.currentTarget.style.boxShadow = "none";
@@ -605,7 +609,7 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
                       }}
                     />
                     {/* </div> */}
-                    <div style={{ flex: 1, marginRight: "1.5rem" }}>
+                    <div style={{flex: 1, marginRight: "1.5rem"}}>
                       <div
                         style={{
                           display: "flex",
@@ -649,7 +653,7 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
                       <p
                         style={{
                           margin: "0 0 0.5rem 0",
-                          color: "#51515180",
+                          color: "#fff",
                           fontSize: "0.875rem",
                           lineHeight: "1.4",
                           fontWeight: "400",
@@ -745,13 +749,13 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
               {sessionState !== StreamingAvatarSessionState.CONNECTED ? (
                 <div
                   className="flex flex-column align-items-center justify-content-center h-full"
-                  style={{ gap: "1rem", color: "var(--text-primary-color)" }}
+                  style={{gap: "1rem", color: "var(--text-primary-color)"}}
                 >
                   <i
                     className="pi pi-info-circle"
-                    style={{ fontSize: "2rem", color: "#bdbdbd" }}
+                    style={{fontSize: "2rem", color: "#bdbdbd"}}
                   />
-                  <p style={{ textAlign: "center", margin: 0 }}>
+                  <p style={{textAlign: "center", margin: 0}}>
                     {sessionState === StreamingAvatarSessionState.INACTIVE
                       ? "Start a conversation with your avatar to begin chatting"
                       : "Connecting to avatar..."}
@@ -760,7 +764,7 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
               ) : messages.length === 0 ? (
                 <div
                   className="flex flex-column align-items-center justify-content-center h-full"
-                  style={{ gap: "1rem", color: "var(--text-primary-color)" }}
+                  style={{gap: "1rem", color: "var(--text-primary-color)"}}
                 >
                   <div
                     style={{
@@ -783,7 +787,7 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
                       alt={selectedAssistant?.name || "Assistant"}
                       width={40}
                       height={40}
-                      style={{ borderRadius: "50%" }}
+                      style={{borderRadius: "50%"}}
                     />
                   </div>
                   <h4
@@ -865,7 +869,7 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
               borderRadius: "0 0 20px 20px",
             }}
           >
-            <div className="flex" style={{ gap: "0.5rem" }}>
+            <div className="flex" style={{gap: "0.5rem"}}>
               <InputText
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
@@ -906,7 +910,7 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
                   minWidth: "40px",
                 }}
               >
-                <i className="pi pi-send" style={{ fontSize: "0.9rem" }} />
+                <i className="pi pi-send" style={{fontSize: "0.9rem"}} />
               </Button>
             </div>
           </div>

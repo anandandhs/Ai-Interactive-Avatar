@@ -41,15 +41,18 @@
 
 /* Button */
 .buttonContainer {
-  background-color: var(--text-primary-color);
+  /* background-color: var(--text-primary-color); */
+  background-color: transparent;
   color: #fff;
   font-weight: 700;
   height: 50px;
   border-radius: 15px !important;
+  border: 1px solid #ffffff4d !important;
 }
 
 .buttonContainer:hover {
-  background-color: var(--text-primary-color) !important;
+  /* background-color: var(--text-primary-color) !important; */
+  background-color: transparent !important;
 }
 
 .secondaryButton {

@@ -1,9 +1,9 @@
 "use client";
 
 import InteractiveAvatar from "@/components/InteractiveAvatar";
-import { LoginPage } from "@/components/LoginPage";
-import { useAuthContext } from "@/components/Prividers/AuthProvider";
-import { useState } from "react";
+import {LoginPage} from "@/components/LoginPage";
+import {useAuthContext} from "@/components/Prividers/AuthProvider";
+import {useState} from "react";
 
 export default function App() {
   const auth = useAuthContext();
@@ -13,16 +13,16 @@ export default function App() {
     return (
       <div
         className="min-h-screen flex align-items-center justify-content-center"
-        style={{ backgroundColor: "var(--bg-primary)" }}
+        style={{backgroundColor: "var(--bg-primary)"}}
       >
         <div
           className="flex flex-column align-items-center"
-          style={{ gap: "var(--space-4)" }}
+          style={{gap: "var(--space-4)"}}
         >
           <div className="p-progress-spinner" />
           <span
             className="text-body-medium"
-            style={{ color: "var(--text-secondary)" }}
+            style={{color: "var(--text-secondary)"}}
           >
             {/* Loading your experience... */}
             <div className="loader"></div>
@@ -47,7 +47,7 @@ export default function App() {
       <div
         className={"flex-1 overflow-hidden"}
         style={{
-          backgroundColor: "var(--bg-primary)",
+          backgroundColor: "#0d151c",
           padding: "var(--space-6) var(--space-8)",
           height: "calc(100vh - 5rem)", // Account for navbar
           maxHeight: "calc(100vh - 5rem)",
@@ -70,7 +70,7 @@ export default function App() {
           >
             <div
               className="w-full h-full overflow-hidden"
-              style={{ height: "100%", maxHeight: "100%" }}
+              style={{height: "100%", maxHeight: "100%"}}
             >
               <InteractiveAvatar page={1} />
             </div>

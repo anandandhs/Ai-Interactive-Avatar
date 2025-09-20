@@ -18,7 +18,8 @@
   width: 100%;
   height: 100vh;
   overflow: hidden;
-  background-color: #fff;
+  background-color: #0d151c !important;
+  border: none !important;
 }
 .homeBackground {
   background-color: #1b84ff0d;
@@ -55,7 +56,7 @@
   position: absolute;
   width: 100%;
   height: 85%;
-  background: #fff;
+  background: #0d151c !important;
   border-radius: 20px;
 }
 
@@ -65,12 +66,29 @@
   border-radius: 20px;
   /* padding: 2rem; */
 }
+.conversationDarkContainer {
+  width: 25%;
+
+  background-color: #0d151c !important;
+  border: 1px solid #ffffff4d !important;
+  border-radius: 20px;
+  /* padding: 2rem; */
+}
 .chatRightContainer {
   border-radius: 0 !important;
   border-radius: 20px !important;
   background-color: transparent !important;
   border: 1px solid #5151511a !important;
+  transition: width 1s ease-in-out;
 }
+.chatRightDarkContainer {
+  border-radius: 0 !important;
+  border-radius: 20px !important;
+  background-color: #0d151c !important;
+  border: 1px solid #ffffff4d !important;
+  transition: width 1s ease-in-out;
+}
+
 .messageInput {
   background-color: transparent !important;
   width: 100%;
@@ -137,9 +155,12 @@
   border: none !important;
 }
 .interruptButton {
-  border: 1px solid #5151511a !important;
-  background-color: #ffffff !important;
+  /* border: 1px solid #5151511a !important; */
+  border: 1px solid #ffffff4d !important;
+  /* background-color: #ffffff !important; */
+  background-color: transparent !important;
   color: var(--text-primary-color) !important;
+  margin-left: 1.5rem;
 }
 .interruptButton:focus {
   box-shadow: none !important;
@@ -147,13 +168,17 @@
 }
 .interruptButton:hover:not(:disabled) {
   box-shadow: none !important;
-  border: 1px solid #5151511a !important;
-  background-color: #ffffff !important;
+  /* border: 1px solid #5151511a !important; */
+  border: 1px solid #ffffff4d !important;
+  /* background-color: #ffffff !important; */
+  background-color: transparent !important;
 }
 .interruptButton:hover {
   box-shadow: none !important;
-  border: 1px solid #5151511a !important;
-  background-color: #ffffff !important;
+  /* border: 1px solid #5151511a !important; */
+  border: 1px solid #ffffff4d !important;
+  /* background-color: #ffffff !important; */
+  background-color: transparent !important;
 }
 .videoContainer {
   width: 100%;
@@ -172,15 +197,15 @@
 .dashboardLeft {
   width: 20%;
   height: 100%;
-  border-right: 1px solid #51515126;
-  background-color: #fff;
+  border-right: 1px solid #ffffff4d !important;
+  background-color: #0d151c !important;
   top: -2rem;
   left: -2rem;
 }
 .pageCard {
-  border: 1px solid #51515126;
+  border: 1px solid #ffffff4d;
   border-radius: 30px;
-  background-color: #fff;
+  background-color: #0d151c;
 }
 .pageGreyCard {
   border: 1px solid #51515126;
@@ -216,7 +241,7 @@
   width: auto;
 }
 .yellowStatus {
-  background-color: #fffdef;
+  background-color: #0d151c;
   border: 1px solid #ffde05;
   border-radius: 20px;
   color: var(--text-primary-color);
@@ -227,12 +252,13 @@
   overflow: hidden;
 }
 .tableHead {
-  background-color: var(--bg-secondary-color);
+  background-color: #0d151c;
   color: var(--text-primary-color);
   padding: 1rem;
   border-top-left-radius: 30px;
   border-top-right-radius: 30px;
   font-size: 16px;
+  border: 1px solid #ffffff4d;
 }
 .tabContainer {
   border-bottom: 1px solid #5151511a;

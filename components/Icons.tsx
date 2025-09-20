@@ -76,18 +76,24 @@ export function SendIcon({size = 24, width, height, ...props}: IconSvgProps) {
 
 export function MicIcon({size = 24, width, height, ...props}: IconSvgProps) {
   return (
-    <div className="flex flex-column gap-2 mt-4">
+    <div
+      className="flex flex-column gap-2 p-2"
+      style={{border: "1px solid #FFFFFF4D", borderRadius: "var(--radius-lg)"}}
+    >
       <Image src={Mic} alt="Mic" className="cursor-pointer" />
-      <span className="text-white text-light">Mic</span>
+      {/* <span className="text-white text-light">Mic</span> */}
     </div>
   );
 }
 
 export function MicOffIcon({size = 24, width, height, ...props}: IconSvgProps) {
   return (
-    <div className="flex flex-column gap-2 mt-4">
+    <div
+      className="flex flex-column gap-2  p-2"
+      style={{border: "1px solid #FFFFFF4D", borderRadius: "var(--radius-lg)"}}
+    >
       <Image src={MicMute} alt="Mic" className="cursor-pointer" />
-      <span className="text-white text-light">Mic</span>
+      {/* <span className="text-white text-light">Mic</span> */}
     </div>
   );
 }

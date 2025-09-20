@@ -1,26 +1,28 @@
-import React, { forwardRef, useEffect, useRef, useState } from "react";
-import { ConnectionQuality } from "@heygen/streaming-avatar";
+import React, {forwardRef, useEffect, useRef, useState} from "react";
+import {ConnectionQuality} from "@heygen/streaming-avatar";
 
-import { useConnectionQuality } from "../logic/useConnectionQuality";
-import { useStreamingAvatarSession } from "../logic/useStreamingAvatarSession";
-import { StreamingAvatarSessionState } from "../logic";
-import { CloseIcon } from "../Icons";
-import { Button } from "../Button";
-import { AVATARS } from "@/app/lib/constants";
+import {useConnectionQuality} from "../logic/useConnectionQuality";
+import {useStreamingAvatarSession} from "../logic/useStreamingAvatarSession";
+import {StreamingAvatarSessionState} from "../logic";
+import {CloseIcon} from "../Icons";
+import {Button} from "../Button";
+import {AVATARS} from "@/app/lib/constants";
 // import Texas from "../../public/Svg/texas.svg";
 import Texas from "../../public/Svg/deskBg.svg";
 import Image from "next/image";
-import { useAuthContext } from "../Prividers/AuthProvider";
-import { getRequiredAvatar } from "@/app/lib/genericFunctions";
-import { useZoomLevel } from "../logic/useZoomLevel";
+import {useAuthContext} from "../Prividers/AuthProvider";
+import {getRequiredAvatar} from "@/app/lib/genericFunctions";
+import {useZoomLevel} from "../logic/useZoomLevel";
+import DarkKatya from "../../public/Svg/dark-katya.png";
+import DarkJohn from "../../public/Svg/dark-pedro.png";
 interface AvatarVideoProps {
   page: number;
 }
 
 export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
-  ({ page }, ref) => {
-    const { sessionState, stream } = useStreamingAvatarSession();
-    const { connectionQuality } = useConnectionQuality();
+  ({page}, ref) => {
+    const {sessionState, stream} = useStreamingAvatarSession();
+    const {connectionQuality} = useConnectionQuality();
     const auth = useAuthContext();
     const [removeBG] = useState(true);
 
@@ -164,7 +166,7 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
           return requestAnimationFrame(renderCanvas);
         }
 
-        const ctx = canvas.getContext("2d", { willReadFrequently: true });
+        const ctx = canvas.getContext("2d", {willReadFrequently: true});
         if (!ctx) return;
 
         canvas.width = video.videoWidth;
@@ -241,7 +243,7 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
               justifyContent: "center",
               overflow: "hidden", // Prevent content from extending beyond container
               // Ensure responsive scaling with page zoom
-              minHeight: "400px", // Minimum height for proper avatar display
+              minHeight: "83vh", // Minimum height for proper avatar display
               aspectRatio: "16/9", // Maintain aspect ratio for consistent layout
             }}
           >
@@ -250,6 +252,17 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
               width={1920}
               height={1080}
               src={(() => {
+                const needsDarkBackground =
+                  auth?.user?.username?.toLowerCase() ==
+                  "john.keating@papyrrus.com";
+                if (needsDarkBackground) {
+                  switch (currentAvatarId) {
+                    case AVATARS[0].avatar_id: // Katya - Administration English
+                      return DarkKatya;
+                    case AVATARS[5].avatar_id: // john - Academic English
+                      return DarkJohn;
+                  }
+                }
                 // Check if user needs special background (Texas/deskBg)
                 const needsSpecialBackground =
                   auth?.user?.username?.toLowerCase() ==
@@ -284,11 +297,11 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
               alt="office background"
               style={{
                 position: "absolute",
-                top: "7%",
-                left: "1.5%",
-                width: "97%",
-                height: "97%",
-                objectFit: "contain",
+                // top: "7%",
+                // left: "1.5%",
+                width: "103%",
+                height: "100%",
+                // objectFit: "contain",
                 zIndex: 0,
               }}
             />
@@ -305,7 +318,7 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
         {!isLoaded && (
           <div
             className="w-full h-full flex align-items-center justify-content-center absolute"
-            style={{ top: 0, left: 0 }}
+            style={{top: 0, left: 0}}
           >
             <div className="loader"></div>
           </div>
