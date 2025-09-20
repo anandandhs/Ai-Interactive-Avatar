@@ -86,6 +86,18 @@ function InteractiveAvatar({ page }: { page: number }) {
       "change my major",
       "program change",
       "academic support",
+      // Job-related keywords for john.keating@papyrrus.com (English)
+      "i am looking for a job",
+      "looking for a job",
+      "job coach",
+      "job postings",
+      "job offers",
+      "job search",
+      "career advice",
+      "employment",
+      "work opportunities",
+      "resume help",
+      "interview preparation",
       // Spanish
       "cambio de carrera",
       "cambio de especialización",
@@ -120,6 +132,17 @@ function InteractiveAvatar({ page }: { page: number }) {
       "CV",
       "hoja de vida",
       "recepcionista",
+      // Job-related keywords for john.keating@papyrrus.com (Spanish)
+      "estoy buscando trabajo",
+      "buscando trabajo",
+      "asesor laboral",
+      "ofertas de empleo",
+      "ofertas de trabajo",
+      "búsqueda de empleo",
+      "consejo profesional",
+      "oportunidades laborales",
+      "ayuda con currículum",
+      "preparación para entrevistas",
     ];
 
     const admissionKeywords = [
@@ -169,6 +192,10 @@ function InteractiveAvatar({ page }: { page: number }) {
     if (advisingKeywords.some((kw) => lowerCaseMessage.includes(kw))) {
       userRequestedNavigation.current = "resume-builder";
       console.log("🎯 User requested: Resume Builder & Career Advising");
+      console.log(
+        "🎯 Matching keywords:",
+        advisingKeywords.filter((kw) => lowerCaseMessage.includes(kw))
+      );
     } else if (admissionKeywords.some((kw) => lowerCaseMessage.includes(kw))) {
       userRequestedNavigation.current = "course-admission";
       console.log("🎯 User requested: Admission Guidance");
@@ -545,6 +572,12 @@ function InteractiveAvatar({ page }: { page: number }) {
   const checkAvatarNavigationConfirmation = (avatarMessage: string) => {
     const lowerCaseMessage = avatarMessage.toLowerCase();
     console.log("🤖 Avatar said:", avatarMessage); // Keep original for debugging
+    console.log("🤖 Avatar said (lowercase):", lowerCaseMessage);
+    console.log(
+      "🤖 Current userRequestedNavigation:",
+      userRequestedNavigation.current
+    );
+    console.log("🤖 Navigation in progress:", navigationInProgress.current);
 
     // Only proceed if user previously requested navigation and no navigation is in progress
     if (!userRequestedNavigation.current || navigationInProgress.current) {
@@ -572,6 +605,11 @@ function InteractiveAvatar({ page }: { page: number }) {
       "connecting you with",
       "routing you to",
       "let me connect you with",
+      "i will connect you with",
+      "i will connect you",
+      "i'll connect you with",
+      "connecting you with",
+      "connect you with",
       "right this way",
       "follow me",
       "i'll take you to",
@@ -628,6 +666,13 @@ function InteractiveAvatar({ page }: { page: number }) {
           "career",
           "career development",
           "career advising",
+          "job coach",
+          "job coaching",
+          "employment",
+          "job search",
+          "resume",
+          "cv",
+          "curriculum vitae",
           // Spanish equivalents
           "asesoramiento",
           "asesoría académica",
@@ -641,6 +686,12 @@ function InteractiveAvatar({ page }: { page: number }) {
           "orientación vocacional",
           "orientación académica",
           "asesoría educativa",
+          "asesor laboral",
+          "entrenador laboral",
+          "empleo",
+          "búsqueda de empleo",
+          "currículum",
+          "hoja de vida",
         ],
       },
       "course-admission": {
@@ -702,6 +753,19 @@ function InteractiveAvatar({ page }: { page: number }) {
 
     console.log(
       `🔍 Confirmation: ${hasConfirmation}, Mentions Service: ${mentionsService}`
+    );
+    console.log("🔍 Avatar message (lowercase):", lowerCaseMessage);
+    console.log("🔍 Requested service:", requestedService);
+    console.log("🔍 Service keywords:", serviceConfig.keywords);
+    console.log(
+      "🔍 Confirmation phrases that match:",
+      confirmationPhrases.filter((phrase) => lowerCaseMessage.includes(phrase))
+    );
+    console.log(
+      "🔍 Service keywords that match:",
+      serviceConfig.keywords.filter((keyword) =>
+        lowerCaseMessage.includes(keyword.toLowerCase())
+      )
     );
 
     // More flexible condition: either confirmation phrase OR service mention
@@ -1064,7 +1128,9 @@ function InteractiveAvatar({ page }: { page: number }) {
             (auth?.user?.username?.toLowerCase() ==
               "jason.padilla@papyrrus.com" ||
               auth?.user?.username?.toLocaleLowerCase() ==
-                "irwin.spinello@papyrrus.com") &&
+                "irwin.spinello@papyrrus.com" ||
+              auth?.user?.username?.toLowerCase() ==
+                "john.keating@papyrrus.com") &&
             page == 1
           ) {
             checkUserNavigationRequest(userMessageContent);
@@ -1102,12 +1168,14 @@ function InteractiveAvatar({ page }: { page: number }) {
           );
 
           if (
-            finalMessageContent &&
+            (finalMessageContent &&
+              (auth?.user?.username?.toLowerCase() ==
+                "jason.padilla@papyrrus.com" ||
+                auth?.user?.username?.toLowerCase() ==
+                  "irwin.spinello@papyrrus.com")) ||
             (auth?.user?.username?.toLowerCase() ==
-              "jason.padilla@papyrrus.com" ||
-              auth?.user?.username?.toLowerCase() ==
-                "irwin.spinello@papyrrus.com") &&
-            page == 1
+              "john.keating@papyrrus.com" &&
+              page == 1)
           ) {
             // Check if there was a user navigation request first
             if (userRequestedNavigation.current) {

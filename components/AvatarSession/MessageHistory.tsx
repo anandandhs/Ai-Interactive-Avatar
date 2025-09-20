@@ -154,12 +154,15 @@ export const MessageHistory: React.FC = () => {
                       borderRadius: "1.25rem",
                     }}
                   >
-                    {message.content}
-                    {/* <ReactTyped
-                      strings={[message.content]}
-                      typeSpeed={165}
-                      smartBackspace={false}
-                    /> */}
+                    {message.sender === MessageSender.CLIENT ? (
+                      message.content
+                    ) : (
+                      <ReactTyped
+                        strings={[message.content]}
+                        typeSpeed={120}
+                        smartBackspace={false}
+                      />
+                    )}
                   </div>
                 </div>
               </div>
