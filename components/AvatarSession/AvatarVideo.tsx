@@ -1,28 +1,29 @@
-import React, {forwardRef, useEffect, useRef, useState} from "react";
-import {ConnectionQuality} from "@heygen/streaming-avatar";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
+import { ConnectionQuality } from "@heygen/streaming-avatar";
 
-import {useConnectionQuality} from "../logic/useConnectionQuality";
-import {useStreamingAvatarSession} from "../logic/useStreamingAvatarSession";
-import {StreamingAvatarSessionState} from "../logic";
-import {CloseIcon} from "../Icons";
-import {Button} from "../Button";
-import {AVATARS} from "@/app/lib/constants";
+import { useConnectionQuality } from "../logic/useConnectionQuality";
+import { useStreamingAvatarSession } from "../logic/useStreamingAvatarSession";
+import { StreamingAvatarSessionState } from "../logic";
+import { CloseIcon } from "../Icons";
+import { Button } from "../Button";
+import { AVATARS } from "@/app/lib/constants";
 // import Texas from "../../public/Svg/texas.svg";
 import Texas from "../../public/Svg/deskBg.svg";
 import Image from "next/image";
-import {useAuthContext} from "../Prividers/AuthProvider";
-import {getRequiredAvatar} from "@/app/lib/genericFunctions";
-import {useZoomLevel} from "../logic/useZoomLevel";
+import { useAuthContext } from "../Prividers/AuthProvider";
+import { getRequiredAvatar } from "@/app/lib/genericFunctions";
+import { useZoomLevel } from "../logic/useZoomLevel";
 import DarkKatya from "../../public/Svg/dark-katya.png";
 import DarkJohn from "../../public/Svg/dark-pedro.png";
 interface AvatarVideoProps {
   page: number;
+  fullScreen?: boolean;
 }
 
 export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
-  ({page}, ref) => {
-    const {sessionState, stream} = useStreamingAvatarSession();
-    const {connectionQuality} = useConnectionQuality();
+  ({ page, fullScreen = false }, ref) => {
+    const { sessionState, stream } = useStreamingAvatarSession();
+    const { connectionQuality } = useConnectionQuality();
     const auth = useAuthContext();
     const [removeBG] = useState(true);
 
@@ -82,6 +83,17 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
         zIndex: 2,
       };
 
+      // Adjust positioning for fullscreen mode
+      const fullScreenAdjustment = fullScreen
+        ? {
+            topOffset: -5, // Move up slightly in fullscreen
+            sizeIncrease: 1.1, // Slightly larger in fullscreen
+          }
+        : {
+            topOffset: 0,
+            sizeIncrease: 1,
+          };
+
       // Check if user needs special background (Texas/deskBg) - these users get different positioning
       const needsSpecialBackground =
         auth?.user?.username?.toLowerCase() == "matteo.gobeaux@papyrrus.com" ||
@@ -106,13 +118,17 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
         currentAvatarId === AVATARS[0].avatar_id ||
         currentAvatarId === AVATARS[3].avatar_id
       ) {
+        const baseTop = is125Zoom ? 33.8 : 32;
+        const adjustedTop = baseTop + fullScreenAdjustment.topOffset;
+        const adjustedSize = 55.5 * fullScreenAdjustment.sizeIncrease;
+
         return {
           ...baseStyles,
-          top: is125Zoom ? "33.8%" : "32%",
+          top: `${adjustedTop}%`,
           left: "52%",
           transform: "translateX(-50%)", // Center horizontally
-          width: "52%", // Standard size for administration
-          height: "52%",
+          width: `${adjustedSize}%`, // Adjusted size for fullscreen
+          height: `${adjustedSize}%`,
           objectFit: "cover" as const,
         };
       }
@@ -134,13 +150,17 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
       }
 
       // Pedro && Amina (Admission avatars) - Default case
+      const baseTop = is125Zoom ? 31.2 : 29.7;
+      const adjustedTop = baseTop + fullScreenAdjustment.topOffset;
+      const adjustedSize = 57.5 * fullScreenAdjustment.sizeIncrease;
+
       return {
         ...baseStyles,
-        top: is125Zoom ? "31.2%" : "29.7%", // adjusted top for zoom
+        top: `${adjustedTop}%`, // adjusted top for zoom and fullscreen
         left: "52%",
         transform: "translateX(-50%)", // Center horizontally
-        width: "52%", // Standard size for admission
-        height: "52%",
+        width: `${adjustedSize}%`, // Adjusted size for fullscreen
+        height: `${adjustedSize}%`,
         objectFit: "cover" as const,
       };
     };
@@ -166,7 +186,7 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
           return requestAnimationFrame(renderCanvas);
         }
 
-        const ctx = canvas.getContext("2d", {willReadFrequently: true});
+        const ctx = canvas.getContext("2d", { willReadFrequently: true });
         if (!ctx) return;
 
         canvas.width = video.videoWidth;
@@ -243,7 +263,7 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
               justifyContent: "center",
               overflow: "hidden", // Prevent content from extending beyond container
               // Ensure responsive scaling with page zoom
-              minHeight: "83vh", // Minimum height for proper avatar display
+              minHeight: fullScreen ? "100vh" : "83vh", // Full height in fullscreen mode
               aspectRatio: "16/9", // Maintain aspect ratio for consistent layout
             }}
           >
@@ -318,7 +338,7 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
         {!isLoaded && (
           <div
             className="w-full h-full flex align-items-center justify-content-center absolute"
-            style={{top: 0, left: 0}}
+            style={{ top: 0, left: 0 }}
           >
             <div className="loader"></div>
           </div>

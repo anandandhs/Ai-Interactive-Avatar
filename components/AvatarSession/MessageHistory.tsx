@@ -1,11 +1,11 @@
-import React, {useEffect, useRef} from "react";
+import React, { useEffect, useRef } from "react";
 
-import {useMessageHistory, MessageSender} from "../logic";
-import {ReactTyped} from "react-typed";
-import {useAuthContext} from "../Prividers/AuthProvider";
+import { useMessageHistory, MessageSender } from "../logic";
+import { ReactTyped } from "react-typed";
+import { useAuthContext } from "../Prividers/AuthProvider";
 
 export const MessageHistory: React.FC = () => {
-  const {messages} = useMessageHistory();
+  const { messages } = useMessageHistory();
   const containerRef = useRef<HTMLDivElement>(null);
   const auth = useAuthContext();
 
@@ -35,13 +35,13 @@ export const MessageHistory: React.FC = () => {
       >
         <h3
           className=" text-2xl font-bold relative z-1  p-4"
-          style={{color: "var(--text-primary-color)"}}
+          style={{ color: "var(--text-primary-color)" }}
         >
           Conversation History
         </h3>
         <span
           className="text-caption p-4"
-          style={{color: "var(--text-secondary)"}}
+          style={{ color: "var(--text-secondary)" }}
         >
           {messages.length} {messages.length === 1 ? "message" : "messages"}
         </span>
@@ -67,11 +67,11 @@ export const MessageHistory: React.FC = () => {
           >
             <i
               className="pi pi-comments text-4xl"
-              style={{color: "var(--text-primary-color)"}}
+              style={{ color: "var(--text-primary-color)" }}
             />
             <p
               className="text-body-medium text-center text-light"
-              style={{color: "var(--text-primary-color)"}}
+              style={{ color: "var(--text-primary-color)" }}
             >
               Your conversation will appear here
             </p>
@@ -108,7 +108,7 @@ export const MessageHistory: React.FC = () => {
                 >
                   <div
                     className="flex align-items-center"
-                    style={{gap: "var(--space-2)"}}
+                    style={{ gap: "var(--space-2)" }}
                   >
                     <div
                       className="w-2 h-2 border-round-full"
@@ -154,12 +154,12 @@ export const MessageHistory: React.FC = () => {
                       borderRadius: "1.25rem",
                     }}
                   >
-                    {/* {message.content} */}
-                    <ReactTyped
+                    {message.content}
+                    {/* <ReactTyped
                       strings={[message.content]}
-                      typeSpeed={48}
+                      typeSpeed={165}
                       smartBackspace={false}
-                    />
+                    /> */}
                   </div>
                 </div>
               </div>

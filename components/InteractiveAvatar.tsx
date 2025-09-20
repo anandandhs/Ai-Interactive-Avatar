@@ -7,54 +7,54 @@ import {
   STTProvider,
   ElevenLabsModel,
 } from "@heygen/streaming-avatar";
-import {useEffect, useRef, useState} from "react";
-import {useMemoizedFn, useUnmount} from "ahooks";
-import {useRouter} from "next/navigation";
-import {Toast} from "primereact/toast";
+import { useEffect, useRef, useState } from "react";
+import { useMemoizedFn, useUnmount } from "ahooks";
+import { useRouter } from "next/navigation";
+import { Toast } from "primereact/toast";
 
-import {AvatarVideo} from "./AvatarSession/AvatarVideo";
-import {useStreamingAvatarSession} from "./logic/useStreamingAvatarSession";
-import {AvatarControls} from "./AvatarSession/AvatarControls";
-import {useVoiceChat} from "./logic/useVoiceChat";
+import { AvatarVideo } from "./AvatarSession/AvatarVideo";
+import { useStreamingAvatarSession } from "./logic/useStreamingAvatarSession";
+import { AvatarControls } from "./AvatarSession/AvatarControls";
+import { useVoiceChat } from "./logic/useVoiceChat";
 import {
   StreamingAvatarProvider,
   StreamingAvatarSessionState,
   useInterrupt,
 } from "./logic";
-import {LoadingIcon} from "./Icons";
-import {MessageHistory} from "./AvatarSession/MessageHistory";
+import { LoadingIcon } from "./Icons";
+import { MessageHistory } from "./AvatarSession/MessageHistory";
 import Avatar from "../public/Svg/home_avatar.svg";
 import BackgroundImage from "../public/Svg/background_image.svg";
 import Mic from "../public/Svg/mic.svg";
 import Speaker from "../public/Svg/speaker.svg";
 import style from "../styles/commonStyle.module.css";
-import {useMessageHistory} from "../components/logic/index";
-import {FloatingChatInterface} from "./FloatingChatInterface";
+import { useMessageHistory } from "../components/logic/index";
+import { FloatingChatInterface } from "./FloatingChatInterface";
 
-import {AVATARS, STT_LANGUAGE_LIST} from "@/app/lib/constants";
+import { AVATARS, STT_LANGUAGE_LIST } from "@/app/lib/constants";
 import Image from "next/image";
 import clsx from "clsx";
-import {InputText} from "primereact/inputtext";
+import { InputText } from "primereact/inputtext";
 import SendIcon from "../public/Svg/send.svg";
 import AppButton from "./UI/CommonUI/AppButton";
-import {useAuthContext} from "./Prividers/AuthProvider";
+import { useAuthContext } from "./Prividers/AuthProvider";
 import {
   getKnowlededgeBase,
   getRequiredAvatar,
 } from "@/app/lib/genericFunctions";
-import {useTextChat} from "./logic/useTextChat";
+import { useTextChat } from "./logic/useTextChat";
 import FullScreen from "../public/Svg/full-screen.svg";
 import ExitScreen from "../public/Svg/exit-screen.svg";
 
-function InteractiveAvatar({page}: {page: number}) {
-  const {initAvatar, startAvatar, stopAvatar, sessionState, stream} =
+function InteractiveAvatar({ page }: { page: number }) {
+  const { initAvatar, startAvatar, stopAvatar, sessionState, stream } =
     useStreamingAvatarSession();
-  const {interrupt} = useInterrupt();
-  const {startVoiceChat} = useVoiceChat();
+  const { interrupt } = useInterrupt();
+  const { startVoiceChat } = useVoiceChat();
   const auth = useAuthContext();
   const router = useRouter();
   const toast = useRef<Toast>(null);
-  const {sendMessage} = useTextChat();
+  const { sendMessage } = useTextChat();
   const currentAvatarMessage = useRef<string>("");
   const currentUserMessage = useRef<string>("");
   const userRequestedNavigation = useRef<string | null>(null);
@@ -616,7 +616,7 @@ function InteractiveAvatar({page}: {page: number}) {
     // Service mapping to actual routes
     const serviceMap: Record<
       string,
-      {route: string; name: string; keywords: string[]}
+      { route: string; name: string; keywords: string[] }
     > = {
       "resume-builder": {
         route: "/resume-builder",
@@ -735,7 +735,10 @@ function InteractiveAvatar({page}: {page: number}) {
   };
 
   // Navigation executor
-  const executeNavigation = (serviceConfig: {route: string; name: string}) => {
+  const executeNavigation = (serviceConfig: {
+    route: string;
+    name: string;
+  }) => {
     console.log("🚀 executeNavigation called for:", serviceConfig.name);
     console.log(
       "🚀 navigationInProgress.current:",
@@ -809,13 +812,13 @@ function InteractiveAvatar({page}: {page: number}) {
             "john.keating@papyrrus.com" &&
             currentAvatarId === AVATARS[0].avatar_id &&
             newLanguage === "es" && {
-              voiceId: "e85822bd14e144e8b6fe73da2fb1085c", // Default voice for john.keating kathya
+              voiceId: "cbb56828d798491e9f601a5415415e25", // Default voice for john.keating kathya
             }),
           ...(auth?.user?.username?.toLowerCase() ===
             "john.keating@papyrrus.com" &&
             currentAvatarId === AVATARS[5].avatar_id &&
             newLanguage === "es" && {
-              voiceId: "72cbcf091d9d48998ce10d7b5c2d569e", // Default voice for john.keating kathya
+              voiceId: "8f2c476e3d36461d9225592c36178977", // Default voice for john.keating kathya
             }),
         },
         language: newLanguage,
@@ -828,12 +831,13 @@ function InteractiveAvatar({page}: {page: number}) {
           auth?.user?.username?.toLowerCase() != "john.keating@papyrrus.com"
             ? ""
             : newLanguage === "en" && currentAvatarId === AVATARS[0].avatar_id
-            ? "02ef215a87ca49f1bb05fb7833bf8afe"
-            : newLanguage === "en" && currentAvatarId === AVATARS[5].avatar_id
-            ? "10d1db10e297474386646f8611eea248"
-            : newLanguage === "es" && currentAvatarId === AVATARS[0].avatar_id
-            ? "826c4781815548e98a9059daffbf84e6"
-            : "d873e488c23e4475b3bddbaef90016c6",
+              ? "02ef215a87ca49f1bb05fb7833bf8afe"
+              : newLanguage === "en" && currentAvatarId === AVATARS[5].avatar_id
+                ? "10d1db10e297474386646f8611eea248"
+                : newLanguage === "es" &&
+                    currentAvatarId === AVATARS[0].avatar_id
+                  ? "826c4781815548e98a9059daffbf84e6"
+                  : "d873e488c23e4475b3bddbaef90016c6",
         knowledgeBase:
           auth?.user?.username?.toLowerCase() != "john.keating@papyrrus.com"
             ? getKnowlededgeBase(
@@ -848,7 +852,7 @@ function InteractiveAvatar({page}: {page: number}) {
       console.log("🔄 Restarting avatar with new config:", updatedConfig);
 
       // Start avatar with new configuration
-      // await startSessionV2(true, updatedConfig);
+      await startSessionV2(true, updatedConfig);
 
       // Show success toast
       toast.current?.show({
@@ -903,29 +907,24 @@ function InteractiveAvatar({page}: {page: number}) {
             auth?.user?.username?.toLowerCase() === "john.keating@papyrrus.com"
               ? currentModel // Use current model for john.keating
               : auth?.user?.username?.toLowerCase() ==
-                  "jason.padilla@papyrrus.com" ||
-                auth?.user?.username?.toLowerCase() ==
-                  "percy.veltman@papyrrus.com"
-              ? ElevenLabsModel.eleven_multilingual_v2
-              : ElevenLabsModel.eleven_flash_v2_5,
+                    "jason.padilla@papyrrus.com" ||
+                  auth?.user?.username?.toLowerCase() ==
+                    "percy.veltman@papyrrus.com"
+                ? ElevenLabsModel.eleven_multilingual_v2
+                : ElevenLabsModel.eleven_flash_v2_5,
           ...(auth?.user?.username?.toLowerCase() ==
             "jason.padilla@papyrrus.com" && {
             voiceId:
               currentAvatarId === AVATARS[3].avatar_id
                 ? "e85822bd14e144e8b6fe73da2fb1085c"
                 : currentAvatarId === AVATARS[4].avatar_id
-                ? "a557ea37036844748016d4cee181c322"
-                : "72cbcf091d9d48998ce10d7b5c2d569e",
+                  ? "a557ea37036844748016d4cee181c322"
+                  : "72cbcf091d9d48998ce10d7b5c2d569e",
           }),
           ...(auth?.user?.username?.toLowerCase() ===
             "percy.veltman@papyrrus.com" && {
             voiceId: "e85822bd14e144e8b6fe73da2fb1085c",
           }),
-          ...(auth?.user?.username?.toLowerCase() ===
-            "john.keating@papyrrus.com" &&
-            currentLanguage === "es" && {
-              voiceId: "e85822bd14e144e8b6fe73da2fb1085c", // Default voice for john.keating
-            }),
           ...(auth?.user?.username?.toLowerCase() ===
             "erica.romaguera@papyrrus.com" && {
             voiceId: "e85822bd14e144e8b6fe73da2fb1085c",
@@ -936,19 +935,19 @@ function InteractiveAvatar({page}: {page: number}) {
               currentAvatarId === AVATARS[0].avatar_id
                 ? "d41b5163f39044129d06aca88d7a8f4f"
                 : currentAvatarId === AVATARS[1].avatar_id
-                ? "808a781f0c8e43dcb89636df6040143c" //male voice
-                : "207e0fdec4e645d287803503706e107d",
+                  ? "808a781f0c8e43dcb89636df6040143c" //male voice
+                  : "207e0fdec4e645d287803503706e107d",
           }),
         },
         language:
           auth?.user?.username?.toLowerCase() === "john.keating@papyrrus.com"
             ? currentLanguage // Use current language for john.keating
             : auth?.user?.username?.toLowerCase() ==
-                "jason.padilla@papyrrus.com" ||
-              auth?.user?.username?.toLowerCase() ==
-                "percy.veltman@papyrrus.com"
-            ? "es"
-            : "en",
+                  "jason.padilla@papyrrus.com" ||
+                auth?.user?.username?.toLowerCase() ==
+                  "percy.veltman@papyrrus.com"
+              ? "es"
+              : "en",
         voiceChatTransport: VoiceChatTransport.WEBSOCKET,
         sttSettings: {
           provider: STTProvider.DEEPGRAM,
@@ -958,15 +957,15 @@ function InteractiveAvatar({page}: {page: number}) {
           auth?.user?.username?.toLowerCase() != "john.keating@papyrrus.com"
             ? ""
             : currentLanguage === "en" &&
-              currentAvatarId === AVATARS[0].avatar_id
-            ? "02ef215a87ca49f1bb05fb7833bf8afe"
-            : currentLanguage === "en" &&
-              currentAvatarId === AVATARS[5].avatar_id
-            ? "10d1db10e297474386646f8611eea248"
-            : currentLanguage === "es" &&
-              currentAvatarId === AVATARS[0].avatar_id
-            ? "826c4781815548e98a9059daffbf84e6"
-            : "d873e488c23e4475b3bddbaef90016c6",
+                currentAvatarId === AVATARS[0].avatar_id
+              ? "02ef215a87ca49f1bb05fb7833bf8afe"
+              : currentLanguage === "en" &&
+                  currentAvatarId === AVATARS[5].avatar_id
+                ? "10d1db10e297474386646f8611eea248"
+                : currentLanguage === "es" &&
+                    currentAvatarId === AVATARS[0].avatar_id
+                  ? "826c4781815548e98a9059daffbf84e6"
+                  : "d873e488c23e4475b3bddbaef90016c6",
         knowledgeBase:
           auth?.user?.username?.toLowerCase() != "john.keating@papyrrus.com"
             ? getKnowlededgeBase(
@@ -982,7 +981,7 @@ function InteractiveAvatar({page}: {page: number}) {
 
       // Auto-start the avatar session for initial load (only when auth changes)
       if (sessionState === StreamingAvatarSessionState.INACTIVE) {
-        // startSessionV2(true, predefinedConfig);
+        startSessionV2(true, predefinedConfig);
       }
     }
   }, [auth]);
@@ -1131,13 +1130,13 @@ function InteractiveAvatar({page}: {page: number}) {
         });
 
         // Create a personalized config with user's display name
-        // const personalizedConfig = { ...config };
+        const personalizedConfig = { ...config };
 
-        // await startAvatar(personalizedConfig);
+        await startAvatar(personalizedConfig);
 
-        // if (isVoiceChat) {
-        //   await startVoiceChat();
-        // }
+        if (isVoiceChat) {
+          await startVoiceChat();
+        }
       } catch (error) {
         console.error("Error starting avatar session:", error);
       }
@@ -1242,11 +1241,15 @@ function InteractiveAvatar({page}: {page: number}) {
             }}
           >
             {sessionState !== StreamingAvatarSessionState.INACTIVE ? (
-              <AvatarVideo ref={mediaStream} page={page} />
+              <AvatarVideo
+                ref={mediaStream}
+                page={page}
+                fullScreen={fullScreen}
+              />
             ) : (
               <div
                 className="w-full h-full flex align-items-center justify-content-center"
-                style={{color: "var(--text-primary-color)"}}
+                style={{ color: "var(--text-primary-color)" }}
               >
                 <div className="loader"></div>
                 {/* <>{"Initializing your avatar..."}</> */}
@@ -1257,7 +1260,7 @@ function InteractiveAvatar({page}: {page: number}) {
             {/* Status Indicator */}
             <div
               className="absolute top-0 right-0 m-4 flex align-items-center"
-              style={{gap: "var(--space-2)"}}
+              style={{ gap: "var(--space-2)" }}
             >
               <div
                 className="w-3 h-3 border-round-full"
@@ -1266,8 +1269,8 @@ function InteractiveAvatar({page}: {page: number}) {
                     sessionState === StreamingAvatarSessionState.CONNECTED
                       ? "var(--success-color)"
                       : sessionState === StreamingAvatarSessionState.INACTIVE
-                      ? "var(--gray-400)"
-                      : "var(--warning-color)",
+                        ? "var(--gray-400)"
+                        : "var(--warning-color)",
                   boxShadow: "var(--shadow-sm)",
                 }}
               />
@@ -1287,8 +1290,8 @@ function InteractiveAvatar({page}: {page: number}) {
                 {sessionState === StreamingAvatarSessionState.CONNECTED
                   ? "Connected"
                   : sessionState === StreamingAvatarSessionState.INACTIVE
-                  ? "Ready"
-                  : "Connecting..."}
+                    ? "Ready"
+                    : "Connecting..."}
               </span>
               {!fullScreen && (
                 <Image
@@ -1385,12 +1388,12 @@ function InteractiveAvatar({page}: {page: number}) {
               // </div>
               <div
                 className="flex flex-column align-items-center"
-                style={{gap: "var(--space-3)"}}
+                style={{ gap: "var(--space-3)" }}
               >
                 <LoadingIcon />
                 <span
                   className="text-body-medium"
-                  style={{color: "--text-secondary-color"}}
+                  style={{ color: "--text-secondary-color" }}
                 >
                   Initializing your avatar...
                 </span>
@@ -1402,7 +1405,7 @@ function InteractiveAvatar({page}: {page: number}) {
         {/* Right Side - Conversation History (60%) */}
         <div
           className={style.conversationDarkContainer}
-          style={{display: fullScreen ? "none" : "block"}}
+          style={{ display: fullScreen ? "none" : "block" }}
         >
           {sessionState === StreamingAvatarSessionState.CONNECTED ? (
             <MessageHistory />
@@ -1418,11 +1421,11 @@ function InteractiveAvatar({page}: {page: number}) {
             >
               <i
                 className="pi pi-comments text-6xl"
-                style={{color: "var(--text-primary-color)"}}
+                style={{ color: "var(--text-primary-color)" }}
               />
               <h3
                 className="text-heading-medium text-center"
-                style={{color: "var(--text-primary-color)"}}
+                style={{ color: "var(--text-primary-color)" }}
               >
                 Conversation
               </h3>
@@ -1458,7 +1461,7 @@ function InteractiveAvatar({page}: {page: number}) {
   );
 }
 
-export default function InteractiveAvatarWrapper({page}: {page: number}) {
+export default function InteractiveAvatarWrapper({ page }: { page: number }) {
   return (
     <StreamingAvatarProvider basePath={process.env.NEXT_PUBLIC_BASE_API_URL}>
       <InteractiveAvatar page={page} />
