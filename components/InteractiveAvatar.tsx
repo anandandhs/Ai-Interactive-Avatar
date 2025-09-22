@@ -152,38 +152,38 @@ function InteractiveAvatar({ page }: { page: number }) {
       "hoja de vida",
       "recepcionista",
       // Job-related keywords for john.keating@papyrrus.com (Spanish)
-      // "estoy buscando trabajo",
-      // "buscando trabajo",
-      // "asesor laboral",
-      // "ofertas de empleo",
-      // "ofertas de trabajo",
-      // "búsqueda de empleo",
-      // "consejo profesional",
-      // "oportunidades laborales",
-      // "ayuda con currículum",
-      // "preparación para entrevistas",
+      "estoy buscando trabajo",
+      "buscando trabajo",
+      "asesor laboral",
+      "ofertas de empleo",
+      "ofertas de trabajo",
+      "búsqueda de empleo",
+      "consejo profesional",
+      "oportunidades laborales",
+      "ayuda con currículum",
+      "preparación para entrevistas",
 
-      // "Estoy buscando trabajo",
-      // "Busco trabajo",
-      // "Estoy buscando empleo",
-      // "Busco empleo",
-      // "¿Me puedes ayudar a encontrar empleo?",
-      // "Muéstrame ofertas de trabajo",
-      // "Muestra ofertas de trabajo",
-      // "¿Dónde hay vacantes disponibles?",
-      // "Quiero conseguir un trabajo lo antes posible",
-      // "¿Tienen listados de empleos?",
-      // "Enséñame trabajos cerca de mí",
-      // "¿Hay empleos disponibles sin experiencia?",
-      // "Estoy buscando un nuevo puesto de trabajo",
-      // "Necesito encontrar empleo",
-      // "¿Hay empleos de medio tiempo?",
-      // "Busco un trabajo de tiempo completo",
-      // "Necesito un trabajo para principiantes",
-      // "¿Tienen pasantías o prácticas?",
-      // "Estoy buscando un empleo para estudiantes",
-      // "¿Hay trabajos sin requisitos de experiencia?",
-      // "Quiero un puesto con posibilidades de crecer",
+      "Estoy buscando trabajo",
+      "Busco trabajo",
+      "Estoy buscando empleo",
+      "Busco empleo",
+      "¿Me puedes ayudar a encontrar empleo?",
+      "Muéstrame ofertas de trabajo",
+      "Muestra ofertas de trabajo",
+      "¿Dónde hay vacantes disponibles?",
+      "Quiero conseguir un trabajo lo antes posible",
+      "¿Tienen listados de empleos?",
+      "Enséñame trabajos cerca de mí",
+      "¿Hay empleos disponibles sin experiencia?",
+      "Estoy buscando un nuevo puesto de trabajo",
+      "Necesito encontrar empleo",
+      "¿Hay empleos de medio tiempo?",
+      "Busco un trabajo de tiempo completo",
+      "Necesito un trabajo para principiantes",
+      "¿Tienen pasantías o prácticas?",
+      "Estoy buscando un empleo para estudiantes",
+      "¿Hay trabajos sin requisitos de experiencia?",
+      "Quiero un puesto con posibilidades de crecer",
     ];
 
     const admissionKeywords = [
@@ -252,6 +252,9 @@ function InteractiveAvatar({ page }: { page: number }) {
   // Add a flag to prevent duplicate navigation
   const navigationInProgress = useRef(false);
 
+  // Add a flag to track if this is the avatar's first message (introduction)
+  const isAvatarIntroduction = useRef(true);
+
   // Function to check if avatar message contains navigation keywords (fallback detection)
   const checkAvatarNavigationRequest = (avatarMessage: string) => {
     const lowerCaseMessage = avatarMessage.toLowerCase();
@@ -259,6 +262,15 @@ function InteractiveAvatar({ page }: { page: number }) {
       "🤖 Avatar said (checking for navigation keywords):",
       lowerCaseMessage
     );
+
+    // Check if this is the avatar's introduction message
+    if (isAvatarIntroduction.current) {
+      console.log(
+        "👋 This is avatar's introduction message, skipping navigation detection to prevent auto-navigation on first message"
+      );
+      isAvatarIntroduction.current = false; // Mark introduction as complete
+      return;
+    }
 
     // Check if navigation is already in progress
     if (navigationInProgress.current) {
@@ -1240,6 +1252,10 @@ function InteractiveAvatar({ page }: { page: number }) {
 
         // Create a personalized config with user's display name
         const personalizedConfig = { ...config };
+
+        // Reset introduction flag for new session
+        isAvatarIntroduction.current = true;
+        console.log("🔄 Reset avatar introduction flag for new session");
 
         await startAvatar(personalizedConfig);
 
