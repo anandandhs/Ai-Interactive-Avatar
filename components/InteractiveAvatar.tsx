@@ -59,7 +59,29 @@ function InteractiveAvatar({ page }: { page: number }) {
   const currentUserMessage = useRef<string>("");
   const userRequestedNavigation = useRef<string | null>(null);
   const isAvatarTalking = useRef<boolean>(false);
-  const [currentLanguage, setCurrentLanguage] = useState<string>("en");
+  // Initialize language from URL params, localStorage, or default to "en"
+  const [currentLanguage, setCurrentLanguageState] = useState<string>(() => {
+    if (typeof window !== "undefined") {
+      // Check URL parameters first
+      const urlParams = new URLSearchParams(window.location.search);
+      const langParam = urlParams.get("lang");
+      if (langParam && (langParam === "en" || langParam === "es")) {
+        return langParam;
+      }
+      // Fall back to localStorage
+      return localStorage.getItem("ai_avatar_language") || "en";
+    }
+    return "en";
+  });
+
+  // Wrapper function to persist language changes to localStorage
+  const setCurrentLanguage = (language: string) => {
+    setCurrentLanguageState(language);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("ai_avatar_language", language);
+      console.log("🌐 Language persisted to localStorage:", language);
+    }
+  };
   const [currentModel, setCurrentModel] = useState<ElevenLabsModel>(
     ElevenLabsModel.eleven_flash_v2_5
   );
@@ -72,6 +94,7 @@ function InteractiveAvatar({ page }: { page: number }) {
   const checkUserNavigationRequest = (userMessage: string) => {
     const lowerCaseMessage = userMessage.toLowerCase();
     console.log("👤 User said:", lowerCaseMessage);
+    console.log("👤 Checking for navigation keywords in user message...");
 
     // Check if user requested specific navigation based on knowledge base support pathways
     const advisingKeywords = [
@@ -229,6 +252,21 @@ function InteractiveAvatar({ page }: { page: number }) {
       "refrigeración",
       "técnico",
     ];
+
+    // Additional debugging for Spanish job search phrases
+    console.log("👤 Checking specific Spanish job phrases:");
+    console.log(
+      "  - Contains 'busco trabajo':",
+      lowerCaseMessage.includes("busco trabajo")
+    );
+    console.log(
+      "  - Contains 'buscando trabajo':",
+      lowerCaseMessage.includes("buscando trabajo")
+    );
+    console.log(
+      "  - Contains 'búsqueda de empleo':",
+      lowerCaseMessage.includes("búsqueda de empleo")
+    );
 
     if (advisingKeywords.some((kw) => lowerCaseMessage.includes(kw))) {
       userRequestedNavigation.current = "resume-builder";
@@ -702,6 +740,12 @@ function InteractiveAvatar({ page }: { page: number }) {
       "te redirijo a",
       "te guiaré a",
       "te acompañaré a",
+      "te conectaré con",
+      "te conectaré",
+      "te transfiero",
+      "mientras te transfiero",
+      "te llevo con",
+      "te dirijo con",
     ];
 
     // Service mapping to actual routes
@@ -819,6 +863,21 @@ function InteractiveAvatar({ page }: { page: number }) {
       serviceConfig.keywords.filter((keyword) =>
         lowerCaseMessage.includes(keyword.toLowerCase())
       )
+    );
+
+    // Additional debugging for Spanish phrases
+    console.log("🔍 Checking specific Spanish phrases:");
+    console.log(
+      "  - Contains 'te conectaré':",
+      lowerCaseMessage.includes("te conectaré")
+    );
+    console.log(
+      "  - Contains 'te transfiero':",
+      lowerCaseMessage.includes("te transfiero")
+    );
+    console.log(
+      "  - Contains 'asesor laboral':",
+      lowerCaseMessage.includes("asesor laboral")
     );
 
     // More flexible condition: either confirmation phrase OR service mention
@@ -1010,7 +1069,21 @@ function InteractiveAvatar({ page }: { page: number }) {
           "🔧 Initializing john.keating@papyrrus.com with default settings"
         );
         setCurrentModel(ElevenLabsModel.eleven_flash_v2_5); // Default to flash model
-        setCurrentLanguage("en"); // Default to English
+
+        // Only set default language if none is persisted
+        const persistedLanguage =
+          typeof window !== "undefined"
+            ? localStorage.getItem("ai_avatar_language")
+            : null;
+        if (!persistedLanguage) {
+          console.log(
+            "🌐 No persisted language found, setting default to English"
+          );
+          setCurrentLanguage("en"); // Default to English
+        } else {
+          console.log("🌐 Using persisted language:", persistedLanguage);
+        }
+
         setIsInitialized(true);
       }
 
@@ -1102,6 +1175,22 @@ function InteractiveAvatar({ page }: { page: number }) {
       }
     }
   }, [auth]);
+
+  // Handle URL language parameter changes
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const urlParams = new URLSearchParams(window.location.search);
+      const langParam = urlParams.get("lang");
+      if (
+        langParam &&
+        (langParam === "en" || langParam === "es") &&
+        langParam !== currentLanguage
+      ) {
+        console.log("🌐 URL language parameter detected:", langParam);
+        setCurrentLanguage(langParam);
+      }
+    }
+  }, []); // Run once on mount to check URL params
 
   // Debug useEffect to track language changes
   useEffect(() => {
