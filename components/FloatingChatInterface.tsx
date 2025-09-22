@@ -1,19 +1,19 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Button } from "primereact/button";
-import { InputText } from "primereact/inputtext";
-import { MessageHistory } from "./AvatarSession/MessageHistory";
-import { useMessageHistory, MessageSender, useInterrupt } from "./logic";
-import { useTextChat } from "./logic/useTextChat";
-import { StreamingAvatarSessionState } from "./logic";
-import { useStreamingAvatarSession } from "./logic/useStreamingAvatarSession";
+import React, {useState, useRef, useEffect} from "react";
+import {Button} from "primereact/button";
+import {InputText} from "primereact/inputtext";
+import {MessageHistory} from "./AvatarSession/MessageHistory";
+import {useMessageHistory, MessageSender, useInterrupt} from "./logic";
+import {useTextChat} from "./logic/useTextChat";
+import {StreamingAvatarSessionState} from "./logic";
+import {useStreamingAvatarSession} from "./logic/useStreamingAvatarSession";
 import clsx from "clsx";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import {useRouter} from "next/navigation";
 
 import styles from "./UI/CommonUI/CommonUI.module.css";
-import { useAuthContext } from "./Prividers/AuthProvider";
-import { AVATARS } from "@/app/lib/constants";
-import { useThemeIcons } from "./logic/useThemeIcon";
+import {useAuthContext} from "./Prividers/AuthProvider";
+import {AVATARS} from "@/app/lib/constants";
+import {useThemeIcons} from "./logic/useThemeIcon";
 
 // AI Assistant profiles
 const AI_ASSISTANTS = [
@@ -151,11 +151,11 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
     currentLanguage === "en"
       ? AI_ASSISTANTS_BILINGUAL_ENGLISH
       : auth?.user?.username === "john.keating@papyrrus.com" &&
-          currentLanguage === "es"
-        ? AI_ASSISTANTS_BILINGUAL_SPANSIH
-        : auth?.user?.username?.toLowerCase() === "jason.padilla@papyrrus.com"
-          ? AI_ASSISTANTS_SPANISH
-          : AI_ASSISTANTS;
+        currentLanguage === "es"
+      ? AI_ASSISTANTS_BILINGUAL_SPANSIH
+      : auth?.user?.username?.toLowerCase() === "jason.padilla@papyrrus.com"
+      ? AI_ASSISTANTS_SPANISH
+      : AI_ASSISTANTS;
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [showAssistantSelection, setShowAssistantSelection] = useState(true);
@@ -163,18 +163,18 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
     (typeof AI_ASSISTANTS)[0] | null
   >(null);
   const [message, setMessage] = useState("");
-  const { sendMessage } = useTextChat();
-  const { messages } = useMessageHistory();
+  const {sendMessage} = useTextChat();
+  const {messages} = useMessageHistory();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const { stopAvatar } = useStreamingAvatarSession();
-  const { interrupt } = useInterrupt();
+  const {stopAvatar} = useStreamingAvatarSession();
+  const {interrupt} = useInterrupt();
   const router = useRouter();
-  const { chatCloseIcon, chatOpenIcon, exportIcon, whiteLogoIcon } =
+  const {chatCloseIcon, chatOpenIcon, exportIcon, whiteLogoIcon} =
     useThemeIcons();
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({behavior: "smooth"});
   };
 
   useEffect(() => {
@@ -222,10 +222,9 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
       if (auth?.user?.username?.toLowerCase() === "john.keating@papyrrus.com") {
         if (assistant.id === AVATARS[0].avatar_id) {
           console.log("🔄 Switching avatar, navigating to home...");
-          router.push(`/?lang=${currentLanguage}`);
+          router.push("/");
         } else if (assistant.id === AVATARS[5].avatar_id) {
-          console.log("🔄 Switching avatar, navigating to resume-builder...");
-          router.push(`/resume-builder?lang=${currentLanguage}`);
+          router.push("/resume-builder");
         }
       }
 
@@ -234,14 +233,14 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
         assistant.id === AVATARS[0].avatar_id ||
         assistant.id === AVATARS[3].avatar_id
       ) {
-        router.push(`/?lang=${currentLanguage}`);
+        router.push("/");
       } else if (
         assistant.id === AVATARS[1].avatar_id ||
         assistant.id === AVATARS[4].avatar_id
       ) {
-        router.push(`/resume-builder?lang=${currentLanguage}`);
+        router.push("/resume-builder");
       } else {
-        router.push(`/course-admission?lang=${currentLanguage}`);
+        router.push("/course-admission");
       }
     } catch (error) {
       console.error("Error during assistant switch:", error);
@@ -250,14 +249,14 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
         assistant.id === AVATARS[0].avatar_id ||
         assistant.id === AVATARS[3].avatar_id
       ) {
-        router.push(`/?lang=${currentLanguage}`);
+        router.push("/");
       } else if (
         assistant.id === AVATARS[1].avatar_id ||
         assistant.id === AVATARS[4].avatar_id
       ) {
-        router.push(`/resume-builder?lang=${currentLanguage}`);
+        router.push("/resume-builder");
       } else {
-        router.push(`/course-admission?lang=${currentLanguage}`);
+        router.push("/course-admission");
       }
     }
 
@@ -368,7 +367,7 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
     );
   }
 
-  function OverlappingImages({ isSpanish }: { isSpanish: boolean }) {
+  function OverlappingImages({isSpanish}: {isSpanish: boolean}) {
     const emglishImages = [
       "/Svg/katyaIcon.svg",
       "/Svg/thaddeusIcon.svg",
@@ -432,7 +431,7 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
             backgroundColor: "#0d151c",
           }}
         >
-          <div className="flex align-items-center" style={{ gap: "0.5rem" }}>
+          <div className="flex align-items-center" style={{gap: "0.5rem"}}>
             {/* {!showAssistantSelection && selectedAssistant && (
               <Button
                 onClick={handleBackToSelection}
@@ -454,7 +453,7 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
               alt="Chat"
               width={142}
               height={35}
-              style={{ display: "block", margin: "0 auto" }}
+              style={{display: "block", margin: "0 auto"}}
             />
             {/* <i
               className={
@@ -478,7 +477,7 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
               isSpanish={auth?.user?.username === "jason.padilla@papyrrus.com"}
             />
           </div>
-          <div className="flex align-items-center" style={{ gap: "0.5rem" }}>
+          <div className="flex align-items-center" style={{gap: "0.5rem"}}>
             {/* Status indicator */}
             {/* {!showAssistantSelection && (
               <div
@@ -610,7 +609,7 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
                       }}
                     />
                     {/* </div> */}
-                    <div style={{ flex: 1, marginRight: "1.5rem" }}>
+                    <div style={{flex: 1, marginRight: "1.5rem"}}>
                       <div
                         style={{
                           display: "flex",
@@ -750,13 +749,13 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
               {sessionState !== StreamingAvatarSessionState.CONNECTED ? (
                 <div
                   className="flex flex-column align-items-center justify-content-center h-full"
-                  style={{ gap: "1rem", color: "var(--text-primary-color)" }}
+                  style={{gap: "1rem", color: "var(--text-primary-color)"}}
                 >
                   <i
                     className="pi pi-info-circle"
-                    style={{ fontSize: "2rem", color: "#bdbdbd" }}
+                    style={{fontSize: "2rem", color: "#bdbdbd"}}
                   />
-                  <p style={{ textAlign: "center", margin: 0 }}>
+                  <p style={{textAlign: "center", margin: 0}}>
                     {sessionState === StreamingAvatarSessionState.INACTIVE
                       ? "Start a conversation with your avatar to begin chatting"
                       : "Connecting to avatar..."}
@@ -765,7 +764,7 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
               ) : messages.length === 0 ? (
                 <div
                   className="flex flex-column align-items-center justify-content-center h-full"
-                  style={{ gap: "1rem", color: "var(--text-primary-color)" }}
+                  style={{gap: "1rem", color: "var(--text-primary-color)"}}
                 >
                   <div
                     style={{
@@ -788,7 +787,7 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
                       alt={selectedAssistant?.name || "Assistant"}
                       width={40}
                       height={40}
-                      style={{ borderRadius: "50%" }}
+                      style={{borderRadius: "50%"}}
                     />
                   </div>
                   <h4
@@ -870,7 +869,7 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
               borderRadius: "0 0 20px 20px",
             }}
           >
-            <div className="flex" style={{ gap: "0.5rem" }}>
+            <div className="flex" style={{gap: "0.5rem"}}>
               <InputText
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
@@ -911,7 +910,7 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
                   minWidth: "40px",
                 }}
               >
-                <i className="pi pi-send" style={{ fontSize: "0.9rem" }} />
+                <i className="pi pi-send" style={{fontSize: "0.9rem"}} />
               </Button>
             </div>
           </div>
