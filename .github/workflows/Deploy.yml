@@ -33,7 +33,7 @@ jobs:
             git pull
 
             echo "Stopping PM2 app if running..."
-            pm2 stop 0 || true
+            pm2 kill || true
 
             echo "Cleaning old build..."
             rm -rf .next
