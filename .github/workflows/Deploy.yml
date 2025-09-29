@@ -45,7 +45,7 @@ jobs:
             yarn build
 
             echo "Starting app with PM2..."
-            pm2 start yarn --name "nextjs-app" -- start
+            pm2 start yarn --name "Ai-Interactive-Avatar" -- start
 
             pm2 save
           EOF
