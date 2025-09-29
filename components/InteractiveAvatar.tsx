@@ -935,9 +935,9 @@ function InteractiveAvatar({ page }: { page: number }) {
             }),
           ...(auth?.user?.username?.toLowerCase() ===
             "john.keating@papyrrus.com" &&
-            currentAvatarId === AVATARS[5].avatar_id &&
+            currentAvatarId === AVATARS[3].avatar_id &&
             newLanguage === "es" && {
-              voiceId: "8f2c476e3d36461d9225592c36178977", // Default voice for john.keating kathya
+              voiceId: "e85822bd14e144e8b6fe73da2fb1085c", // Default voice for john.keating kathya
             }),
         },
         language: newLanguage,
@@ -951,7 +951,7 @@ function InteractiveAvatar({ page }: { page: number }) {
             ? ""
             : newLanguage === "en" && currentAvatarId === AVATARS[0].avatar_id
               ? "02ef215a87ca49f1bb05fb7833bf8afe"
-              : newLanguage === "en" && currentAvatarId === AVATARS[5].avatar_id
+              : newLanguage === "en" && currentAvatarId === AVATARS[3].avatar_id
                 ? "10d1db10e297474386646f8611eea248"
                 : newLanguage === "es" &&
                     currentAvatarId === AVATARS[0].avatar_id
@@ -1080,7 +1080,7 @@ function InteractiveAvatar({ page }: { page: number }) {
                 currentAvatarId === AVATARS[0].avatar_id
               ? "02ef215a87ca49f1bb05fb7833bf8afe"
               : selectedLanguage === "en" &&
-                  currentAvatarId === AVATARS[5].avatar_id
+                  currentAvatarId === AVATARS[3].avatar_id
                 ? "10d1db10e297474386646f8611eea248"
                 : selectedLanguage === "es" &&
                     currentAvatarId === AVATARS[0].avatar_id

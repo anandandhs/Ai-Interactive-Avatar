@@ -95,12 +95,12 @@ const AI_ASSISTANTS_BILINGUAL_ENGLISH = [
     color: "#1B84FF",
   },
   {
-    id: "Pedro_Black_Suit_public",
-    name: "Pedro",
+    id: "Marianne_Black_Suit_public",
+    name: "Marianne",
     role: "Representative",
     description:
-      "Hi, I’m Pedro, your virtual assistant here to guide you through the admissions process and answer your questions.",
-    avatar: "/Svg/pedroIcon.svg",
+      "Hi, I’m Marianne, your virtual assistant here to guide you through the admissions process and answer your questions.",
+    avatar: "/Svg/marianneIcon.svg",
     specialties: ["Financial Aid", "Scholarships", "Payment Plans"],
     color: "#FF9800",
   },
@@ -122,12 +122,12 @@ const AI_ASSISTANTS_BILINGUAL_SPANSIH = [
     color: "#1B84FF",
   },
   {
-    id: "Pedro_Black_Suit_public",
-    name: "Pedro",
+    id: "Marianne_Black_Suit_public",
+    name: "Marianne",
     role: "Representante",
     description:
-      "Hola, soy Pedro, tu asistente virtual aquí para guiarte a través del proceso de admisión y responder tus preguntas.",
-    avatar: "/Svg/pedroIcon.svg",
+      "Hola, soy Marianne, tu asistente virtual aquí para guiarte a través del proceso de admisión y responder tus preguntas.",
+    avatar: "/Svg/marianneIcon.svg",
     specialties: ["Ayuda financiera", "Becas", "Planes de pago"],
     color: "#FF9800",
   },
@@ -232,7 +232,7 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
           console.log("🔄 Switching avatar, navigating to home...");
           router.push("/");
           return;
-        } else if (assistant.id === AVATARS[5].avatar_id) {
+        } else if (assistant.id === AVATARS[3].avatar_id) {
           router.push("/resume-builder");
           return;
         }

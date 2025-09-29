@@ -14,7 +14,8 @@ import { useAuthContext } from "../Prividers/AuthProvider";
 import { getRequiredAvatar } from "@/app/lib/genericFunctions";
 import { useZoomLevel } from "../logic/useZoomLevel";
 import DarkKatya from "../../public/Svg/dark-katya.png";
-import DarkJohn from "../../public/Svg/dark-pedro.png";
+// import DarkPedro from "../../public/Svg/dark-pedro.png";
+import DarkMarianne from "../../public/Svg/dark-marianne.png";
 interface AvatarVideoProps {
   page: number;
   fullScreen?: boolean;
@@ -277,10 +278,10 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
                   "john.keating@papyrrus.com";
                 if (needsDarkBackground) {
                   switch (currentAvatarId) {
-                    case AVATARS[0].avatar_id: // Katya - Administration English
+                    case AVATARS[0].avatar_id: // Katya - Receptionist
                       return DarkKatya;
-                    case AVATARS[5].avatar_id: // john - Academic English
-                      return DarkJohn;
+                    case AVATARS[3].avatar_id: // MarrieAnne - Job Coach
+                      return DarkMarianne;
                   }
                 }
                 // Check if user needs special background (Texas/deskBg)

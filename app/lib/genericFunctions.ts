@@ -2217,9 +2217,9 @@ export const getRequiredAvatar = (email: string, page: number) => {
         case 1:
           return AVATARS[0].avatar_id;
         case 2:
-          return AVATARS[5].avatar_id;
+          return AVATARS[3].avatar_id;
         case 3:
-          return AVATARS[5].avatar_id;
+          return AVATARS[3].avatar_id;
       }
 
     default:
