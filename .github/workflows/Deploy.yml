@@ -10,22 +10,39 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
       - name: Build & Deploy
         env:
           PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          HOSTNAME: ${{secrets.SSH_HOST}}
-          USER_NAME: ${{secrets.USER_NAME}}
-
+          HOSTNAME: ${{ secrets.SSH_HOST }}
+          USER_NAME: ${{ secrets.USER_NAME }}
         run: |
-          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
+          # Convert the multiline private key properly
+          echo "$PRIVATE_KEY" | tr -d '\r' | sed 's/\\n/\n/g' > private_key
+          chmod 600 private_key
 
-              # Now we have got the access of EC2 and we will start the deploy .
-              cd Ai-Interactive-Avatar &&
-              git pull &&
-              yarn build &&
-              pm2 stop 0 || true &&
-              rm -rf .next &&
-              yarn build &&
-              pm2 start 0
-              '
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} << 'EOF'
+            set -e
+
+            cd Ai-Interactive-Avatar
+
+            echo "Pulling latest code..."
+            git pull
+
+            echo "Stopping PM2 app if running..."
+            pm2 stop 0 || true
+
+            echo "Cleaning old build..."
+            rm -rf .next
+
+            echo "Installing dependencies..."
+            yarn install --frozen-lockfile
+
+            echo "Building Next.js..."
+            yarn build
+
+            echo "Starting app with PM2..."
+            pm2 start yarn --name "nextjs-app" -- start
+
+            pm2 save
+          EOF
