@@ -1,20 +1,22 @@
 "use client";
 
-import React, {useState} from "react";
-import {Input} from "./Input";
-import {Card} from "primereact/card";
-import {Message} from "primereact/message";
+import React, { useState } from "react";
+import { Input } from "./Input";
+import { Card } from "primereact/card";
+import { Message } from "primereact/message";
 
 import Image from "next/image";
 
-import {InputText} from "primereact/inputtext";
+import { InputText } from "primereact/inputtext";
 import TextInput from "./UI/CommonUI/TextInput";
-import {Button} from "./Button";
+import { Button } from "./Button";
 import AppButton from "./UI/CommonUI/AppButton";
 import style from "../styles/commonStyle.module.css";
 import clsx from "clsx";
 
-import {useThemeIcons} from "./logic/useThemeIcon";
+import { useThemeIcons } from "./logic/useThemeIcon";
+import { Dropdown } from "primereact/dropdown";
+import { useSelectedAvatarLanguage } from "./logic/useSelectedAvatarLanguage";
 
 interface LoginPageProps {
   onLogin: (username: string, password: string) => Promise<boolean>;
@@ -31,7 +33,10 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   const [password, setPassword] = useState("");
   const [imageLoading, setImageLoading] = useState(true);
 
-  const {mailIcon, passwordIcon, RectangleLeftImage, RectangleRightImage} =
+  const { selectedLanguage, setSelectedLanguage, languageOptions } =
+    useSelectedAvatarLanguage();
+
+  const { mailIcon, passwordIcon, RectangleLeftImage, RectangleRightImage } =
     useThemeIcons();
   const handleSubmit = async () => {
     if (!username.trim() || !password.trim()) return;
@@ -42,7 +47,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   return (
     <div className="grid h-full">
       {/* Left Side */}
-      <div className="col-12 md:col-6 relative p-0" style={{height: "107vh"}}>
+      <div className="col-12 md:col-6 relative p-0" style={{ height: "107vh" }}>
         <Image
           src={process.env.NEXT_PUBLIC_LOGIN_LOGO!}
           alt="avatar"
@@ -113,12 +118,12 @@ export const LoginPage: React.FC<LoginPageProps> = ({
         <Image
           src={RectangleLeftImage}
           alt="rectangleLeft"
-          style={{position: "absolute", top: "15%", left: "50%"}}
+          style={{ position: "absolute", top: "15%", left: "50%" }}
         />
         <Image
           src={RectangleRightImage}
           alt="rectangleRIght"
-          style={{position: "absolute", top: "15%", left: "98.5%"}}
+          style={{ position: "absolute", top: "15%", left: "98.5%" }}
         />
         <div className="h-full flex flex-column justify-content-center">
           <div className="flex flex-column justify-content-center align-items-center relative">
@@ -153,7 +158,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             </div>
             <div
               className="flex flex-column gap-4 mt-5"
-              style={{width: "28rem"}}
+              style={{ width: "28rem" }}
             >
               {error && <div className={style.errorBox}>{error}</div>}
 
@@ -227,6 +232,15 @@ export const LoginPage: React.FC<LoginPageProps> = ({
                 >
                   &nbsp;{"Sign in"}
                 </p>
+              </span>
+              <span className="flex justify-content-center">
+                <Dropdown
+                  value={selectedLanguage}
+                  onChange={(e) => setSelectedLanguage(e.value)}
+                  options={languageOptions}
+                  style={{ width: "15rem" }}
+                  placeholder="Language"
+                />
               </span>
             </div>
           </div>

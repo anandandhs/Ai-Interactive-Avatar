@@ -1,6 +1,7 @@
 "use client";
 
 import NavBar from "@/components/NavBar";
+import { StreamingAvatarProvider } from "@/components/logic";
 import {useAuthContext} from "@/components/Prividers/AuthProvider";
 import {usePathname} from "next/navigation";
 import {useEffect, useState} from "react";
@@ -45,7 +46,9 @@ export default function LayoutContent({children}: {children: React.ReactNode}) {
               }
         }
       >
-        {children}
+        <StreamingAvatarProvider basePath={process.env.NEXT_PUBLIC_BASE_API_URL}>
+          {children}
+        </StreamingAvatarProvider>
       </div>
     </main>
   );

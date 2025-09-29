@@ -45,6 +45,7 @@ import {
 import { useTextChat } from "./logic/useTextChat";
 import FullScreen from "../public/Svg/full-screen.svg";
 import ExitScreen from "../public/Svg/exit-screen.svg";
+import { useSelectedAvatarLanguage } from "./logic/useSelectedAvatarLanguage";
 
 function InteractiveAvatar({ page }: { page: number }) {
   const { initAvatar, startAvatar, stopAvatar, sessionState, stream } =
@@ -59,12 +60,13 @@ function InteractiveAvatar({ page }: { page: number }) {
   const currentUserMessage = useRef<string>("");
   const userRequestedNavigation = useRef<string | null>(null);
   const isAvatarTalking = useRef<boolean>(false);
-  const [currentLanguage, setCurrentLanguage] = useState<string>("en");
   const [currentModel, setCurrentModel] = useState<ElevenLabsModel>(
     ElevenLabsModel.eleven_flash_v2_5
   );
   const [isInitialized, setIsInitialized] = useState<boolean>(false);
   const [fullScreen, setFullScreen] = useState<boolean>(false);
+
+  const { selectedLanguage, setSelectedLanguage } = useSelectedAvatarLanguage();
 
   const mediaStream = useRef<HTMLVideoElement>(null);
 
@@ -909,7 +911,7 @@ function InteractiveAvatar({ page }: { page: number }) {
 
     try {
       setCurrentModel(newModel);
-      setCurrentLanguage(newLanguage);
+      setSelectedLanguage(newLanguage);
 
       // Stop current avatar session gracefully
       await stopAvatarGracefully();
@@ -991,6 +993,8 @@ function InteractiveAvatar({ page }: { page: number }) {
     }
   };
 
+  const lastConfigRef = useRef<StartAvatarRequest | null>(null);
+
   useEffect(() => {
     if (auth?.user) {
       const currentAvatarId = getRequiredAvatar(
@@ -1010,7 +1014,6 @@ function InteractiveAvatar({ page }: { page: number }) {
           "🔧 Initializing john.keating@papyrrus.com with default settings"
         );
         setCurrentModel(ElevenLabsModel.eleven_flash_v2_5); // Default to flash model
-        setCurrentLanguage("en"); // Default to English
         setIsInitialized(true);
       }
 
@@ -1058,7 +1061,7 @@ function InteractiveAvatar({ page }: { page: number }) {
         },
         language:
           auth?.user?.username?.toLowerCase() === "john.keating@papyrrus.com"
-            ? currentLanguage // Use current language for john.keating
+            ? selectedLanguage // Use current language for john.keating
             : auth?.user?.username?.toLowerCase() ==
                   "jason.padilla@papyrrus.com" ||
                 auth?.user?.username?.toLowerCase() ==
@@ -1073,13 +1076,13 @@ function InteractiveAvatar({ page }: { page: number }) {
         knowledgeId:
           auth?.user?.username?.toLowerCase() != "john.keating@papyrrus.com"
             ? ""
-            : currentLanguage === "en" &&
+            : selectedLanguage === "en" &&
                 currentAvatarId === AVATARS[0].avatar_id
               ? "02ef215a87ca49f1bb05fb7833bf8afe"
-              : currentLanguage === "en" &&
+              : selectedLanguage === "en" &&
                   currentAvatarId === AVATARS[5].avatar_id
                 ? "10d1db10e297474386646f8611eea248"
-                : currentLanguage === "es" &&
+                : selectedLanguage === "es" &&
                     currentAvatarId === AVATARS[0].avatar_id
                   ? "826c4781815548e98a9059daffbf84e6"
                   : "d873e488c23e4475b3bddbaef90016c6",
@@ -1096,26 +1099,21 @@ function InteractiveAvatar({ page }: { page: number }) {
 
       console.log("Predefined Config:", predefinedConfig);
 
-      // Auto-start the avatar session for initial load (only when auth changes)
-      if (sessionState === StreamingAvatarSessionState.INACTIVE) {
+      // Only start session if inactive and config changed
+      if (
+        sessionState === StreamingAvatarSessionState.INACTIVE &&
+        JSON.stringify(predefinedConfig) !==
+          JSON.stringify(lastConfigRef.current)
+      ) {
+        lastConfigRef.current = predefinedConfig;
         startSessionV2(true, predefinedConfig);
       }
     }
-  }, [auth]);
-
-  // Debug useEffect to track language changes
-  useEffect(() => {
-    console.log("🌐 Current language state changed to:", currentLanguage);
-  }, [currentLanguage]);
-
-  // Debug useEffect to track model changes
-  useEffect(() => {
-    console.log("🔄 Current model state changed to:", currentModel);
-  }, [currentModel]);
+  }, [auth, sessionState, selectedLanguage, currentAvatarId, currentModel]);
 
   useEffect(() => {
     if (sessionState === StreamingAvatarSessionState.CONNECTED) {
-      if (currentLanguage === "es") {
+      if (selectedLanguage === "es") {
         sendMessage(`Hola, me llamo ${auth?.user?.displayName}`);
       } else {
         sendMessage(`Hi, my name is ${auth?.user?.displayName}`);
@@ -1452,8 +1450,6 @@ function InteractiveAvatar({ page }: { page: number }) {
           >
             {sessionState === StreamingAvatarSessionState.CONNECTED ? (
               <AvatarControls
-                currentLanguage={currentLanguage}
-                setCurrentLanguage={setCurrentLanguage}
                 currentModel={currentModel}
                 onModelChange={restartAvatarWithNewConfig}
               />
@@ -1579,7 +1575,6 @@ function InteractiveAvatar({ page }: { page: number }) {
             sessionState={sessionState}
             page={page}
             currentAvatarId={currentAvatarId}
-            currentLanguage={currentLanguage}
           />
         ))}
     </div>
@@ -1587,9 +1582,5 @@ function InteractiveAvatar({ page }: { page: number }) {
 }
 
 export default function InteractiveAvatarWrapper({ page }: { page: number }) {
-  return (
-    <StreamingAvatarProvider basePath={process.env.NEXT_PUBLIC_BASE_API_URL}>
-      <InteractiveAvatar page={page} />
-    </StreamingAvatarProvider>
-  );
+  return <InteractiveAvatar page={page} />;
 }

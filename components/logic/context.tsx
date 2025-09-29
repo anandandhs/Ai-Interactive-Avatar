@@ -61,6 +61,9 @@ type StreamingAvatarContextProps = {
 
   connectionQuality: ConnectionQuality;
   setConnectionQuality: (connectionQuality: ConnectionQuality) => void;
+
+  selectedLanguage: string;
+  setSelectedLanguage: (language: string) => void;
 };
 
 const StreamingAvatarContext = React.createContext<StreamingAvatarContextProps>(
@@ -89,6 +92,8 @@ const StreamingAvatarContext = React.createContext<StreamingAvatarContextProps>(
     setIsAvatarTalking: () => {},
     connectionQuality: ConnectionQuality.UNKNOWN,
     setConnectionQuality: () => {},
+    selectedLanguage: "en",
+    setSelectedLanguage: () => {},
   }
 );
 
@@ -219,6 +224,12 @@ const useStreamingAvatarConnectionQualityState = () => {
   return { connectionQuality, setConnectionQuality };
 };
 
+const useSelectedAvatarLanguage = () => {
+  const [selectedLanguage, setSelectedLanguage] = useState("en");
+
+  return { selectedLanguage, setSelectedLanguage };
+};
+
 export const StreamingAvatarProvider = ({
   children,
   basePath,
@@ -233,6 +244,7 @@ export const StreamingAvatarProvider = ({
   const listeningState = useStreamingAvatarListeningState();
   const talkingState = useStreamingAvatarTalkingState();
   const connectionQualityState = useStreamingAvatarConnectionQualityState();
+  const selectedAvatarLanguage = useSelectedAvatarLanguage();
 
   return (
     <StreamingAvatarContext.Provider
@@ -245,6 +257,7 @@ export const StreamingAvatarProvider = ({
         ...listeningState,
         ...talkingState,
         ...connectionQualityState,
+        ...selectedAvatarLanguage,
       }}
     >
       {children}

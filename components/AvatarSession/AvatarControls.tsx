@@ -1,61 +1,58 @@
-import React, {useState} from "react";
-import {SelectButton} from "primereact/selectbutton";
-import {ElevenLabsModel} from "@heygen/streaming-avatar";
+import React, { useState } from "react";
+import { SelectButton } from "primereact/selectbutton";
+import { ElevenLabsModel } from "@heygen/streaming-avatar";
 
-import {useVoiceChat} from "../logic/useVoiceChat";
-import {Button} from "../Button";
-import {useInterrupt} from "../logic/useInterrupt";
+import { useVoiceChat } from "../logic/useVoiceChat";
+import { Button } from "../Button";
+import { useInterrupt } from "../logic/useInterrupt";
 
-import {AudioInput} from "./AudioInput";
-import {TextInput} from "./TextInput";
+import { AudioInput } from "./AudioInput";
+import { TextInput } from "./TextInput";
 import style from "../../styles/commonStyle.module.css";
-import {Dropdown} from "primereact/dropdown";
-import {useAuthContext} from "../Prividers/AuthProvider";
+import { Dropdown } from "primereact/dropdown";
+import { useAuthContext } from "../Prividers/AuthProvider";
 import Image from "next/image";
+import { useSelectedAvatarLanguage } from "../logic/useSelectedAvatarLanguage";
 
 interface AvatarControlsProps {
-  currentLanguage: string;
-  setCurrentLanguage: (language: string) => void;
   currentModel?: ElevenLabsModel;
   onModelChange?: (model: ElevenLabsModel, language: string) => void;
 }
 
 export const AvatarControls: React.FC<AvatarControlsProps> = ({
-  currentLanguage,
-  setCurrentLanguage,
   currentModel,
   onModelChange,
 }: {
-  currentLanguage: string;
-  setCurrentLanguage: (language: string) => void;
   currentModel?: ElevenLabsModel;
   onModelChange?: (model: ElevenLabsModel, language: string) => void;
 }) => {
-  const {isVoiceChatLoading, isVoiceChatActive, startVoiceChat, stopVoiceChat} =
-    useVoiceChat();
-  const {interrupt} = useInterrupt();
+  const {
+    isVoiceChatLoading,
+    isVoiceChatActive,
+    startVoiceChat,
+    stopVoiceChat,
+  } = useVoiceChat();
+  const { interrupt } = useInterrupt();
 
   const auth = useAuthContext();
 
-  const chatOptions = [
-    {label: "Voice Chat", value: "voice"},
-    {label: "Text Chat", value: "text"},
-  ];
+  const { selectedLanguage, setSelectedLanguage, languageOptions } =
+    useSelectedAvatarLanguage();
 
-  const languageOptions = [
-    {label: "English", value: "en"},
-    {label: "Spanish", value: "es"},
+  const chatOptions = [
+    { label: "Voice Chat", value: "voice" },
+    { label: "Text Chat", value: "text" },
   ];
 
   const modelOptions = [
-    {label: "Flash V2.5", value: ElevenLabsModel.eleven_flash_v2_5},
-    {label: "Multilingual V2", value: ElevenLabsModel.eleven_multilingual_v2},
+    { label: "Flash V2.5", value: ElevenLabsModel.eleven_flash_v2_5 },
+    { label: "Multilingual V2", value: ElevenLabsModel.eleven_multilingual_v2 },
   ];
 
   const handleLanguageChange = (newLanguage: string) => {
     console.log("🌐 Language change requested:", newLanguage);
-    console.log("🌐 Current language before change:", currentLanguage);
-    setCurrentLanguage(newLanguage);
+    console.log("🌐 Current language before change:", selectedLanguage);
+    setSelectedLanguage(newLanguage);
     if (
       auth?.user?.username?.toLowerCase() === "john.keating@papyrrus.com" &&
       onModelChange &&
@@ -75,7 +72,7 @@ export const AvatarControls: React.FC<AvatarControlsProps> = ({
       onModelChange
     ) {
       console.log("✅ Triggering model change for john.keating@papyrrus.com");
-      onModelChange(newModel, currentLanguage);
+      onModelChange(newModel, selectedLanguage);
     }
   };
 
@@ -103,7 +100,7 @@ export const AvatarControls: React.FC<AvatarControlsProps> = ({
       {/* <TextInput /> */}
 
       {auth?.user?.username?.toLowerCase() === "john.keating@papyrrus.com" && (
-        <div className="flex" style={{gap: "1rem", marginRight: "2rem"}}>
+        <div className="flex" style={{ gap: "1rem", marginRight: "2rem" }}>
           {/* <Dropdown
             value={currentModel}
             onChange={(e) => handleModelChange(e.value)}
@@ -114,11 +111,11 @@ export const AvatarControls: React.FC<AvatarControlsProps> = ({
           /> */}
           <div className="flex align-items-center">
             <Dropdown
-              value={currentLanguage}
+              value={selectedLanguage}
               onChange={(e) => handleLanguageChange(e.value)}
               options={languageOptions}
               className={isVoiceChatLoading ? "opacity-50" : ""}
-              style={{width: "10rem"}}
+              style={{ width: "10rem" }}
               placeholder="Language"
             />
             <Button
