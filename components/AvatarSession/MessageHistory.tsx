@@ -1,13 +1,43 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useMemo } from "react";
 
 import { useMessageHistory, MessageSender } from "../logic";
 import { ReactTyped } from "react-typed";
 import { useAuthContext } from "../Prividers/AuthProvider";
+import { useSelectedAvatarLanguage } from "../logic/useSelectedAvatarLanguage";
 
 export const MessageHistory: React.FC = () => {
   const { messages } = useMessageHistory();
   const containerRef = useRef<HTMLDivElement>(null);
   const auth = useAuthContext();
+  const { selectedLanguage } = useSelectedAvatarLanguage();
+
+  // Calculate synchronized typeSpeed based on avatar speech rate
+  const synchronizedTypeSpeed = useMemo(() => {
+    // Avatar speech rates: 0.8 for English, 1.2 for Spanish
+    const avatarSpeechRate = selectedLanguage === "es" ? 1.2 : 0.8;
+
+    // ReactTyped typeSpeed is in milliseconds between characters, not CPM
+    // For real-time caption feel, we need much faster speeds
+    // Base speed: lower number = faster typing
+    const baseTypeSpeed = selectedLanguage === "es" ? 25 : 35; // milliseconds per character
+
+    // Adjust based on speech rate (inverse relationship for milliseconds)
+    const adjustedSpeed = Math.round(baseTypeSpeed / avatarSpeechRate);
+
+    // Ensure reasonable bounds (15-50ms per character)
+    const finalSpeed = Math.max(15, Math.min(50, adjustedSpeed));
+
+    // Debug log to help fine-tune the synchronization
+    console.log(
+      `🎯 Caption sync - Language: ${selectedLanguage}, Speech Rate: ${avatarSpeechRate}, Type Speed: ${finalSpeed}ms per char`
+    );
+
+    return finalSpeed;
+  }, [selectedLanguage]);
+
+  // Note: The synchronizedTypeSpeed is calculated to match the avatar's speech rate
+  // This creates a close caption feel where text appears at roughly the same pace
+  // as the avatar speaks, providing better synchronization between lip movements and text
 
   useEffect(() => {
     const container = containerRef.current;
@@ -159,8 +189,15 @@ export const MessageHistory: React.FC = () => {
                     ) : (
                       <ReactTyped
                         strings={[message.content]}
-                        typeSpeed={120}
+                        typeSpeed={synchronizedTypeSpeed}
                         smartBackspace={false}
+                        showCursor={false}
+                        fadeOut={false}
+                        fadeOutDelay={0}
+                        startDelay={0}
+                        backSpeed={0}
+                        loop={false}
+                        cursorChar=""
                       />
                     )}
                   </div>
