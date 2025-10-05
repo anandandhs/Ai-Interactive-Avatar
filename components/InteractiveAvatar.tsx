@@ -51,10 +51,10 @@ function InteractiveAvatar({ page }: { page: number }) {
   const { initAvatar, startAvatar, stopAvatar, sessionState, stream } =
     useStreamingAvatarSession();
   const { interrupt } = useInterrupt();
-  const { startVoiceChat } = useVoiceChat();
   const auth = useAuthContext();
   const router = useRouter();
   const toast = useRef<Toast>(null);
+  const { startVoiceChat } = useVoiceChat(toast);
   const { sendMessage } = useTextChat();
   const currentAvatarMessage = useRef<string>("");
   const currentUserMessage = useRef<string>("");
@@ -1452,6 +1452,7 @@ function InteractiveAvatar({ page }: { page: number }) {
               <AvatarControls
                 currentModel={currentModel}
                 onModelChange={restartAvatarWithNewConfig}
+                toastRef={toast}
               />
             ) : sessionState === StreamingAvatarSessionState.INACTIVE ? (
               <></>

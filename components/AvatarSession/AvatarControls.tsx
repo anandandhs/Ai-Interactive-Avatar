@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { SelectButton } from "primereact/selectbutton";
 import { ElevenLabsModel } from "@heygen/streaming-avatar";
+import { Toast } from "primereact/toast";
 
 import { useVoiceChat } from "../logic/useVoiceChat";
 import { Button } from "../Button";
@@ -17,21 +18,24 @@ import { useSelectedAvatarLanguage } from "../logic/useSelectedAvatarLanguage";
 interface AvatarControlsProps {
   currentModel?: ElevenLabsModel;
   onModelChange?: (model: ElevenLabsModel, language: string) => void;
+  toastRef?: React.RefObject<Toast>;
 }
 
 export const AvatarControls: React.FC<AvatarControlsProps> = ({
   currentModel,
   onModelChange,
+  toastRef,
 }: {
   currentModel?: ElevenLabsModel;
   onModelChange?: (model: ElevenLabsModel, language: string) => void;
+  toastRef?: React.RefObject<Toast>;
 }) => {
   const {
     isVoiceChatLoading,
     isVoiceChatActive,
     startVoiceChat,
     stopVoiceChat,
-  } = useVoiceChat();
+  } = useVoiceChat(toastRef);
   const { interrupt } = useInterrupt();
 
   const auth = useAuthContext();
@@ -125,7 +129,7 @@ export const AvatarControls: React.FC<AvatarControlsProps> = ({
             >
               Interrupt
             </Button>
-            {(isVoiceChatActive || isVoiceChatLoading) && <AudioInput />}
+            <AudioInput toastRef={toastRef} />
           </div>
         </div>
       )}
