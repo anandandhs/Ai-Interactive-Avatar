@@ -158,7 +158,10 @@ export const useStreamingAvatarSession = () => {
         handleEndMessage
       );
 
-      await avatarRef.current.createStartAvatar(config);
+      const startAvatarResponse =
+        await avatarRef.current.createStartAvatar(config);
+
+      localStorage.setItem("sessionId", startAvatarResponse.session_id);
 
       return avatarRef.current;
     },

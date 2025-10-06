@@ -86,6 +86,72 @@ export interface LoginResponse {
   };
 }
 
+export interface SessionResponse {
+  success: boolean;
+  message: string;
+  data: SessionData;
+  errors: null;
+}
+
+export interface SessionData {
+  id: number;
+  userId: number;
+  sessionId: string;
+  metaDataId: string;
+  preferredLanguage: string;
+  user: SessionUser;
+  createdAt: string;
+  updatedAt: string;
+  metadata: null;
+}
+
+export interface SessionUser {
+  userID: number;
+  adEmployeeID: null;
+  adObjectID: string;
+  adEmployeeType: string;
+  adUserType: string;
+  adManagerObjectId: string;
+  phone: string;
+  mobileNumber: null;
+  city: string;
+  state: string;
+  zipCode: string;
+  country: string;
+  profilePhotoUrl: string;
+  accountEnabled: boolean;
+  pushNotificationEnabled: boolean;
+  isManagerRole: boolean;
+  userCreatedDateTime: string;
+  lastUpdatedDateTime: string;
+  manager: null;
+  groups: null;
+  groupIds: null;
+  role: null;
+  tenantRoles: null;
+  preferenceMetadataId: string;
+  preference: null;
+  responsibilityDTOs: null;
+  selectedSign: string;
+  isGlobalAdmin: boolean;
+  isAdmin: boolean;
+  roleNames: null;
+  permissions: null;
+  displayName: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  adUserPrincipalName: string;
+  departmentName: string;
+  jobTitle: string;
+}
+
+export interface SessionRequest {
+  sessionId: string;
+  preferredLanguage: string;
+  metadata: string;
+}
+
 // User profile response interface
 export interface UserProfileResponse {
   displayName: string;
