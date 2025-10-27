@@ -1394,10 +1394,12 @@ function InteractiveAvatar({ page }: { page: number }) {
 
   useEffect(() => {
     if (stream && mediaStream.current) {
-      clsx;
-      mediaStream.current.srcObject = stream;
-      mediaStream.current.onloadedmetadata = () => {
-        mediaStream.current!.play();
+      const videoElement = mediaStream.current;
+      videoElement.srcObject = stream;
+      videoElement.onloadedmetadata = () => {
+        videoElement.play().catch((error) => {
+          console.error("Error playing video stream:", error);
+        });
       };
     }
   }, [mediaStream, stream]);
