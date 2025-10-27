@@ -56,6 +56,9 @@ export const API_ENDPOINTS = {
   USER: {
     PROFILE: "UserProfile/{Email}",
   },
+  AI: {
+    CREATE_INTENTION: "AI/CreateAiIntension",
+  },
   // Add more endpoints as needed
 } as const;
 
@@ -159,6 +162,25 @@ export interface UserProfileResponse {
   // Add other profile properties as needed
 }
 
+// AI Intention API interfaces
+export interface AiIntentionRequest {
+  avatarResponse: string;
+}
+
+export interface AiIntentionData {
+  id: number;
+  avatarResponse: string;
+  openAiIntension: string;
+  createdAt: string;
+}
+
+export interface AiIntentionResponse {
+  success: boolean;
+  message: string;
+  data: AiIntentionData;
+  errors: null | string[];
+}
+
 // Generic API response wrapper
 export interface ApiResponse<T = any> {
   success: boolean;
@@ -166,5 +188,18 @@ export interface ApiResponse<T = any> {
   message?: string;
   errors?: string[];
 }
+
+// API function to create AI intention
+export const createAiIntention = async (
+  avatarResponse: string
+): Promise<AiIntentionResponse> => {
+  const response = await apiClient.post<AiIntentionResponse>(
+    API_ENDPOINTS.AI.CREATE_INTENTION,
+    {
+      avatarResponse,
+    } as AiIntentionRequest
+  );
+  return response.data;
+};
 
 export default apiClient;

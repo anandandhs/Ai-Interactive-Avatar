@@ -46,6 +46,7 @@ import { useTextChat } from "./logic/useTextChat";
 import FullScreen from "../public/Svg/full-screen.svg";
 import ExitScreen from "../public/Svg/exit-screen.svg";
 import { useSelectedAvatarLanguage } from "./logic/useSelectedAvatarLanguage";
+import { createAiIntention } from "./logic/apiConfig";
 
 function InteractiveAvatar({ page }: { page: number }) {
   const { initAvatar, startAvatar, stopAvatar, sessionState, stream } =
@@ -84,185 +85,185 @@ function InteractiveAvatar({ page }: { page: number }) {
   const mediaStream = useRef<HTMLVideoElement>(null);
 
   // Function to check if user requested navigation
-  const checkUserNavigationRequest = (userMessage: string) => {
-    const lowerCaseMessage = userMessage.toLowerCase();
-    console.log("👤 User said:", lowerCaseMessage);
+  // const checkUserNavigationRequest = (userMessage: string) => {
+  //   const lowerCaseMessage = userMessage.toLowerCase();
+  //   console.log("👤 User said:", lowerCaseMessage);
 
-    // Check if user requested specific navigation based on knowledge base support pathways
-    const advisingKeywords = [
-      "major change",
-      "major change inquiries",
-      "course selection",
-      "course selection help",
-      "degree requirements",
-      "academic advising",
-      "advising",
-      "change major",
-      "change my major",
-      "program change",
-      "academic support",
-      // Job-related keywords for john.keating@papyrrus.com (English)
-      "i am looking for a job",
-      "looking for a job",
-      "job coach",
-      "job postings",
-      "job offers",
-      "job search",
-      "career advice",
-      "employment",
-      "work opportunities",
-      "resume help",
-      "interview preparation",
-      "I’m looking for a job",
-      "Can you help me find work",
-      "Show me job openings",
-      "Are there any vacancies right now",
-      "I need to find a job quickly",
-      "Do you have job listings",
-      "Find me jobs near me",
-      "Are there jobs available without experience",
-      "I want to change jobs",
-      "I’m searching for employment opportunities",
-      "Do you have part-time jobs",
-      "I’m looking for a full-time job",
-      "Any entry-level jobs available",
-      "Are there internships",
-      "Looking for student jobs",
-      "I need a job with no experience required",
-      "Are there jobs with growth opportunities",
-      "i need a job",
+  //   // Check if user requested specific navigation based on knowledge base support pathways
+  //   const advisingKeywords = [
+  //     "major change",
+  //     "major change inquiries",
+  //     "course selection",
+  //     "course selection help",
+  //     "degree requirements",
+  //     "academic advising",
+  //     "advising",
+  //     "change major",
+  //     "change my major",
+  //     "program change",
+  //     "academic support",
+  //     // Job-related keywords for john.keating@papyrrus.com (English)
+  //     "i am looking for a job",
+  //     "looking for a job",
+  //     "job coach",
+  //     "job postings",
+  //     "job offers",
+  //     "job search",
+  //     "career advice",
+  //     "employment",
+  //     "work opportunities",
+  //     "resume help",
+  //     "interview preparation",
+  //     "I’m looking for a job",
+  //     "Can you help me find work",
+  //     "Show me job openings",
+  //     "Are there any vacancies right now",
+  //     "I need to find a job quickly",
+  //     "Do you have job listings",
+  //     "Find me jobs near me",
+  //     "Are there jobs available without experience",
+  //     "I want to change jobs",
+  //     "I’m searching for employment opportunities",
+  //     "Do you have part-time jobs",
+  //     "I’m looking for a full-time job",
+  //     "Any entry-level jobs available",
+  //     "Are there internships",
+  //     "Looking for student jobs",
+  //     "I need a job with no experience required",
+  //     "Are there jobs with growth opportunities",
+  //     "i need a job",
 
-      // Spanish
-      "cambio de carrera",
-      "cambio de especialización",
-      "selección de cursos",
-      "ayuda con cursos",
-      "requisitos de grado",
-      "asesoría académica",
-      "consejería",
-      "cambiar de carrera",
-      "cambiar mi especialización",
-      "cambio de programa",
-      "apoyo académico",
-      "orientación académica",
-      "carrera",
-      "profesión",
-      "carrera técnica",
-      "escuela técnica",
-      "politécnico",
-      "escuela técnica",
-      "politécnico",
-      "desarrollo profesional",
-      "desarrollo de carrera",
-      "asesoramiento académico",
-      "orientación académica",
-      "orientación profesional",
-      "orientación vocacional",
-      "asesor académico",
-      "creador de CV",
-      "creador de hoja de vida",
-      "creador de curriculum vitae",
-      "currículum vitae",
-      "CV",
-      "hoja de vida",
-      "recepcionista",
-      // Job-related keywords for john.keating@papyrrus.com (Spanish)
-      "estoy buscando trabajo",
-      "buscando trabajo",
-      "asesor laboral",
-      "ofertas de empleo",
-      "ofertas de trabajo",
-      "búsqueda de empleo",
-      "consejo profesional",
-      "oportunidades laborales",
-      "ayuda con currículum",
-      "preparación para entrevistas",
+  //     // Spanish
+  //     "cambio de carrera",
+  //     "cambio de especialización",
+  //     "selección de cursos",
+  //     "ayuda con cursos",
+  //     "requisitos de grado",
+  //     "asesoría académica",
+  //     "consejería",
+  //     "cambiar de carrera",
+  //     "cambiar mi especialización",
+  //     "cambio de programa",
+  //     "apoyo académico",
+  //     "orientación académica",
+  //     "carrera",
+  //     "profesión",
+  //     "carrera técnica",
+  //     "escuela técnica",
+  //     "politécnico",
+  //     "escuela técnica",
+  //     "politécnico",
+  //     "desarrollo profesional",
+  //     "desarrollo de carrera",
+  //     "asesoramiento académico",
+  //     "orientación académica",
+  //     "orientación profesional",
+  //     "orientación vocacional",
+  //     "asesor académico",
+  //     "creador de CV",
+  //     "creador de hoja de vida",
+  //     "creador de curriculum vitae",
+  //     "currículum vitae",
+  //     "CV",
+  //     "hoja de vida",
+  //     "recepcionista",
+  //     // Job-related keywords for john.keating@papyrrus.com (Spanish)
+  //     "estoy buscando trabajo",
+  //     "buscando trabajo",
+  //     "asesor laboral",
+  //     "ofertas de empleo",
+  //     "ofertas de trabajo",
+  //     "búsqueda de empleo",
+  //     "consejo profesional",
+  //     "oportunidades laborales",
+  //     "ayuda con currículum",
+  //     "preparación para entrevistas",
 
-      "Estoy buscando trabajo",
-      "Busco trabajo",
-      "Estoy buscando empleo",
-      "Busco empleo",
-      "¿Me puedes ayudar a encontrar empleo?",
-      "Muéstrame ofertas de trabajo",
-      "Muestra ofertas de trabajo",
-      "¿Dónde hay vacantes disponibles?",
-      "Quiero conseguir un trabajo lo antes posible",
-      "¿Tienen listados de empleos?",
-      "Enséñame trabajos cerca de mí",
-      "¿Hay empleos disponibles sin experiencia?",
-      "Estoy buscando un nuevo puesto de trabajo",
-      "Necesito encontrar empleo",
-      "¿Hay empleos de medio tiempo?",
-      "Busco un trabajo de tiempo completo",
-      "Necesito un trabajo para principiantes",
-      "¿Tienen pasantías o prácticas?",
-      "Estoy buscando un empleo para estudiantes",
-      "¿Hay trabajos sin requisitos de experiencia?",
-      "Quiero un puesto con posibilidades de crecer",
-    ];
+  //     "Estoy buscando trabajo",
+  //     "Busco trabajo",
+  //     "Estoy buscando empleo",
+  //     "Busco empleo",
+  //     "¿Me puedes ayudar a encontrar empleo?",
+  //     "Muéstrame ofertas de trabajo",
+  //     "Muestra ofertas de trabajo",
+  //     "¿Dónde hay vacantes disponibles?",
+  //     "Quiero conseguir un trabajo lo antes posible",
+  //     "¿Tienen listados de empleos?",
+  //     "Enséñame trabajos cerca de mí",
+  //     "¿Hay empleos disponibles sin experiencia?",
+  //     "Estoy buscando un nuevo puesto de trabajo",
+  //     "Necesito encontrar empleo",
+  //     "¿Hay empleos de medio tiempo?",
+  //     "Busco un trabajo de tiempo completo",
+  //     "Necesito un trabajo para principiantes",
+  //     "¿Tienen pasantías o prácticas?",
+  //     "Estoy buscando un empleo para estudiantes",
+  //     "¿Hay trabajos sin requisitos de experiencia?",
+  //     "Quiero un puesto con posibilidades de crecer",
+  //   ];
 
-    const admissionKeywords = [
-      "application",
-      "application questions",
-      "enrollment",
-      "enrollment process",
-      "deadline",
-      "deadline inquiries",
-      "admissions",
-      "admission guidance",
-      "apply",
-      "registration",
-      "hvac",
-      "hvac training",
-      "hvac certification",
-      "hvac technician",
-      "hvac program",
-      "hvac classes",
-      "hvac training options",
-      "heating ventilation air conditioning",
-      // Spanish
-      "solicitud",
-      "preguntas sobre aplicación",
-      "inscripción",
-      "proceso de inscripción",
-      "fecha límite",
-      "consulta de plazos",
-      "admisiones",
-      "orientación para admisión",
-      "aplicar",
-      "registro",
-      "climatización",
-      "formación en climatización",
-      "certificación hvac",
-      "técnico en climatización",
-      "programa de hvac",
-      "clases de climatización",
-      "opciones de formación en hvac",
-      "calefacción ventilación aire acondicionado",
-      "admisión",
-      "aire acondicionado",
-      "refrigeración",
-      "técnico",
-    ];
+  //   const admissionKeywords = [
+  //     "application",
+  //     "application questions",
+  //     "enrollment",
+  //     "enrollment process",
+  //     "deadline",
+  //     "deadline inquiries",
+  //     "admissions",
+  //     "admission guidance",
+  //     "apply",
+  //     "registration",
+  //     "hvac",
+  //     "hvac training",
+  //     "hvac certification",
+  //     "hvac technician",
+  //     "hvac program",
+  //     "hvac classes",
+  //     "hvac training options",
+  //     "heating ventilation air conditioning",
+  //     // Spanish
+  //     "solicitud",
+  //     "preguntas sobre aplicación",
+  //     "inscripción",
+  //     "proceso de inscripción",
+  //     "fecha límite",
+  //     "consulta de plazos",
+  //     "admisiones",
+  //     "orientación para admisión",
+  //     "aplicar",
+  //     "registro",
+  //     "climatización",
+  //     "formación en climatización",
+  //     "certificación hvac",
+  //     "técnico en climatización",
+  //     "programa de hvac",
+  //     "clases de climatización",
+  //     "opciones de formación en hvac",
+  //     "calefacción ventilación aire acondicionado",
+  //     "admisión",
+  //     "aire acondicionado",
+  //     "refrigeración",
+  //     "técnico",
+  //   ];
 
-    if (advisingKeywords.some((kw) => lowerCaseMessage.includes(kw))) {
-      userRequestedNavigation.current = "resume-builder";
-      console.log("🎯 User requested: Resume Builder & Career Advising");
-      console.log(
-        "🎯 Matching keywords:",
-        advisingKeywords.filter((kw) => lowerCaseMessage.includes(kw))
-      );
-    } else if (admissionKeywords.some((kw) => lowerCaseMessage.includes(kw))) {
-      userRequestedNavigation.current = "course-admission";
-      console.log("🎯 User requested: Admission Guidance");
-    } else if (lowerCaseMessage.includes("dashboard")) {
-      userRequestedNavigation.current = "dashboard";
-      console.log("🎯 User requested: Dashboard");
-    } else {
-      userRequestedNavigation.current = null;
-      console.log("❌ No navigation request detected in user message");
-    }
-  };
+  //   if (advisingKeywords.some((kw) => lowerCaseMessage.includes(kw))) {
+  //     userRequestedNavigation.current = "resume-builder";
+  //     console.log("🎯 User requested: Resume Builder & Career Advising");
+  //     console.log(
+  //       "🎯 Matching keywords:",
+  //       advisingKeywords.filter((kw) => lowerCaseMessage.includes(kw))
+  //     );
+  //   } else if (admissionKeywords.some((kw) => lowerCaseMessage.includes(kw))) {
+  //     userRequestedNavigation.current = "course-admission";
+  //     console.log("🎯 User requested: Admission Guidance");
+  //   } else if (lowerCaseMessage.includes("dashboard")) {
+  //     userRequestedNavigation.current = "dashboard";
+  //     console.log("🎯 User requested: Dashboard");
+  //   } else {
+  //     userRequestedNavigation.current = null;
+  //     console.log("❌ No navigation request detected in user message");
+  //   }
+  // };
 
   // Add a flag to prevent duplicate navigation
   const navigationInProgress = useRef(false);
@@ -271,193 +272,193 @@ function InteractiveAvatar({ page }: { page: number }) {
   const isAvatarIntroduction = useRef(true);
 
   // Function to check if avatar message contains navigation keywords (fallback detection)
-  const checkAvatarNavigationRequest = (avatarMessage: string) => {
-    const lowerCaseMessage = avatarMessage.toLowerCase();
-    console.log(
-      "🤖 Avatar said (checking for navigation keywords):",
-      lowerCaseMessage
-    );
+  // const checkAvatarNavigationRequest = (avatarMessage: string) => {
+  //   const lowerCaseMessage = avatarMessage.toLowerCase();
+  //   console.log(
+  //     "🤖 Avatar said (checking for navigation keywords):",
+  //     lowerCaseMessage
+  //   );
 
-    // Check if this is the avatar's introduction message
-    if (isAvatarIntroduction.current) {
-      console.log(
-        "👋 This is avatar's introduction message, skipping navigation detection to prevent auto-navigation on first message"
-      );
-      isAvatarIntroduction.current = false; // Mark introduction as complete
-      return;
-    }
+  //   // Check if this is the avatar's introduction message
+  //   if (isAvatarIntroduction.current) {
+  //     console.log(
+  //       "👋 This is avatar's introduction message, skipping navigation detection to prevent auto-navigation on first message"
+  //     );
+  //     isAvatarIntroduction.current = false; // Mark introduction as complete
+  //     return;
+  //   }
 
-    // Check if navigation is already in progress
-    if (navigationInProgress.current) {
-      console.log(
-        "⏭️ Navigation already in progress, skipping avatar keyword detection"
-      );
-      return;
-    }
+  //   // Check if navigation is already in progress
+  //   if (navigationInProgress.current) {
+  //     console.log(
+  //       "⏭️ Navigation already in progress, skipping avatar keyword detection"
+  //     );
+  //     return;
+  //   }
 
-    // Use the same keywords as user navigation detection
-    const advisingKeywords = [
-      "major change",
-      "major change inquiries",
-      "course selection",
-      "course selection help",
-      "degree requirements",
-      "academic advising",
-      "advising",
-      "change major",
-      "change my major",
-      "program change",
-      "academic support",
-      // Spanish
-      "cambio de carrera",
-      "cambio de especialización",
-      "selección de cursos",
-      "ayuda con cursos",
-      "requisitos de grado",
-      "asesoría académica",
-      "consejería",
-      "cambiar de carrera",
-      "cambiar mi especialización",
-      "cambio de programa",
-      "apoyo académico",
-      "orientación académica",
-      "carrera",
-      "profesión",
-      "carrera técnica",
-      "escuela técnica",
-      "politécnico",
-      "desarrollo profesional",
-    ];
+  //   // Use the same keywords as user navigation detection
+  //   const advisingKeywords = [
+  //     "major change",
+  //     "major change inquiries",
+  //     "course selection",
+  //     "course selection help",
+  //     "degree requirements",
+  //     "academic advising",
+  //     "advising",
+  //     "change major",
+  //     "change my major",
+  //     "program change",
+  //     "academic support",
+  //     // Spanish
+  //     "cambio de carrera",
+  //     "cambio de especialización",
+  //     "selección de cursos",
+  //     "ayuda con cursos",
+  //     "requisitos de grado",
+  //     "asesoría académica",
+  //     "consejería",
+  //     "cambiar de carrera",
+  //     "cambiar mi especialización",
+  //     "cambio de programa",
+  //     "apoyo académico",
+  //     "orientación académica",
+  //     "carrera",
+  //     "profesión",
+  //     "carrera técnica",
+  //     "escuela técnica",
+  //     "politécnico",
+  //     "desarrollo profesional",
+  //   ];
 
-    const admissionKeywords = [
-      "application",
-      "application questions",
-      "enrollment",
-      "enrollment process",
-      "deadline",
-      "deadline inquiries",
-      "admissions",
-      "admission guidance",
-      "apply",
-      "registration",
-      "hvac",
-      "hvac training",
-      "hvac certification",
-      "hvac technician",
-      "hvac program",
-      "hvac classes",
-      "hvac training options",
-      "heating ventilation air conditioning",
-      // Spanish
-      "solicitud",
-      "preguntas sobre aplicación",
-      "inscripción",
-      "proceso de inscripción",
-      "fecha límite",
-      "consulta de plazos",
-      "admisiones",
-      "orientación para admisión",
-      "aplicar",
-      "registro",
-      "climatización",
-      "formación en climatización",
-      "certificación hvac",
-      "técnico en climatización",
-      "programa de hvac",
-      "clases de climatización",
-      "opciones de formación en hvac",
-      "calefacción ventilación aire acondicionado",
-      "admisión",
-      "aire acondicionado",
-      "refrigeración",
-      "técnico",
-    ];
+  //   const admissionKeywords = [
+  //     "application",
+  //     "application questions",
+  //     "enrollment",
+  //     "enrollment process",
+  //     "deadline",
+  //     "deadline inquiries",
+  //     "admissions",
+  //     "admission guidance",
+  //     "apply",
+  //     "registration",
+  //     "hvac",
+  //     "hvac training",
+  //     "hvac certification",
+  //     "hvac technician",
+  //     "hvac program",
+  //     "hvac classes",
+  //     "hvac training options",
+  //     "heating ventilation air conditioning",
+  //     // Spanish
+  //     "solicitud",
+  //     "preguntas sobre aplicación",
+  //     "inscripción",
+  //     "proceso de inscripción",
+  //     "fecha límite",
+  //     "consulta de plazos",
+  //     "admisiones",
+  //     "orientación para admisión",
+  //     "aplicar",
+  //     "registro",
+  //     "climatización",
+  //     "formación en climatización",
+  //     "certificación hvac",
+  //     "técnico en climatización",
+  //     "programa de hvac",
+  //     "clases de climatización",
+  //     "opciones de formación en hvac",
+  //     "calefacción ventilación aire acondicionado",
+  //     "admisión",
+  //     "aire acondicionado",
+  //     "refrigeración",
+  //     "técnico",
+  //   ];
 
-    if (advisingKeywords.some((kw) => lowerCaseMessage.includes(kw))) {
-      userRequestedNavigation.current = "resume-builder";
-      console.log(
-        "🎯 Avatar mentioned: Resume Builder & Career Advising - setting navigation request"
-      );
+  //   if (advisingKeywords.some((kw) => lowerCaseMessage.includes(kw))) {
+  //     userRequestedNavigation.current = "resume-builder";
+  //     console.log(
+  //       "🎯 Avatar mentioned: Resume Builder & Career Advising - setting navigation request"
+  //     );
 
-      // Since avatar already mentioned the service, we can proceed with navigation
-      // after avatar stops talking
-      const serviceConfig = {
-        route: "/resume-builder",
-        name: "Resume Builder & Career Advising",
-        keywords: ["resume", "career", "advising", "academic planning"],
-      };
+  //     // Since avatar already mentioned the service, we can proceed with navigation
+  //     // after avatar stops talking
+  //     const serviceConfig = {
+  //       route: "/resume-builder",
+  //       name: "Resume Builder & Career Advising",
+  //       keywords: ["resume", "career", "advising", "academic planning"],
+  //     };
 
-      const checkTalkingStatus = () => {
-        if (isAvatarTalking.current) {
-          console.log("🗣️ Avatar still speaking...");
-          setTimeout(checkTalkingStatus, 300);
-        } else {
-          console.log(
-            "🚀 Avatar finished speaking - navigating based on avatar keywords!"
-          );
-          executeNavigation(serviceConfig);
-        }
-      };
+  //     const checkTalkingStatus = () => {
+  //       if (isAvatarTalking.current) {
+  //         console.log("🗣️ Avatar still speaking...");
+  //         setTimeout(checkTalkingStatus, 300);
+  //       } else {
+  //         console.log(
+  //           "🚀 Avatar finished speaking - navigating based on avatar keywords!"
+  //         );
+  //         executeNavigation(serviceConfig);
+  //       }
+  //     };
 
-      checkTalkingStatus();
-    } else if (admissionKeywords.some((kw) => lowerCaseMessage.includes(kw))) {
-      userRequestedNavigation.current = "course-admission";
-      console.log(
-        "🎯 Avatar mentioned: Admission Guidance - setting navigation request"
-      );
+  //     checkTalkingStatus();
+  //   } else if (admissionKeywords.some((kw) => lowerCaseMessage.includes(kw))) {
+  //     userRequestedNavigation.current = "course-admission";
+  //     console.log(
+  //       "🎯 Avatar mentioned: Admission Guidance - setting navigation request"
+  //     );
 
-      // Since avatar already mentioned the service, we can proceed with navigation
-      // after avatar stops talking
-      const serviceConfig = {
-        route: "/course-admission",
-        name: "Admission Guidance",
-        keywords: ["admission", "enrollment", "application", "hvac"],
-      };
+  //     // Since avatar already mentioned the service, we can proceed with navigation
+  //     // after avatar stops talking
+  //     const serviceConfig = {
+  //       route: "/course-admission",
+  //       name: "Admission Guidance",
+  //       keywords: ["admission", "enrollment", "application", "hvac"],
+  //     };
 
-      const checkTalkingStatus = () => {
-        if (isAvatarTalking.current) {
-          console.log("🗣️ Avatar still speaking...");
-          setTimeout(checkTalkingStatus, 300);
-        } else {
-          console.log(
-            "🚀 Avatar finished speaking - navigating based on avatar keywords!"
-          );
-          executeNavigation(serviceConfig);
-        }
-      };
+  //     const checkTalkingStatus = () => {
+  //       if (isAvatarTalking.current) {
+  //         console.log("🗣️ Avatar still speaking...");
+  //         setTimeout(checkTalkingStatus, 300);
+  //       } else {
+  //         console.log(
+  //           "🚀 Avatar finished speaking - navigating based on avatar keywords!"
+  //         );
+  //         executeNavigation(serviceConfig);
+  //       }
+  //     };
 
-      checkTalkingStatus();
-    } else if (lowerCaseMessage.includes("dashboard")) {
-      userRequestedNavigation.current = "dashboard";
-      console.log(
-        "🎯 Avatar mentioned: Dashboard - setting navigation request"
-      );
+  //     checkTalkingStatus();
+  //   } else if (lowerCaseMessage.includes("dashboard")) {
+  //     userRequestedNavigation.current = "dashboard";
+  //     console.log(
+  //       "🎯 Avatar mentioned: Dashboard - setting navigation request"
+  //     );
 
-      // Since avatar already mentioned the service, we can proceed with navigation
-      // after avatar stops talking
-      const serviceConfig = {
-        route: "/dashboard",
-        name: "Dashboard",
-        keywords: ["dashboard", "home", "main menu"],
-      };
+  //     // Since avatar already mentioned the service, we can proceed with navigation
+  //     // after avatar stops talking
+  //     const serviceConfig = {
+  //       route: "/dashboard",
+  //       name: "Dashboard",
+  //       keywords: ["dashboard", "home", "main menu"],
+  //     };
 
-      const checkTalkingStatus = () => {
-        if (isAvatarTalking.current) {
-          console.log("🗣️ Avatar still speaking...");
-          setTimeout(checkTalkingStatus, 300);
-        } else {
-          console.log(
-            "🚀 Avatar finished speaking - navigating based on avatar keywords!"
-          );
-          executeNavigation(serviceConfig);
-        }
-      };
+  //     const checkTalkingStatus = () => {
+  //       if (isAvatarTalking.current) {
+  //         console.log("🗣️ Avatar still speaking...");
+  //         setTimeout(checkTalkingStatus, 300);
+  //       } else {
+  //         console.log(
+  //           "🚀 Avatar finished speaking - navigating based on avatar keywords!"
+  //         );
+  //         executeNavigation(serviceConfig);
+  //       }
+  //     };
 
-      checkTalkingStatus();
-    } else {
-      console.log("❌ No navigation keywords detected in avatar message");
-    }
-  };
+  //     checkTalkingStatus();
+  //   } else {
+  //     console.log("❌ No navigation keywords detected in avatar message");
+  //   }
+  // };
 
   // Function to check if avatar confirmed navigation and execute it
   // Graceful avatar session cleanup function
@@ -637,234 +638,234 @@ function InteractiveAvatar({ page }: { page: number }) {
   //   }
   // };
 
-  const checkAvatarNavigationConfirmation = (avatarMessage: string) => {
-    const lowerCaseMessage = avatarMessage.toLowerCase();
-    console.log("🤖 Avatar said:", avatarMessage); // Keep original for debugging
-    console.log("🤖 Avatar said (lowercase):", lowerCaseMessage);
-    console.log(
-      "🤖 Current userRequestedNavigation:",
-      userRequestedNavigation.current
-    );
-    console.log("🤖 Navigation in progress:", navigationInProgress.current);
+  // const checkAvatarNavigationConfirmation = (avatarMessage: string) => {
+  //   const lowerCaseMessage = avatarMessage.toLowerCase();
+  //   console.log("🤖 Avatar said:", avatarMessage); // Keep original for debugging
+  //   console.log("🤖 Avatar said (lowercase):", lowerCaseMessage);
+  //   console.log(
+  //     "🤖 Current userRequestedNavigation:",
+  //     userRequestedNavigation.current
+  //   );
+  //   console.log("🤖 Navigation in progress:", navigationInProgress.current);
 
-    // Only proceed if user previously requested navigation and no navigation is in progress
-    if (!userRequestedNavigation.current || navigationInProgress.current) {
-      console.log(
-        "❌ No pending navigation request or navigation already in progress"
-      );
-      return;
-    }
+  //   // Only proceed if user previously requested navigation and no navigation is in progress
+  //   if (!userRequestedNavigation.current || navigationInProgress.current) {
+  //     console.log(
+  //       "❌ No pending navigation request or navigation already in progress"
+  //     );
+  //     return;
+  //   }
 
-    // Unified confirmation phrases
-    const confirmationPhrases = [
-      "taking you to",
-      "navigating to",
-      "redirecting to",
-      "going to",
-      "heading to",
-      "excellent choice",
-      "great choice",
-      "perfect",
-      "sounds good",
-      "let's get started",
-      "let's begin",
-      "i'll help you with",
-      "let me guide you",
-      "connecting you with",
-      "routing you to",
-      "let me connect you with",
-      "i will connect you with",
-      "i will connect you",
-      "i'll connect you with",
-      "connecting you with",
-      "connect you with",
-      "right this way",
-      "follow me",
-      "i'll take you to",
-      "here we go",
-      "transferring you",
-      "taking you over to",
-      // Spanish phrases
-      "llevándote a",
-      "dirigiéndote a",
-      "redirigiéndote a",
-      "yendo a",
-      "encaminándote a",
-      "excelente elección",
-      "gran elección",
-      "perfecto",
-      "suena bien",
-      "empecemos",
-      "comencemos",
-      "te ayudaré con",
-      "déjame guiarte",
-      "conectándote con",
-      "encaminándote a",
-      "déjame conectarte con",
-      "por aquí",
-      "sígueme",
-      "te llevaré a",
-      "aquí vamos",
-      "transfiriéndote",
-      "llevándote hacia",
-      "vamos a",
-      "perfecto, vamos a",
-      "muy bien, vamos a",
-      "estupendo, vamos a",
-      "de acuerdo, vamos a",
-      "ahora te llevo a",
-      "permíteme llevarte a",
-      "te redirijo a",
-      "te guiaré a",
-      "te acompañaré a",
-    ];
+  //   // Unified confirmation phrases
+  //   const confirmationPhrases = [
+  //     "taking you to",
+  //     "navigating to",
+  //     "redirecting to",
+  //     "going to",
+  //     "heading to",
+  //     "excellent choice",
+  //     "great choice",
+  //     "perfect",
+  //     "sounds good",
+  //     "let's get started",
+  //     "let's begin",
+  //     "i'll help you with",
+  //     "let me guide you",
+  //     "connecting you with",
+  //     "routing you to",
+  //     "let me connect you with",
+  //     "i will connect you with",
+  //     "i will connect you",
+  //     "i'll connect you with",
+  //     "connecting you with",
+  //     "connect you with",
+  //     "right this way",
+  //     "follow me",
+  //     "i'll take you to",
+  //     "here we go",
+  //     "transferring you",
+  //     "taking you over to",
+  //     // Spanish phrases
+  //     "llevándote a",
+  //     "dirigiéndote a",
+  //     "redirigiéndote a",
+  //     "yendo a",
+  //     "encaminándote a",
+  //     "excelente elección",
+  //     "gran elección",
+  //     "perfecto",
+  //     "suena bien",
+  //     "empecemos",
+  //     "comencemos",
+  //     "te ayudaré con",
+  //     "déjame guiarte",
+  //     "conectándote con",
+  //     "encaminándote a",
+  //     "déjame conectarte con",
+  //     "por aquí",
+  //     "sígueme",
+  //     "te llevaré a",
+  //     "aquí vamos",
+  //     "transfiriéndote",
+  //     "llevándote hacia",
+  //     "vamos a",
+  //     "perfecto, vamos a",
+  //     "muy bien, vamos a",
+  //     "estupendo, vamos a",
+  //     "de acuerdo, vamos a",
+  //     "ahora te llevo a",
+  //     "permíteme llevarte a",
+  //     "te redirijo a",
+  //     "te guiaré a",
+  //     "te acompañaré a",
+  //   ];
 
-    // Service mapping to actual routes
-    const serviceMap: Record<
-      string,
-      { route: string; name: string; keywords: string[] }
-    > = {
-      "resume-builder": {
-        route: "/resume-builder",
-        name: "Advising",
-        keywords: [
-          "advising",
-          "academic advising",
-          "academic planning",
-          "career",
-          "career development",
-          "career advising",
-          "job coach",
-          "job coaching",
-          "employment",
-          "job search",
-          "resume",
-          "cv",
-          "curriculum vitae",
-          // Spanish equivalents
-          "asesoramiento",
-          "asesoría académica",
-          "planificación académica",
-          "carrera",
-          "desarrollo profesional",
-          "orientación profesional",
-          "consejería",
-          "asesoría de carrera",
-          "plan de estudios",
-          "orientación vocacional",
-          "orientación académica",
-          "asesoría educativa",
-          "asesor laboral",
-          "entrenador laboral",
-          "empleo",
-          "búsqueda de empleo",
-          "currículum",
-          "hoja de vida",
-        ],
-      },
-      "course-admission": {
-        route: "/course-admission",
-        name: "Admission",
-        keywords: [
-          "admission",
-          "course",
-          "academic planning",
-          "admission guidance",
-          "enrollment",
-          "HVAC training",
-          "HVAC",
-          // Spanish equivalents
-          "admisión",
-          "inscripción",
-          "matrícula", // Alternate for enrollment
-          "curso",
-          "asignatura", // Alternate for course (more academic)
-          "planificación académica",
-          "orientación para admisión",
-          "guía de admisión",
-          "formación en HVAC",
-          "climatización", // Common term for HVAC in Spanish
-          "calefacción y aire acondicionado", // Full translation
-          "curso de climatización",
-          "certificación HVAC",
-          "técnico en climatización",
-          "programa HVAC",
-          "capacitación en HVAC",
-          "sistema de climatización",
-        ],
-      },
-      dashboard: {
-        route: "/dashboard",
-        name: "Dashboard",
-        keywords: ["dashboard", "home", "main menu"],
-      },
-    };
+  //   // Service mapping to actual routes
+  //   const serviceMap: Record<
+  //     string,
+  //     { route: string; name: string; keywords: string[] }
+  //   > = {
+  //     "resume-builder": {
+  //       route: "/resume-builder",
+  //       name: "Advising",
+  //       keywords: [
+  //         "advising",
+  //         "academic advising",
+  //         "academic planning",
+  //         "career",
+  //         "career development",
+  //         "career advising",
+  //         "job coach",
+  //         "job coaching",
+  //         "employment",
+  //         "job search",
+  //         "resume",
+  //         "cv",
+  //         "curriculum vitae",
+  //         // Spanish equivalents
+  //         "asesoramiento",
+  //         "asesoría académica",
+  //         "planificación académica",
+  //         "carrera",
+  //         "desarrollo profesional",
+  //         "orientación profesional",
+  //         "consejería",
+  //         "asesoría de carrera",
+  //         "plan de estudios",
+  //         "orientación vocacional",
+  //         "orientación académica",
+  //         "asesoría educativa",
+  //         "asesor laboral",
+  //         "entrenador laboral",
+  //         "empleo",
+  //         "búsqueda de empleo",
+  //         "currículum",
+  //         "hoja de vida",
+  //       ],
+  //     },
+  //     "course-admission": {
+  //       route: "/course-admission",
+  //       name: "Admission",
+  //       keywords: [
+  //         "admission",
+  //         "course",
+  //         "academic planning",
+  //         "admission guidance",
+  //         "enrollment",
+  //         "HVAC training",
+  //         "HVAC",
+  //         // Spanish equivalents
+  //         "admisión",
+  //         "inscripción",
+  //         "matrícula", // Alternate for enrollment
+  //         "curso",
+  //         "asignatura", // Alternate for course (more academic)
+  //         "planificación académica",
+  //         "orientación para admisión",
+  //         "guía de admisión",
+  //         "formación en HVAC",
+  //         "climatización", // Common term for HVAC in Spanish
+  //         "calefacción y aire acondicionado", // Full translation
+  //         "curso de climatización",
+  //         "certificación HVAC",
+  //         "técnico en climatización",
+  //         "programa HVAC",
+  //         "capacitación en HVAC",
+  //         "sistema de climatización",
+  //       ],
+  //     },
+  //     dashboard: {
+  //       route: "/dashboard",
+  //       name: "Dashboard",
+  //       keywords: ["dashboard", "home", "main menu"],
+  //     },
+  //   };
 
-    const requestedService = userRequestedNavigation.current;
-    const serviceConfig = serviceMap[requestedService];
+  //   const requestedService = userRequestedNavigation.current;
+  //   const serviceConfig = serviceMap[requestedService];
 
-    if (!serviceConfig) {
-      console.log("⚠️ Unknown service requested:", requestedService);
-      userRequestedNavigation.current = null;
-      return;
-    }
+  //   if (!serviceConfig) {
+  //     console.log("⚠️ Unknown service requested:", requestedService);
+  //     userRequestedNavigation.current = null;
+  //     return;
+  //   }
 
-    // Check for confirmation
-    const hasConfirmation = confirmationPhrases.some((phrase) =>
-      lowerCaseMessage.includes(phrase)
-    );
+  //   // Check for confirmation
+  //   const hasConfirmation = confirmationPhrases.some((phrase) =>
+  //     lowerCaseMessage.includes(phrase)
+  //   );
 
-    // Check if service is mentioned (case-insensitive)
-    const mentionsService = serviceConfig.keywords.some((keyword) =>
-      lowerCaseMessage.includes(keyword.toLowerCase())
-    );
+  //   // Check if service is mentioned (case-insensitive)
+  //   const mentionsService = serviceConfig.keywords.some((keyword) =>
+  //     lowerCaseMessage.includes(keyword.toLowerCase())
+  //   );
 
-    console.log(
-      `🔍 Confirmation: ${hasConfirmation}, Mentions Service: ${mentionsService}`
-    );
-    console.log("🔍 Avatar message (lowercase):", lowerCaseMessage);
-    console.log("🔍 Requested service:", requestedService);
-    console.log("🔍 Service keywords:", serviceConfig.keywords);
-    console.log(
-      "🔍 Confirmation phrases that match:",
-      confirmationPhrases.filter((phrase) => lowerCaseMessage.includes(phrase))
-    );
-    console.log(
-      "🔍 Service keywords that match:",
-      serviceConfig.keywords.filter((keyword) =>
-        lowerCaseMessage.includes(keyword.toLowerCase())
-      )
-    );
+  //   console.log(
+  //     `🔍 Confirmation: ${hasConfirmation}, Mentions Service: ${mentionsService}`
+  //   );
+  //   console.log("🔍 Avatar message (lowercase):", lowerCaseMessage);
+  //   console.log("🔍 Requested service:", requestedService);
+  //   console.log("🔍 Service keywords:", serviceConfig.keywords);
+  //   console.log(
+  //     "🔍 Confirmation phrases that match:",
+  //     confirmationPhrases.filter((phrase) => lowerCaseMessage.includes(phrase))
+  //   );
+  //   console.log(
+  //     "🔍 Service keywords that match:",
+  //     serviceConfig.keywords.filter((keyword) =>
+  //       lowerCaseMessage.includes(keyword.toLowerCase())
+  //     )
+  //   );
 
-    // More flexible condition: either confirmation phrase OR service mention
-    if (hasConfirmation || mentionsService) {
-      console.log("✅ Navigation confirmed - preparing transition...");
+  //   // More flexible condition: either confirmation phrase OR service mention
+  //   if (hasConfirmation || mentionsService) {
+  //     console.log("✅ Navigation confirmed - preparing transition...");
 
-      // // Immediate visual feedback
-      // toast.current?.show({
-      //   severity: "info",
-      //   summary: "Preparing Navigation",
-      //   detail: `Almost ready for ${serviceConfig.name}...`,
-      //   life: 3000,
-      // });
+  //     // // Immediate visual feedback
+  //     // toast.current?.show({
+  //     //   severity: "info",
+  //     //   summary: "Preparing Navigation",
+  //     //   detail: `Almost ready for ${serviceConfig.name}...`,
+  //     //   life: 3000,
+  //     // });
 
-      // Wait for avatar to stop talking
-      const checkTalkingStatus = () => {
-        if (isAvatarTalking.current) {
-          console.log("🗣️ Avatar still speaking...");
-          setTimeout(checkTalkingStatus, 300);
-        } else {
-          console.log("🚀 Avatar finished speaking - navigating!");
-          executeNavigation(serviceConfig);
-        }
-      };
+  //     // Wait for avatar to stop talking
+  //     const checkTalkingStatus = () => {
+  //       if (isAvatarTalking.current) {
+  //         console.log("🗣️ Avatar still speaking...");
+  //         setTimeout(checkTalkingStatus, 300);
+  //       } else {
+  //         console.log("🚀 Avatar finished speaking - navigating!");
+  //         executeNavigation(serviceConfig);
+  //       }
+  //     };
 
-      checkTalkingStatus();
-    } else {
-      console.log("❌ No navigation confirmation detected");
-      userRequestedNavigation.current = null;
-    }
-  };
+  //     checkTalkingStatus();
+  //   } else {
+  //     console.log("❌ No navigation confirmation detected");
+  //     userRequestedNavigation.current = null;
+  //   }
+  // };
 
   // Navigation executor
   const executeNavigation = (serviceConfig: {
@@ -1227,7 +1228,8 @@ function InteractiveAvatar({ page }: { page: number }) {
         avatar.on(StreamingEvents.USER_STOP, (event) => {
           console.log(">>>>> User stopped talking:", event);
         });
-        avatar.on(StreamingEvents.USER_END_MESSAGE, (event) => {
+
+        avatar.on(StreamingEvents.USER_END_MESSAGE, async (event) => {
           console.log(">>>>> User end message:", event);
 
           // Use the accumulated user message content
@@ -1244,12 +1246,61 @@ function InteractiveAvatar({ page }: { page: number }) {
                 "john.keating@papyrrus.com") &&
             page == 1
           ) {
-            checkUserNavigationRequest(userMessageContent);
+            //checkUserNavigationRequest(userMessageContent);
+
+            // Call AI Intention API with user message
+            if (userMessageContent) {
+              try {
+                const aiIntentionResponse =
+                  await createAiIntention(userMessageContent);
+
+                if (aiIntentionResponse.success && aiIntentionResponse.data) {
+                  const { openAiIntension } = aiIntentionResponse.data;
+
+                  if (openAiIntension === "Job Search") {
+                    // Check if navigation is already in progress to prevent duplicate execution
+                    if (navigationInProgress.current) {
+                      console.log(
+                        "⚠️ Navigation already in progress, skipping duplicate execution"
+                      );
+                      return;
+                    }
+
+                    // Set flag immediately to prevent duplicate calls
+                    navigationInProgress.current = true;
+                    // Final confirmation toast
+                    toast.current?.show({
+                      severity: "success",
+                      summary: "Navigation Confirmed",
+                      detail: `Transferring the chat to JobSearch...`,
+                      life: 4000,
+                    });
+
+                    // Stop avatar and navigate
+                    setTimeout(async () => {
+                      try {
+                        await stopAvatarGracefully();
+                        router.push("/resume-builder");
+                      } catch (error) {
+                        console.error("Navigation error:", error);
+                        router.push("/resume-builder"); // Navigate anyway
+                      } finally {
+                        userRequestedNavigation.current = null;
+                        navigationInProgress.current = false;
+                      }
+                    }, 4000);
+                  }
+                }
+              } catch (error) {
+                console.error("❌ Error calling AI Intention API:", error);
+              }
+            }
           }
 
           // Reset the user message accumulator for the next message
           currentUserMessage.current = "";
         });
+
         avatar.on(StreamingEvents.USER_TALKING_MESSAGE, (event) => {
           console.log(">>>>> User talking message:", event);
 
@@ -1258,6 +1309,7 @@ function InteractiveAvatar({ page }: { page: number }) {
             currentUserMessage.current += event.detail.message;
           }
         });
+
         avatar.on(StreamingEvents.AVATAR_TALKING_MESSAGE, (event) => {
           console.log(">>>>> Avatar talking message:", event);
 
@@ -1266,6 +1318,7 @@ function InteractiveAvatar({ page }: { page: number }) {
             currentAvatarMessage.current += event.detail.message;
           }
         });
+
         avatar.on(StreamingEvents.AVATAR_END_MESSAGE, (event) => {
           console.log(">>>>> Avatar end message event:", event);
           console.log(">>>>> Event detail:", event?.detail);
@@ -1294,13 +1347,13 @@ function InteractiveAvatar({ page }: { page: number }) {
               console.log(
                 "🔄 User navigation request exists, checking avatar confirmation"
               );
-              checkAvatarNavigationConfirmation(finalMessageContent);
+              //checkAvatarNavigationConfirmation(finalMessageContent);
             } else {
               // No user navigation request, check if avatar message contains navigation keywords (fallback detection)
               console.log(
                 "🔍 No user navigation request, checking avatar for navigation keywords"
               );
-              checkAvatarNavigationRequest(finalMessageContent);
+              //checkAvatarNavigationRequest(finalMessageContent);
             }
           }
 
