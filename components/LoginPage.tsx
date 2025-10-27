@@ -156,6 +156,28 @@ export const LoginPage: React.FC<LoginPageProps> = ({
                 Connect with our Intelligence
               </p>
             </div>
+            <div className="flex flex-column justify-content-center mt-5">
+              <span
+                style={{
+                  color: "var(--text-primary-color)",
+                  fontWeight: "400",
+                  fontSize: "1rem",
+                  lineHeight: "100%",
+                  marginBottom: "0.5rem", // adds small gap
+                }}
+                className="flex justify-content-center"
+              >
+                Language
+              </span>
+              <Dropdown
+                value={selectedLanguage}
+                onChange={(e) => setSelectedLanguage(e.value)}
+                options={languageOptions}
+                style={{ width: "15rem" }}
+                placeholder="Language"
+              />
+            </div>
+
             <div
               className="flex flex-column gap-4 mt-5"
               style={{ width: "28rem" }}
@@ -164,6 +186,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
 
               <div className="flex relative">
                 <Image src={mailIcon} alt="mail" className={style.imageInput} />
+
                 <TextInput
                   label="Email"
                   width="100%"
@@ -232,15 +255,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({
                 >
                   &nbsp;{"Sign in"}
                 </p>
-              </span>
-              <span className="flex justify-content-center">
-                <Dropdown
-                  value={selectedLanguage}
-                  onChange={(e) => setSelectedLanguage(e.value)}
-                  options={languageOptions}
-                  style={{ width: "15rem" }}
-                  placeholder="Language"
-                />
               </span>
             </div>
           </div>
