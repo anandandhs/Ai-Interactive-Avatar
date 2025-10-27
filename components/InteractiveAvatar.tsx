@@ -1122,14 +1122,24 @@ function InteractiveAvatar({ page }: { page: number }) {
   }, [auth, sessionState, selectedLanguage, currentAvatarId, currentModel]);
 
   useEffect(() => {
-    if (sessionState === StreamingAvatarSessionState.CONNECTED) {
+    if (
+      sessionState === StreamingAvatarSessionState.CONNECTED
+      // &&
+      // !hasRestoredMessages
+    ) {
       if (selectedLanguage === "es") {
         sendMessage(`Hola, me llamo ${auth?.user?.displayName}`);
       } else {
         sendMessage(`Hi, my name is ${auth?.user?.displayName}`);
       }
     }
-  }, [sessionState]);
+  }, [
+    sessionState,
+    selectedLanguage,
+    auth?.user?.displayName,
+    sendMessage,
+    // hasRestoredMessages,
+  ]);
 
   async function fetchAccessToken() {
     try {
