@@ -1056,7 +1056,9 @@ function InteractiveAvatar({ page }: { page: number }) {
         sttSettings: {
           provider: STTProvider.DEEPGRAM,
         },
-        activityIdleTimeout: 3600, // comment this after demo
+        // CRITICAL FIX: Reduced from 3600s (1 hour = 12 credits!) to 120s (2 minutes = 0.4 credits)
+        // This prevents sessions from consuming excessive credits when idle
+        activityIdleTimeout: 120, // 2 minutes (HeyGen default)
         knowledgeId:
           auth?.user?.username?.toLowerCase() != "john.keating@papyrrus.com"
             ? ""
