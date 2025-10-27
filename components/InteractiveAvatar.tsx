@@ -69,6 +69,11 @@ function InteractiveAvatar({ page }: { page: number }) {
   const [isInitialized, setIsInitialized] = useState<boolean>(false);
   const [fullScreen, setFullScreen] = useState<boolean>(false);
 
+  // CRITICAL FIX: Prevent multiple simultaneous session creations
+  const isCreatingSession = useRef<boolean>(false);
+  const lastSessionCreationTime = useRef<number>(0);
+  const SESSION_CREATION_COOLDOWN = 3000; // 3 seconds minimum between session creations
+
   const { selectedLanguage, setSelectedLanguage } = useSelectedAvatarLanguage();
 
   // Keep ref in sync with state
@@ -1077,22 +1082,38 @@ function InteractiveAvatar({ page }: { page: number }) {
       } as StartAvatarRequest;
 
       // Only start session if inactive and config changed
+      const configChanged =
+        JSON.stringify(predefinedConfig) !==
+        JSON.stringify(lastConfigRef.current);
+
+      console.log("🔍 Session check:", {
+        sessionState,
+        configChanged,
+        isCreatingSession: isCreatingSession.current,
+        currentAvatarId,
+        selectedLanguage,
+        currentModel,
+      });
+
       if (
         sessionState === StreamingAvatarSessionState.INACTIVE &&
-        JSON.stringify(predefinedConfig) !==
-          JSON.stringify(lastConfigRef.current)
+        configChanged &&
+        !isCreatingSession.current // CRITICAL FIX: Don't start if already creating
       ) {
+        console.log("✅ Conditions met for new session creation");
         // Reset greeting flags for new session
         isStreamReady.current = false;
         greetingSent.current = false;
 
         lastConfigRef.current = predefinedConfig;
         startSessionV2(true, predefinedConfig);
+      } else if (isCreatingSession.current) {
+        console.log("⏳ Session creation already in progress, skipping...");
       }
     }
   }, [auth, sessionState, selectedLanguage, currentAvatarId, currentModel]);
 
-  // Send greeting when stream is ready
+  // Send greeting when stream is ready - FIXED: Removed sendMessage from dependencies
   useEffect(() => {
     if (
       sessionState === StreamingAvatarSessionState.CONNECTED &&
@@ -1105,13 +1126,15 @@ function InteractiveAvatar({ page }: { page: number }) {
       );
       greetingSent.current = true;
 
-      if (selectedLanguage === "es") {
-        sendMessage(`Hola, me llamo ${auth?.user?.displayName}`);
-      } else {
-        sendMessage(`Hi, my name is ${auth?.user?.displayName}`);
-      }
+      // Use the sendMessage function directly without adding it to dependencies
+      const greetingMessage =
+        selectedLanguage === "es"
+          ? `Hola, me llamo ${auth?.user?.displayName}`
+          : `Hi, my name is ${auth?.user?.displayName}`;
+
+      sendMessage(greetingMessage);
     }
-  }, [sessionState, selectedLanguage, auth?.user?.displayName, sendMessage]);
+  }, [sessionState, selectedLanguage, auth?.user?.displayName]); // FIXED: Removed sendMessage from deps
 
   async function fetchAccessToken() {
     try {
@@ -1131,6 +1154,26 @@ function InteractiveAvatar({ page }: { page: number }) {
 
   const startSessionV2 = useMemoizedFn(
     async (isVoiceChat: boolean, config: StartAvatarRequest) => {
+      // CRITICAL FIX: Prevent multiple simultaneous session creations
+      if (isCreatingSession.current) {
+        console.warn("⚠️ Session creation already in progress, skipping...");
+        return;
+      }
+
+      // CRITICAL FIX: Enforce cooldown period between session creations
+      const now = Date.now();
+      const timeSinceLastCreation = now - lastSessionCreationTime.current;
+      if (timeSinceLastCreation < SESSION_CREATION_COOLDOWN) {
+        console.warn(
+          `⚠️ Session creation cooldown active. Wait ${Math.ceil((SESSION_CREATION_COOLDOWN - timeSinceLastCreation) / 1000)}s more...`
+        );
+        return;
+      }
+
+      isCreatingSession.current = true;
+      lastSessionCreationTime.current = now;
+      console.log("🚀 Starting new avatar session...");
+
       try {
         const newToken = await fetchAccessToken();
         const avatar = initAvatar(newToken);
@@ -1275,8 +1318,14 @@ function InteractiveAvatar({ page }: { page: number }) {
         if (isVoiceChat) {
           await startVoiceChat();
         }
+
+        // CRITICAL FIX: Reset session creation flag on success
+        console.log("✅ Avatar session started successfully");
+        isCreatingSession.current = false;
       } catch (error) {
-        console.error("Error starting avatar session:", error);
+        console.error("❌ Error starting avatar session:", error);
+        // CRITICAL FIX: Reset session creation flag on error
+        isCreatingSession.current = false;
       }
     }
   );

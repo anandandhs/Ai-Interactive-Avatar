@@ -211,20 +211,26 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
   ) => {
     try {
       // Gracefully stop the current avatar session
-      {
-        console.log("🔄 Switching avatar, stopping current session...");
+      console.log("🔄 Switching avatar, stopping current session...");
+
+      // Only stop if session is active
+      if (sessionState !== StreamingAvatarSessionState.INACTIVE) {
         interrupt();
         // Wait a bit for interrupt to take effect
         await new Promise((resolve) => setTimeout(resolve, 300));
-        await stopAvatar();
 
-        // Wait until sessionState is INACTIVE (max 3 seconds)
-        let waited = 0;
-        // Optionally, you can remove the while loop or keep it if you expect sessionState to be updated externally
-        while (waited < 3000) {
-          await new Promise((resolve) => setTimeout(resolve, 100));
-          waited += 100;
+        try {
+          await stopAvatar();
+          console.log("✅ Avatar session stopped successfully");
+        } catch (stopError) {
+          console.error("⚠️ Error stopping avatar:", stopError);
+          // Continue with navigation even if stop fails
         }
+
+        // Wait a bit for cleanup to complete
+        await new Promise((resolve) => setTimeout(resolve, 500));
+      } else {
+        console.log("ℹ️ Session already inactive, proceeding with navigation");
       }
 
       if (auth?.user?.username?.toLowerCase() === "john.keating@papyrrus.com") {
@@ -545,55 +551,58 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
                 {"Do you have a preferred agent you'd like to speak with?"}
               </div>
               <div>
-                {aiAssistants.map((assistant, index) => (
-                  <div
-                    key={assistant.id}
-                    onClick={() => handleAssistantSelect(assistant)}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      height: "6rem",
-                      padding: "1.719rem 2rem 1.156rem 1.813rem",
-                      // padding: "1rem",
-                      // marginBottom: "0.75rem",
-                      backgroundColor:
-                        assistant.id === currentAvatarId
-                          ? "#5151511A"
-                          : "transparent",
-                      borderBottom:
-                        index === AI_ASSISTANTS.length - 1
-                          ? "none"
-                          : "1px solid #5151511a",
-                      // borderRadius: "12px",
-                      cursor: "pointer",
-                      transition: "all 0.2s ease",
-                      animation: `fadeIn 0.3s ease-in-out ${index * 0.1}s both`,
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = "#5151511A";
-                      // e.currentTarget.style.borderColor = assistant.color;
-                      e.currentTarget.style.transform = "translateY(-2px)";
-                      e.currentTarget.style.boxShadow =
-                        "0 4px 12px rgba(0, 0, 0, 0.1)";
-                      const paragraph = e.currentTarget.querySelector("p");
-                      if (paragraph) {
-                        paragraph.style.color = "var(--text-primary-color)"; // change text color
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (assistant.id !== currentAvatarId) {
-                        e.currentTarget.style.backgroundColor = "#transparent";
-                        // e.currentTarget.style.borderColor = "#5151511a";
-                        e.currentTarget.style.transform = "translateY(0)";
-                        e.currentTarget.style.boxShadow = "none";
-                        const paragraph = e.currentTarget.querySelector("p");
-                        if (paragraph) {
-                          paragraph.style.color = "var(--text-secondary-color)"; // change text color
+                {aiAssistants.map((assistant, index) => {
+                  const isActive = assistant.id === currentAvatarId;
+                  return (
+                    <div
+                      key={assistant.id}
+                      onClick={() => {
+                        if (!isActive) {
+                          handleAssistantSelect(assistant);
                         }
-                      }
-                    }}
-                  >
-                    {/* <div
+                      }}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        height: "6rem",
+                        padding: "1.719rem 2rem 1.156rem 1.813rem",
+                        backgroundColor: isActive ? "#5151511A" : "transparent",
+                        borderBottom:
+                          index === AI_ASSISTANTS.length - 1
+                            ? "none"
+                            : "1px solid #5151511a",
+                        cursor: isActive ? "not-allowed" : "pointer",
+                        transition: "all 0.2s ease",
+                        animation: `fadeIn 0.3s ease-in-out ${index * 0.1}s both`,
+                        opacity: isActive ? 0.5 : 1,
+                        pointerEvents: isActive ? "none" : "auto",
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!isActive) {
+                          e.currentTarget.style.backgroundColor = "#5151511A";
+                          e.currentTarget.style.transform = "translateY(-2px)";
+                          e.currentTarget.style.boxShadow =
+                            "0 4px 12px rgba(0, 0, 0, 0.1)";
+                          const paragraph = e.currentTarget.querySelector("p");
+                          if (paragraph) {
+                            paragraph.style.color = "var(--text-primary-color)";
+                          }
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isActive) {
+                          e.currentTarget.style.backgroundColor = "transparent";
+                          e.currentTarget.style.transform = "translateY(0)";
+                          e.currentTarget.style.boxShadow = "none";
+                          const paragraph = e.currentTarget.querySelector("p");
+                          if (paragraph) {
+                            paragraph.style.color =
+                              "var(--text-secondary-color)";
+                          }
+                        }
+                      }}
+                    >
+                      {/* <div
                     style={{
                       width: "50px",
                       height: "50px",
@@ -606,78 +615,98 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
                       border: `2px solid ${assistant.color}`,
                     }}
                   > */}
-                    <Image
-                      src={assistant.avatar}
-                      alt={assistant.name}
-                      width={30}
-                      height={30}
-                      style={{
-                        borderRadius: "50%",
-                        width: "3.875rem",
-                        height: "3.875rem",
-                        marginRight: "1rem",
-                      }}
-                    />
-                    {/* </div> */}
-                    <div style={{ flex: 1, marginRight: "1.5rem" }}>
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "0.5rem",
-                          marginBottom: "0.25rem",
-                        }}
-                      >
-                        <h4
+                      <div style={{ position: "relative" }}>
+                        <Image
+                          src={assistant.avatar}
+                          alt={assistant.name}
+                          width={30}
+                          height={30}
                           style={{
-                            margin: 0,
-                            color: "var(--text-primary-color)",
-                            fontSize: "1rem",
-                            fontWeight: "700",
-                            fontStyle: "bold",
+                            borderRadius: "50%",
+                            width: "3.875rem",
+                            height: "3.875rem",
+                            marginRight: "1rem",
                           }}
-                        >
-                          {assistant.name}
-                        </h4>
-                        <span
-                          style={{
-                            backgroundColor: "#08B72E",
-                            color: "white",
-                            padding: "0.375rem 0.375rem",
-                            borderRadius: "12px",
-                            fontSize: "0.75rem",
-                            fontWeight: "500",
-                          }}
-                        ></span>
-                        <span
-                          style={{
-                            color: "#1B84FF",
-                            fontSize: "0.875rem",
-                            fontWeight: "400",
-                            fontStyle: "regular",
-                          }}
-                        >
-                          {assistant.role}
-                        </span>
+                        />
+                        {isActive && (
+                          <div
+                            style={{
+                              position: "absolute",
+                              bottom: "0.5rem",
+                              right: "1rem",
+                              width: "0.75rem",
+                              height: "0.75rem",
+                              backgroundColor: "#08B72E",
+                              borderRadius: "50%",
+                              border: "2px solid #0d151c",
+                            }}
+                          />
+                        )}
                       </div>
-                      <p
-                        style={{
-                          margin: "0 0 0.5rem 0",
-                          color: "#fff",
-                          fontSize: "0.875rem",
-                          lineHeight: "1.4",
-                          fontWeight: "400",
-                          display: "-webkit-box",
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: "vertical",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          whiteSpace: "normal",
-                        }}
-                      >
-                        {assistant.description}
-                      </p>
-                      {/* <div
+                      {/* </div> */}
+                      <div style={{ flex: 1, marginRight: "1.5rem" }}>
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "0.5rem",
+                            marginBottom: "0.25rem",
+                          }}
+                        >
+                          <h4
+                            style={{
+                              margin: 0,
+                              color: "var(--text-primary-color)",
+                              fontSize: "1rem",
+                              fontWeight: "700",
+                              fontStyle: "bold",
+                            }}
+                          >
+                            {assistant.name}
+                          </h4>
+                          {isActive && (
+                            <span
+                              style={{
+                                backgroundColor: "#08B72E",
+                                color: "white",
+                                padding: "0.125rem 0.5rem",
+                                borderRadius: "12px",
+                                fontSize: "0.75rem",
+                                fontWeight: "500",
+                              }}
+                            >
+                              Active
+                            </span>
+                          )}
+                          <span
+                            style={{
+                              color: "#1B84FF",
+                              fontSize: "0.875rem",
+                              fontWeight: "400",
+                              fontStyle: "regular",
+                            }}
+                          >
+                            {assistant.role}
+                          </span>
+                        </div>
+                        <p
+                          style={{
+                            margin: "0 0 0.5rem 0",
+                            color: "#fff",
+                            fontSize: "0.875rem",
+                            lineHeight: "1.4",
+                            fontWeight: "400",
+                            display: "-webkit-box",
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: "vertical",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "normal",
+                          }}
+                        >
+                          {assistant.description}
+                        </p>
+                        {/* <div
                       style={{
                         display: "flex",
                         flexWrap: "wrap",
@@ -699,14 +728,15 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
                         </span>
                       ))}
                     </div> */}
-                    </div>
-                    {/* <i
+                      </div>
+                      {/* <i
                       className="pi pi-chevron-right"
                       style={{ color: "#bdbdbd", fontSize: "1rem" }}
                     /> */}
-                    <Image src={exportIcon} alt="arrowRight" />
-                  </div>
-                ))}
+                      <Image src={exportIcon} alt="arrowRight" />
+                    </div>
+                  );
+                })}
 
                 {/* <div
                   onClick={() => handleAssistantSelect(AI_ASSISTANTS[0])}
