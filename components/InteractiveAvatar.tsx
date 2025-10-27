@@ -60,6 +60,9 @@ function InteractiveAvatar({ page }: { page: number }) {
   const currentUserMessage = useRef<string>("");
   const userRequestedNavigation = useRef<string | null>(null);
   const isAvatarTalking = useRef<boolean>(false);
+  const isStreamReady = useRef<boolean>(false);
+  const greetingSent = useRef<boolean>(false);
+  const selectedLanguageRef = useRef<string>("en");
   const [currentModel, setCurrentModel] = useState<ElevenLabsModel>(
     ElevenLabsModel.eleven_flash_v2_5
   );
@@ -67,6 +70,11 @@ function InteractiveAvatar({ page }: { page: number }) {
   const [fullScreen, setFullScreen] = useState<boolean>(false);
 
   const { selectedLanguage, setSelectedLanguage } = useSelectedAvatarLanguage();
+
+  // Keep ref in sync with state
+  useEffect(() => {
+    selectedLanguageRef.current = selectedLanguage;
+  }, [selectedLanguage]);
 
   const mediaStream = useRef<HTMLVideoElement>(null);
 
@@ -910,77 +918,36 @@ function InteractiveAvatar({ page }: { page: number }) {
     if (!auth?.user) return;
 
     try {
+      console.log("🔄 Starting avatar restart process...");
+
+      // Reset greeting flags for new session
+      isStreamReady.current = false;
+      greetingSent.current = false;
+
+      // Stop current avatar session gracefully and wait for it to complete
+      console.log("🛑 Stopping current avatar session...");
+      await stopAvatarGracefully();
+      console.log("✅ Avatar session stopped successfully");
+
+      // Wait for state updates to propagate and cleanup to complete
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      // Update the model and language - this will trigger the main useEffect
+      // which will start a new session with the updated configuration
+      console.log(
+        `🔄 Updating language to: ${newLanguage}, model to: ${newModel}`
+      );
       setCurrentModel(newModel);
       setSelectedLanguage(newLanguage);
-
-      // Stop current avatar session gracefully
-      await stopAvatarGracefully();
-
-      // Wait a moment for cleanup
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Create new configuration with updated model and language
-      const updatedConfig = {
-        quality: AvatarQuality.Low,
-        avatarName: currentAvatarId,
-        voice: {
-          rate: newLanguage === "es" ? 1.2 : 0.8,
-          emotion: VoiceEmotion.EXCITED,
-          model: newModel,
-          ...(auth?.user?.username?.toLowerCase() ===
-            "john.keating@papyrrus.com" &&
-            currentAvatarId === AVATARS[0].avatar_id &&
-            newLanguage === "es" && {
-              voiceId: "cbb56828d798491e9f601a5415415e25",
-            }),
-          ...(auth?.user?.username?.toLowerCase() ===
-            "john.keating@papyrrus.com" &&
-            currentAvatarId === AVATARS[3].avatar_id &&
-            newLanguage === "es" && {
-              voiceId: "1a9bfb4ec9bc43d59ab64a4e66fe467c",
-            }),
-        },
-        language: newLanguage,
-        voiceChatTransport: VoiceChatTransport.WEBSOCKET,
-        sttSettings: {
-          provider: STTProvider.DEEPGRAM,
-        },
-        activityIdleTimeout: 3600,
-        knowledgeId:
-          auth?.user?.username?.toLowerCase() != "john.keating@papyrrus.com"
-            ? ""
-            : newLanguage === "en" && currentAvatarId === AVATARS[0].avatar_id
-              ? "02ef215a87ca49f1bb05fb7833bf8afe"
-              : newLanguage === "en" && currentAvatarId === AVATARS[3].avatar_id
-                ? "10d1db10e297474386646f8611eea248"
-                : newLanguage === "es" &&
-                    currentAvatarId === AVATARS[0].avatar_id
-                  ? "826c4781815548e98a9059daffbf84e6"
-                  : "d873e488c23e4475b3bddbaef90016c6",
-        knowledgeBase:
-          auth?.user?.username?.toLowerCase() != "john.keating@papyrrus.com"
-            ? getKnowlededgeBase(
-                auth?.user?.username?.toLowerCase() || "",
-                page,
-                auth.user.displayName || "",
-                currentAvatarId
-              )
-            : "",
-      } as StartAvatarRequest;
-
-      console.log("🔄 Restarting avatar with new config:", updatedConfig);
-
-      // Start avatar with new configuration
-      await startSessionV2(true, updatedConfig);
 
       // Show success toast
       toast.current?.show({
         severity: "success",
         summary: "Configuration Updated",
-        detail: `Avatar restarted with ${
+        detail: `Switching to ${
           newLanguage === "en" ? "English" : "Spanish"
-        } language.`,
-        life: 5000,
+        } language...`,
+        life: 3000,
       });
     } catch (error) {
       console.error("Error restarting avatar with new config:", error);
@@ -1115,31 +1082,36 @@ function InteractiveAvatar({ page }: { page: number }) {
         JSON.stringify(predefinedConfig) !==
           JSON.stringify(lastConfigRef.current)
       ) {
+        // Reset greeting flags for new session
+        isStreamReady.current = false;
+        greetingSent.current = false;
+
         lastConfigRef.current = predefinedConfig;
         startSessionV2(true, predefinedConfig);
       }
     }
   }, [auth, sessionState, selectedLanguage, currentAvatarId, currentModel]);
 
+  // Send greeting when stream is ready
   useEffect(() => {
     if (
-      sessionState === StreamingAvatarSessionState.CONNECTED
-      // &&
-      // !hasRestoredMessages
+      sessionState === StreamingAvatarSessionState.CONNECTED &&
+      isStreamReady.current &&
+      !greetingSent.current
     ) {
+      console.log(
+        "👋 Stream is ready, sending greeting message in language:",
+        selectedLanguage
+      );
+      greetingSent.current = true;
+
       if (selectedLanguage === "es") {
         sendMessage(`Hola, me llamo ${auth?.user?.displayName}`);
       } else {
         sendMessage(`Hi, my name is ${auth?.user?.displayName}`);
       }
     }
-  }, [
-    sessionState,
-    selectedLanguage,
-    auth?.user?.displayName,
-    sendMessage,
-    // hasRestoredMessages,
-  ]);
+  }, [sessionState, selectedLanguage, auth?.user?.displayName, sendMessage]);
 
   async function fetchAccessToken() {
     try {
@@ -1175,9 +1147,32 @@ function InteractiveAvatar({ page }: { page: number }) {
         });
         avatar.on(StreamingEvents.STREAM_DISCONNECTED, () => {
           console.log("Stream disconnected");
+          // Reset stream ready flag when disconnected
+          isStreamReady.current = false;
+          greetingSent.current = false;
         });
         avatar.on(StreamingEvents.STREAM_READY, (event) => {
           console.log(">>>>> Stream ready:", event.detail);
+          // Mark stream as ready and trigger greeting
+          isStreamReady.current = true;
+
+          // Send greeting after a small delay to ensure everything is initialized
+          setTimeout(() => {
+            if (!greetingSent.current && auth?.user?.displayName) {
+              const currentLang = selectedLanguageRef.current;
+              console.log(
+                "👋 Stream ready event - sending greeting in language:",
+                currentLang
+              );
+              greetingSent.current = true;
+
+              if (currentLang === "es") {
+                sendMessage(`Hola, me llamo ${auth?.user?.displayName}`);
+              } else {
+                sendMessage(`Hi, my name is ${auth?.user?.displayName}`);
+              }
+            }
+          }, 500); // Small delay to ensure avatar is fully ready
         });
         avatar.on(StreamingEvents.USER_START, (event) => {
           console.log(">>>>> User started talking:", event);
