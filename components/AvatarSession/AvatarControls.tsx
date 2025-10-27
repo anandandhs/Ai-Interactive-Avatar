@@ -18,18 +18,14 @@ import { useSelectedAvatarLanguage } from "../logic/useSelectedAvatarLanguage";
 interface AvatarControlsProps {
   currentModel?: ElevenLabsModel;
   onModelChange?: (model: ElevenLabsModel, language: string) => void;
-  toastRef?: React.RefObject<Toast>;
+  toastRef?: React.RefObject<Toast | null>;
 }
 
 export const AvatarControls: React.FC<AvatarControlsProps> = ({
   currentModel,
   onModelChange,
   toastRef,
-}: {
-  currentModel?: ElevenLabsModel;
-  onModelChange?: (model: ElevenLabsModel, language: string) => void;
-  toastRef?: React.RefObject<Toast>;
-}) => {
+}: AvatarControlsProps) => {
   const {
     isVoiceChatLoading,
     isVoiceChatActive,

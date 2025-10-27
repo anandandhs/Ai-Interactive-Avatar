@@ -8,7 +8,7 @@ import style from "../../styles/commonStyle.module.css";
 import clsx from "clsx";
 
 interface AudioInputProps {
-  toastRef?: React.RefObject<Toast>;
+  toastRef?: React.RefObject<Toast | null>;
 }
 
 export const AudioInput: React.FC<AudioInputProps> = ({ toastRef }) => {

@@ -4,7 +4,7 @@ import { Toast } from "primereact/toast";
 import { useStreamingAvatarContext } from "./context";
 import { useMicrophone } from "./useMicrophone";
 
-export const useVoiceChat = (toastRef?: React.RefObject<Toast>) => {
+export const useVoiceChat = (toastRef?: React.RefObject<Toast | null>) => {
   const {
     avatarRef,
     isMuted,
