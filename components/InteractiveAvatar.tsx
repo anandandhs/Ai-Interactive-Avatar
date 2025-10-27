@@ -931,13 +931,13 @@ function InteractiveAvatar({ page }: { page: number }) {
             "john.keating@papyrrus.com" &&
             currentAvatarId === AVATARS[0].avatar_id &&
             newLanguage === "es" && {
-              voiceId: "cbb56828d798491e9f601a5415415e25", // Default voice for john.keating kathya
+              voiceId: "cbb56828d798491e9f601a5415415e25",
             }),
           ...(auth?.user?.username?.toLowerCase() ===
             "john.keating@papyrrus.com" &&
             currentAvatarId === AVATARS[3].avatar_id &&
             newLanguage === "es" && {
-              voiceId: "e85822bd14e144e8b6fe73da2fb1085c", // Default voice for john.keating kathya
+              voiceId: "1a9bfb4ec9bc43d59ab64a4e66fe467c",
             }),
         },
         language: newLanguage,
@@ -1058,6 +1058,18 @@ function InteractiveAvatar({ page }: { page: number }) {
                   ? "808a781f0c8e43dcb89636df6040143c" //male voice
                   : "207e0fdec4e645d287803503706e107d",
           }),
+          ...(auth?.user?.username?.toLowerCase() ===
+            "john.keating@papyrrus.com" &&
+            currentAvatarId === AVATARS[0].avatar_id &&
+            selectedLanguage === "es" && {
+              voiceId: "cbb56828d798491e9f601a5415415e25",
+            }),
+          ...(auth?.user?.username?.toLowerCase() ===
+            "john.keating@papyrrus.com" &&
+            currentAvatarId === AVATARS[3].avatar_id &&
+            selectedLanguage === "es" && {
+              voiceId: "1a9bfb4ec9bc43d59ab64a4e66fe467c",
+            }),
         },
         language:
           auth?.user?.username?.toLowerCase() === "john.keating@papyrrus.com"
@@ -1096,8 +1108,6 @@ function InteractiveAvatar({ page }: { page: number }) {
               )
             : "",
       } as StartAvatarRequest;
-
-      console.log("Predefined Config:", predefinedConfig);
 
       // Only start session if inactive and config changed
       if (

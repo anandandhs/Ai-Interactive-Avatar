@@ -54,29 +54,18 @@ export const AvatarControls: React.FC<AvatarControlsProps> = ({
   ];
 
   const handleLanguageChange = (newLanguage: string) => {
-    console.log("🌐 Language change requested:", newLanguage);
-    console.log("🌐 Current language before change:", selectedLanguage);
     setSelectedLanguage(newLanguage);
     if (
       auth?.user?.username?.toLowerCase() === "john.keating@papyrrus.com" &&
       onModelChange &&
       currentModel
     ) {
-      console.log(
-        "✅ Triggering language change for john.keating@papyrrus.com"
+      onModelChange(
+        currentModel === ElevenLabsModel.eleven_flash_v2_5
+          ? ElevenLabsModel.eleven_multilingual_v2
+          : ElevenLabsModel.eleven_flash_v2_5,
+        newLanguage
       );
-      onModelChange(currentModel, newLanguage);
-    }
-  };
-
-  const handleModelChange = (newModel: ElevenLabsModel) => {
-    console.log("🔄 Model change requested:", newModel);
-    if (
-      auth?.user?.username?.toLowerCase() === "john.keating@papyrrus.com" &&
-      onModelChange
-    ) {
-      console.log("✅ Triggering model change for john.keating@papyrrus.com");
-      onModelChange(newModel, selectedLanguage);
     }
   };
 
