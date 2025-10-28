@@ -1059,7 +1059,7 @@ function InteractiveAvatar({ page }: { page: number }) {
         },
         // CRITICAL FIX: Reduced from 3600s (1 hour = 12 credits!) to 120s (2 minutes = 0.4 credits)
         // This prevents sessions from consuming excessive credits when idle
-        activityIdleTimeout: 120, // 2 minutes (HeyGen default)
+        activityIdleTimeout: 600, // 10 minutes (HeyGen default)
         knowledgeId:
           auth?.user?.username?.toLowerCase() != "john.keating@papyrrus.com"
             ? ""
