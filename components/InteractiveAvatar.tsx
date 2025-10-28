@@ -1041,7 +1041,7 @@ function InteractiveAvatar({ page }: { page: number }) {
             "john.keating@papyrrus.com" &&
             currentAvatarId === AVATARS[3].avatar_id &&
             selectedLanguage === "es" && {
-              voiceId: "28f7220adbc144eeba42d70e1e969b29",
+              voiceId: "6156f8f798604e3f8c73ba2931cfb104",
             }),
         },
         language:
