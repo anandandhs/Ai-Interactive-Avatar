@@ -994,7 +994,7 @@ function InteractiveAvatar({ page }: { page: number }) {
         quality: AvatarQuality.Low,
         avatarName: currentAvatarId,
         voice: {
-          rate: 0.8,
+          rate: 1.0,
           emotion: VoiceEmotion.EXCITED,
           model:
             auth?.user?.username?.toLowerCase() === "john.keating@papyrrus.com"
@@ -1041,7 +1041,7 @@ function InteractiveAvatar({ page }: { page: number }) {
             "john.keating@papyrrus.com" &&
             currentAvatarId === AVATARS[3].avatar_id &&
             selectedLanguage === "es" && {
-              voiceId: "1a9bfb4ec9bc43d59ab64a4e66fe467c",
+              voiceId: "28f7220adbc144eeba42d70e1e969b29",
             }),
         },
         language:
