@@ -165,7 +165,8 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
   const [message, setMessage] = useState("");
   const { sendMessage } = useTextChat();
   const { messages } = useMessageHistory();
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [animatedMessageIds] = useState(new Set<string>());
 
   const { stopAvatar } = useStreamingAvatarSession();
   const { interrupt } = useInterrupt();
@@ -173,13 +174,28 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
   const { chatCloseIcon, chatOpenIcon, exportIcon, whiteLogoIcon } =
     useThemeIcons();
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
+  // Auto-scroll using MutationObserver to detect DOM changes
+  // This handles all scrolling scenarios:
+  // - New messages added
+  // - Message content updates (streaming)
+  // - Dynamic content changes
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    // MutationObserver watches for any DOM changes and scrolls accordingly
+    const observer = new MutationObserver(() => {
+      container.scrollTop = container.scrollHeight;
+    });
+
+    observer.observe(container, {
+      childList: true, // Watch for added/removed nodes
+      subtree: true, // Watch all descendants
+      characterData: true, // Watch for text content changes
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   const handleSendMessage = () => {
     if (
@@ -524,6 +540,7 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
 
         {/* Content Area */}
         <div
+          ref={scrollContainerRef}
           className="flex-1 overflow-y-auto"
           style={{
             // padding: showAssistantSelection ? "0" : "1rem",
@@ -857,42 +874,50 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
                     display: "flex",
                     flexDirection: "column",
                     gap: "1rem",
+                    padding: "1rem",
                   }}
                 >
-                  {messages.map((msg, index) => (
-                    <div
-                      key={msg.id}
-                      className={`flex ${
-                        msg.sender === MessageSender.CLIENT
-                          ? "justify-content-end"
-                          : "justify-content-start"
-                      }`}
-                      style={{
-                        animation: `fadeIn 0.3s ease-in-out ${
-                          index * 0.1
-                        }s both`,
-                      }}
-                    >
+                  {messages.map((msg) => {
+                    // Only animate messages that haven't been animated before
+                    const shouldAnimate = !animatedMessageIds.has(msg.id);
+                    if (shouldAnimate) {
+                      animatedMessageIds.add(msg.id);
+                    }
+                    return (
                       <div
+                        key={msg.id}
+                        className={`flex ${
+                          msg.sender === MessageSender.CLIENT
+                            ? "justify-content-end"
+                            : "justify-content-start"
+                        }`}
                         style={{
-                          maxWidth: "80%",
-                          padding: "0.75rem 1rem",
-                          borderRadius: "18px",
-                          backgroundColor:
-                            msg.sender === MessageSender.CLIENT
-                              ? "#5151511A"
-                              : selectedAssistant?.color + "1A" || "#1B84FF1A",
-                          color: "var(--text-primary-color)",
-                          fontSize: "0.9rem",
-                          lineHeight: "1.4",
-                          wordBreak: "break-word",
+                          animation: shouldAnimate
+                            ? `fadeIn 0.3s ease-in-out both`
+                            : "none",
                         }}
                       >
-                        {msg.content}
+                        <div
+                          style={{
+                            maxWidth: "80%",
+                            padding: "0.75rem 1rem",
+                            borderRadius: "18px",
+                            backgroundColor:
+                              msg.sender === MessageSender.CLIENT
+                                ? "#5151511A"
+                                : selectedAssistant?.color + "1A" ||
+                                  "#1B84FF1A",
+                            color: "var(--text-primary-color)",
+                            fontSize: "0.9rem",
+                            lineHeight: "1.4",
+                            wordBreak: "break-word",
+                          }}
+                        >
+                          {msg.content}
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                  <div ref={messagesEndRef} />
+                    );
+                  })}
                 </div>
               )}
             </>

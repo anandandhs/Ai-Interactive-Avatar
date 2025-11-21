@@ -84,11 +84,12 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
         zIndex: 2,
       };
 
-      // Adjust positioning for fullscreen mode
+      // In fullscreen mode, adjust position to prevent head cutoff
+      // The container width changes but avatar should maintain proportions
       const fullScreenAdjustment = fullScreen
         ? {
-            topOffset: -5, // Move up slightly in fullscreen
-            sizeIncrease: 1.1, // Slightly larger in fullscreen
+            topOffset: 3, // Move down to show full head
+            sizeIncrease: 1, // Keep same size in fullscreen
           }
         : {
             topOffset: 0,
@@ -119,9 +120,9 @@ export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>(
         currentAvatarId === AVATARS[0].avatar_id ||
         currentAvatarId === AVATARS[3].avatar_id
       ) {
-        const baseTop = is125Zoom ? 33.8 : 32;
+        const baseTop = is125Zoom ? 7.5 : 7.5;
         const adjustedTop = baseTop + fullScreenAdjustment.topOffset;
-        const adjustedSize = 55.5 * fullScreenAdjustment.sizeIncrease;
+        const adjustedSize = 88 * fullScreenAdjustment.sizeIncrease;
 
         return {
           ...baseStyles,

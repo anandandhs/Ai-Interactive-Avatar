@@ -142,7 +142,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
                   lineHeight: "100%",
                 }}
               >
-                Welcome back !
+                {"Get ready to work"}
               </h2>
               <p
                 style={{
@@ -153,7 +153,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
                 }}
                 // className={style.blueText}
               >
-                Connect with our Intelligence
+                {"Jobs, tools, and training to launch your next career step"}
               </p>
             </div>
             <div className="flex flex-column justify-content-center mt-5">

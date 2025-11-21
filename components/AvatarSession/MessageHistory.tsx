@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useMemo } from "react";
+import React, { useEffect, useRef, useMemo, useState } from "react";
 
 import { useMessageHistory, MessageSender } from "../logic";
 import { ReactTyped } from "react-typed";
@@ -8,6 +8,7 @@ import { useSelectedAvatarLanguage } from "../logic/useSelectedAvatarLanguage";
 export const MessageHistory: React.FC = () => {
   const { messages } = useMessageHistory();
   const containerRef = useRef<HTMLDivElement>(null);
+  const [animatedMessageIds] = useState(new Set<string>());
   const auth = useAuthContext();
   const { selectedLanguage } = useSelectedAvatarLanguage();
 
@@ -27,25 +28,31 @@ export const MessageHistory: React.FC = () => {
     // Ensure reasonable bounds (15-50ms per character)
     const finalSpeed = Math.max(15, Math.min(50, adjustedSpeed));
 
-    // Debug log to help fine-tune the synchronization
-    console.log(
-      `🎯 Caption sync - Language: ${selectedLanguage}, Speech Rate: ${avatarSpeechRate}, Type Speed: ${finalSpeed}ms per char`
-    );
-
     return finalSpeed;
   }, [selectedLanguage]);
 
-  // Note: The synchronizedTypeSpeed is calculated to match the avatar's speech rate
-  // This creates a close caption feel where text appears at roughly the same pace
-  // as the avatar speaks, providing better synchronization between lip movements and text
-
+  // Auto-scroll using MutationObserver to detect DOM changes
+  // This handles all scrolling scenarios:
+  // - New messages added
+  // - Message content updates (streaming)
+  // - ReactTyped character-by-character animation
   useEffect(() => {
     const container = containerRef.current;
+    if (!container) return;
 
-    if (!container || messages.length === 0) return;
+    // MutationObserver watches for any DOM changes and scrolls accordingly
+    const observer = new MutationObserver(() => {
+      container.scrollTop = container.scrollHeight;
+    });
 
-    container.scrollTop = container.scrollHeight;
-  }, [messages]);
+    observer.observe(container, {
+      childList: true, // Watch for added/removed nodes
+      subtree: true, // Watch all descendants
+      characterData: true, // Watch for text content changes (ReactTyped)
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div
@@ -113,97 +120,106 @@ export const MessageHistory: React.FC = () => {
                 msg.content !== `Hi, my name is ${auth?.user?.displayName}` &&
                 msg.content !== `Hola, me llamo ${auth?.user?.displayName}`
             )
-            .map((message, index) => (
-              <div
-                key={message.id}
-                className={`flex ${
-                  message.sender === MessageSender.CLIENT
-                    ? "justify-content-end"
-                    : "justify-content-start"
-                }`}
-                style={{
-                  animation: `fadeIn 0.3s ease-in-out ${index * 0.1}s both`,
-                }}
-              >
+            .map((message) => {
+              // Only animate messages that haven't been animated before
+              const shouldAnimate = !animatedMessageIds.has(message.id);
+              if (shouldAnimate) {
+                animatedMessageIds.add(message.id);
+              }
+              return (
                 <div
-                  className={`flex flex-column ${
+                  key={message.id}
+                  className={`flex ${
                     message.sender === MessageSender.CLIENT
-                      ? "align-items-end"
-                      : "align-items-start"
+                      ? "justify-content-end"
+                      : "justify-content-start"
                   }`}
                   style={{
-                    maxWidth: "70%",
-                    gap: "var(--space-1)",
+                    animation: shouldAnimate
+                      ? `fadeIn 0.3s ease-in-out both`
+                      : "none",
                   }}
                 >
                   <div
-                    className="flex align-items-center"
-                    style={{ gap: "var(--space-2)" }}
+                    className={`flex flex-column ${
+                      message.sender === MessageSender.CLIENT
+                        ? "align-items-end"
+                        : "align-items-start"
+                    }`}
+                    style={{
+                      maxWidth: "70%",
+                      gap: "var(--space-1)",
+                    }}
                   >
                     <div
-                      className="w-2 h-2 border-round-full"
+                      className="flex align-items-center"
+                      style={{ gap: "var(--space-2)" }}
+                    >
+                      <div
+                        className="w-2 h-2 border-round-full"
+                        style={{
+                          backgroundColor:
+                            message.sender === MessageSender.CLIENT
+                              ? "var(--primary-color)"
+                              : "var(--success-color)",
+                        }}
+                      />
+                      <span
+                        className="text-caption font-medium"
+                        style={{
+                          color: "#fff",
+                          fontWeight: "300",
+                        }}
+                      >
+                        {message.sender === MessageSender.AVATAR
+                          ? "AI Avatar"
+                          : "You"}
+                      </span>
+                    </div>
+
+                    <div
+                      className="p-3"
                       style={{
                         backgroundColor:
                           message.sender === MessageSender.CLIENT
-                            ? "var(--primary-color)"
-                            : "var(--success-color)",
-                      }}
-                    />
-                    <span
-                      className="text-caption font-medium"
-                      style={{
-                        color: "#fff",
-                        fontWeight: "300",
+                            ? "var(--bg-sender-color)"
+                            : "var(--bg-receiver-color)",
+                        color:
+                          message.sender === MessageSender.CLIENT
+                            ? "var(--text-primary-color)"
+                            : "var(--text-primary-color)",
+                        border:
+                          message.sender === MessageSender.CLIENT
+                            ? "1px solid #FFFFFF1A"
+                            : "1px solid #FFFFFF1A",
+                        boxShadow: "var(--shadow-sm)",
+                        fontSize: "var(--font-size-base)",
+                        lineHeight: "var(--line-height-relaxed)",
+                        wordBreak: "break-word",
+                        borderRadius: "1.25rem",
                       }}
                     >
-                      {message.sender === MessageSender.AVATAR
-                        ? "AI Avatar"
-                        : "You"}
-                    </span>
-                  </div>
-
-                  <div
-                    className="p-3"
-                    style={{
-                      backgroundColor:
-                        message.sender === MessageSender.CLIENT
-                          ? "var(--bg-sender-color)"
-                          : "var(--bg-receiver-color)",
-                      color:
-                        message.sender === MessageSender.CLIENT
-                          ? "var(--text-primary-color)"
-                          : "var(--text-primary-color)",
-                      border:
-                        message.sender === MessageSender.CLIENT
-                          ? "1px solid #FFFFFF1A"
-                          : "1px solid #FFFFFF1A",
-                      boxShadow: "var(--shadow-sm)",
-                      fontSize: "var(--font-size-base)",
-                      lineHeight: "var(--line-height-relaxed)",
-                      wordBreak: "break-word",
-                      borderRadius: "1.25rem",
-                    }}
-                  >
-                    {message.sender === MessageSender.CLIENT ? (
-                      message.content
-                    ) : (
-                      <ReactTyped
-                        strings={[message.content]}
-                        typeSpeed={synchronizedTypeSpeed}
-                        smartBackspace={false}
-                        showCursor={false}
-                        fadeOut={false}
-                        fadeOutDelay={0}
-                        startDelay={0}
-                        backSpeed={0}
-                        loop={false}
-                        cursorChar=""
-                      />
-                    )}
+                      {message.sender === MessageSender.CLIENT ? (
+                        message.content
+                      ) : (
+                        <ReactTyped
+                          strings={[message.content]}
+                          typeSpeed={synchronizedTypeSpeed}
+                          smartBackspace={false}
+                          showCursor={false}
+                          fadeOut={false}
+                          fadeOutDelay={0}
+                          startDelay={0}
+                          backSpeed={0}
+                          loop={false}
+                          cursorChar=""
+                        />
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))
+              );
+            })
         )}
       </div>
     </div>
