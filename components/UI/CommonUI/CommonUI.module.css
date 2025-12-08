@@ -1,6 +1,7 @@
 .inputContainer {
   height: 2.813rem;
-  border: 1px solid #51515126 !important;
+  /* border: 1px solid #51515126 !important; */
+  border: 1px solid #ffffff4d !important;
   border-radius: 15px !important;
   color: var(--text-primary-color);
   font-weight: 400;
@@ -30,6 +31,7 @@
   border: 1px solid var(--text-primary-color) !important;
   box-shadow: none !important;
 }
+
 .label {
   color: var(--text-primary-color);
 }
@@ -42,17 +44,19 @@
 /* Button */
 .buttonContainer {
   /* background-color: var(--text-primary-color); */
-  background-color: transparent;
+  /* background-color: transparent; */
+  background-color: #1b84ff !important;
   color: #fff;
   font-weight: 700;
   height: 50px;
   border-radius: 15px !important;
-  border: 1px solid #ffffff4d !important;
+  /* border: 1px solid #ffffff4d !important; */
 }
 
 .buttonContainer:hover {
   /* background-color: var(--text-primary-color) !important; */
-  background-color: transparent !important;
+  /* background-color: transparent !important; */
+  background-color: #1b84ff !important;
 }
 
 .secondaryButton {

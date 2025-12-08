@@ -130,8 +130,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             <Image
               src={process.env.NEXT_PUBLIC_LOGO!}
               alt="logo"
-              width={isVictorValleyTheme ? 108 : 180}
-              height={isVictorValleyTheme ? 108 : 35}
+              width={isVictorValleyTheme ? 108 : 250}
+              height={isVictorValleyTheme ? 108 : 80}
             />
             <div className="flex flex-column justify-content-center align-items-center gap-2 mt-5">
               <h2
