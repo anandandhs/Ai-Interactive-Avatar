@@ -929,7 +929,6 @@ function InteractiveAvatar({ page }: { page: number }) {
       // Reset greeting flags for new session
       isStreamReady.current = false;
       greetingSent.current = false;
-      isAvatarIntroduction.current = true;
 
       // Stop current avatar session gracefully and wait for it to complete
       console.log("🛑 Stopping current avatar session...");
@@ -1320,7 +1319,7 @@ function InteractiveAvatar({ page }: { page: number }) {
           }
         });
 
-        avatar.on(StreamingEvents.AVATAR_END_MESSAGE, async (event) => {
+        avatar.on(StreamingEvents.AVATAR_END_MESSAGE, (event) => {
           console.log(">>>>> Avatar end message event:", event);
           console.log(">>>>> Event detail:", event?.detail);
 
@@ -1332,15 +1331,6 @@ function InteractiveAvatar({ page }: { page: number }) {
             currentAvatarMessage.current
           );
 
-          if (isAvatarIntroduction.current) {
-            console.log(
-              "👋 This is avatar's introduction message, skipping AI intention check."
-            );
-            isAvatarIntroduction.current = false; // Mark introduction as complete
-            currentAvatarMessage.current = ""; // Reset message
-            return;
-          }
-
           if (
             (finalMessageContent &&
               (auth?.user?.username?.toLowerCase() ==
@@ -1351,53 +1341,6 @@ function InteractiveAvatar({ page }: { page: number }) {
               "john.keating@papyrrus.com" &&
               page == 1)
           ) {
-            // Call AI Intention API with avatar message also
-            if (finalMessageContent) {
-              try {
-                const aiIntentionResponse =
-                  await createAiIntention(finalMessageContent);
-
-                if (aiIntentionResponse.success && aiIntentionResponse.data) {
-                  const { openAiIntension } = aiIntentionResponse.data;
-
-                  if (openAiIntension === "Job Search") {
-                    // Check if navigation is already in progress to prevent duplicate execution
-                    if (navigationInProgress.current) {
-                      console.log(
-                        "⚠️ Navigation already in progress, skipping duplicate execution"
-                      );
-                      return;
-                    }
-
-                    // Set flag immediately to prevent duplicate calls
-                    navigationInProgress.current = true;
-                    // Final confirmation toast
-                    toast.current?.show({
-                      severity: "success",
-                      summary: "Navigation Confirmed",
-                      detail: `Transferring the chat to JobSearch...`,
-                      life: 4000,
-                    });
-
-                    // Stop avatar and navigate
-                    setTimeout(async () => {
-                      try {
-                        await stopAvatarGracefully();
-                        router.push("/resume-builder");
-                      } catch (error) {
-                        console.error("Navigation error:", error);
-                        router.push("/resume-builder"); // Navigate anyway
-                      } finally {
-                        userRequestedNavigation.current = null;
-                        navigationInProgress.current = false;
-                      }
-                    }, 4000);
-                  }
-                }
-              } catch (error) {
-                console.error("❌ Error calling AI Intention API:", error);
-              }
-            }
             // Check if there was a user navigation request first
             if (userRequestedNavigation.current) {
               // User already requested navigation, check if avatar confirmed it
