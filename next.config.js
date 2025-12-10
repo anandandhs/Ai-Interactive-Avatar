@@ -3,11 +3,6 @@ const nextConfig = {
   // Optimize memory usage during build
   swcMinify: true,
   
-  // Reduce memory footprint
-  experimental: {
-    optimizeCss: true,
-  },
-  
   // Webpack optimizations for build performance
   webpack: (config, { isServer, dev }) => {
     // Only optimize for production builds
