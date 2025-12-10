@@ -135,14 +135,25 @@ const useStreamingAvatarMessageState = () => {
   }: {
     detail: UserTalkingMessageEvent;
   }) => {
+    // Defensive check: ensure detail and detail.message exist
+    if (!detail || !detail.message) {
+      console.warn("handleUserTalkingMessage: Missing detail or detail.message", detail);
+      return;
+    }
+
     if (currentSenderRef.current === MessageSender.CLIENT) {
-      setMessages((prev) => [
+      setMessages((prev) => {
+        if (prev.length === 0) {
+          return prev;
+        }
+        return [
         ...prev.slice(0, -1),
         {
           ...prev[prev.length - 1],
           content: [prev[prev.length - 1].content, detail.message].join(""),
         },
-      ]);
+        ];
+      });
     } else {
       currentSenderRef.current = MessageSender.CLIENT;
       setMessages((prev) => [
@@ -161,14 +172,25 @@ const useStreamingAvatarMessageState = () => {
   }: {
     detail: StreamingTalkingMessageEvent;
   }) => {
+    // Defensive check: ensure detail and detail.message exist
+    if (!detail || !detail.message) {
+      console.warn("handleStreamingTalkingMessage: Missing detail or detail.message", detail);
+      return;
+    }
+
     if (currentSenderRef.current === MessageSender.AVATAR) {
-      setMessages((prev) => [
+      setMessages((prev) => {
+        if (prev.length === 0) {
+          return prev;
+        }
+        return [
         ...prev.slice(0, -1),
         {
           ...prev[prev.length - 1],
           content: [prev[prev.length - 1].content, detail.message].join(""),
         },
-      ]);
+        ];
+      });
     } else {
       currentSenderRef.current = MessageSender.AVATAR;
       setMessages((prev) => [

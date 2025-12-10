@@ -1199,27 +1199,35 @@ function InteractiveAvatar({ page }: { page: number }) {
           greetingSent.current = false;
         });
         avatar.on(StreamingEvents.STREAM_READY, (event) => {
-          console.log(">>>>> Stream ready:", event.detail);
-          // Mark stream as ready and trigger greeting
-          isStreamReady.current = true;
+          try {
+            console.log(">>>>> Stream ready:", event?.detail);
+            // Mark stream as ready and trigger greeting
+            isStreamReady.current = true;
 
-          // Send greeting after a small delay to ensure everything is initialized
-          setTimeout(() => {
-            if (!greetingSent.current && auth?.user?.displayName) {
-              const currentLang = selectedLanguageRef.current;
-              console.log(
-                "👋 Stream ready event - sending greeting in language:",
-                currentLang
-              );
-              greetingSent.current = true;
+            // Send greeting after a small delay to ensure everything is initialized
+            setTimeout(() => {
+              try {
+                if (!greetingSent.current && auth?.user?.displayName) {
+                  const currentLang = selectedLanguageRef.current;
+                  console.log(
+                    "👋 Stream ready event - sending greeting in language:",
+                    currentLang
+                  );
+                  greetingSent.current = true;
 
-              if (currentLang === "es") {
-                sendMessage(`Hola, me llamo ${auth?.user?.displayName}`);
-              } else {
-                sendMessage(`Hi, my name is ${auth?.user?.displayName}`);
+                  if (currentLang === "es") {
+                    sendMessage(`Hola, me llamo ${auth?.user?.displayName}`);
+                  } else {
+                    sendMessage(`Hi, my name is ${auth?.user?.displayName}`);
+                  }
+                }
+              } catch (error) {
+                console.error("Error sending greeting in STREAM_READY:", error);
               }
-            }
-          }, 500); // Small delay to ensure avatar is fully ready
+            }, 500); // Small delay to ensure avatar is fully ready
+          } catch (error) {
+            console.error("Error in STREAM_READY handler:", error);
+          }
         });
         avatar.on(StreamingEvents.USER_START, (event) => {
           console.log(">>>>> User started talking:", event);
@@ -1231,191 +1239,223 @@ function InteractiveAvatar({ page }: { page: number }) {
         });
 
         avatar.on(StreamingEvents.USER_END_MESSAGE, async (event) => {
-          console.log(">>>>> User end message:", event);
+          try {
+            console.log(">>>>> User end message:", event);
 
-          // Use the accumulated user message content
-          const userMessageContent = currentUserMessage.current;
-          console.log("User message content:", userMessageContent);
+            // Use the accumulated user message content
+            const userMessageContent = currentUserMessage.current;
+            console.log("User message content:", userMessageContent);
 
-          if (
-            userMessageContent &&
-            (auth?.user?.username?.toLowerCase() ==
-              "jason.padilla@papyrrus.com" ||
-              auth?.user?.username?.toLocaleLowerCase() ==
-                "irwin.spinello@papyrrus.com" ||
-              auth?.user?.username?.toLowerCase() ==
-                "john.keating@papyrrus.com") &&
-            page == 1
-          ) {
-            //checkUserNavigationRequest(userMessageContent);
+            if (
+              userMessageContent &&
+              (auth?.user?.username?.toLowerCase() ==
+                "jason.padilla@papyrrus.com" ||
+                auth?.user?.username?.toLowerCase() ==
+                  "irwin.spinello@papyrrus.com" ||
+                auth?.user?.username?.toLowerCase() ==
+                  "john.keating@papyrrus.com") &&
+              page == 1
+            ) {
+              //checkUserNavigationRequest(userMessageContent);
 
-            // Call AI Intention API with user message
-            if (userMessageContent) {
-              try {
-                const aiIntentionResponse =
-                  await createAiIntention(userMessageContent);
+              // Call AI Intention API with user message
+              if (userMessageContent) {
+                try {
+                  const aiIntentionResponse =
+                    await createAiIntention(userMessageContent);
 
-                if (aiIntentionResponse.success && aiIntentionResponse.data) {
-                  const { openAiIntension } = aiIntentionResponse.data;
+                  if (aiIntentionResponse.success && aiIntentionResponse.data) {
+                    const { openAiIntension } = aiIntentionResponse.data;
 
-                  if (openAiIntension === "Job Search") {
-                    // Check if navigation is already in progress to prevent duplicate execution
-                    if (navigationInProgress.current) {
-                      console.log(
-                        "⚠️ Navigation already in progress, skipping duplicate execution"
-                      );
-                      return;
-                    }
-
-                    // Set flag immediately to prevent duplicate calls
-                    navigationInProgress.current = true;
-                    // Final confirmation toast
-                    toast.current?.show({
-                      severity: "success",
-                      summary: "Navigation Confirmed",
-                      detail: `Transferring the chat to JobSearch...`,
-                      life: 4000,
-                    });
-
-                    // Stop avatar and navigate
-                    setTimeout(async () => {
-                      try {
-                        await stopAvatarGracefully();
-                        router.push("/resume-builder");
-                      } catch (error) {
-                        console.error("Navigation error:", error);
-                        router.push("/resume-builder"); // Navigate anyway
-                      } finally {
-                        userRequestedNavigation.current = null;
-                        navigationInProgress.current = false;
+                    if (openAiIntension === "Job Search") {
+                      // Check if navigation is already in progress to prevent duplicate execution
+                      if (navigationInProgress.current) {
+                        console.log(
+                          "⚠️ Navigation already in progress, skipping duplicate execution"
+                        );
+                        return;
                       }
-                    }, 4000);
+
+                      // Set flag immediately to prevent duplicate calls
+                      navigationInProgress.current = true;
+                      // Final confirmation toast
+                      toast.current?.show({
+                        severity: "success",
+                        summary: "Navigation Confirmed",
+                        detail: `Transferring the chat to JobSearch...`,
+                        life: 4000,
+                      });
+
+                      // Stop avatar and navigate
+                      setTimeout(async () => {
+                        try {
+                          await stopAvatarGracefully();
+                          router.push("/resume-builder");
+                        } catch (error) {
+                          console.error("Navigation error:", error);
+                          router.push("/resume-builder"); // Navigate anyway
+                        } finally {
+                          userRequestedNavigation.current = null;
+                          navigationInProgress.current = false;
+                        }
+                      }, 4000);
+                    }
                   }
+                } catch (error) {
+                  console.error("❌ Error calling AI Intention API:", error);
                 }
-              } catch (error) {
-                console.error("❌ Error calling AI Intention API:", error);
               }
             }
-          }
 
-          // Reset the user message accumulator for the next message
-          currentUserMessage.current = "";
+            // Reset the user message accumulator for the next message
+            currentUserMessage.current = "";
+          } catch (error) {
+            console.error("Error in USER_END_MESSAGE handler:", error);
+            // Reset message accumulator even on error to prevent state corruption
+            currentUserMessage.current = "";
+          }
         });
 
         avatar.on(StreamingEvents.USER_TALKING_MESSAGE, (event) => {
-          console.log(">>>>> User talking message:", event);
+          try {
+            console.log(">>>>> User talking message:", event);
 
-          // Accumulate the user's message content as they speak
-          if (event?.detail?.message) {
-            currentUserMessage.current += event.detail.message;
+            // Accumulate the user's message content as they speak
+            // Defensive check: ensure event, detail, and message exist
+            if (event && event.detail && event.detail.message) {
+              currentUserMessage.current += event.detail.message;
+            } else {
+              console.warn(
+                "USER_TALKING_MESSAGE: Missing event.detail.message",
+                event
+              );
+            }
+          } catch (error) {
+            console.error("Error in USER_TALKING_MESSAGE handler:", error);
           }
         });
 
         avatar.on(StreamingEvents.AVATAR_TALKING_MESSAGE, (event) => {
-          console.log(">>>>> Avatar talking message:", event);
+          try {
+            console.log(">>>>> Avatar talking message:", event);
 
-          // Accumulate the avatar's message content as it speaks
-          if (event?.detail?.message) {
-            currentAvatarMessage.current += event.detail.message;
+            // Accumulate the avatar's message content as it speaks
+            // Defensive check: ensure event, detail, and message exist
+            if (event && event.detail && event.detail.message) {
+              currentAvatarMessage.current += event.detail.message;
+            } else {
+              console.warn(
+                "AVATAR_TALKING_MESSAGE: Missing event.detail.message",
+                event
+              );
+            }
+          } catch (error) {
+            console.error("Error in AVATAR_TALKING_MESSAGE handler:", error);
           }
         });
 
         avatar.on(StreamingEvents.AVATAR_END_MESSAGE, async (event) => {
-          console.log(">>>>> Avatar end message event:", event);
-          console.log(">>>>> Event detail:", event?.detail);
+          try {
+            console.log(">>>>> Avatar end message event:", event);
+            console.log(">>>>> Event detail:", event?.detail);
 
-          // Use the accumulated message content from AVATAR_TALKING_MESSAGE
-          const finalMessageContent = currentAvatarMessage.current;
-          console.log(
-            "Final accumulated message content:",
-            finalMessageContent,
-            currentAvatarMessage.current
-          );
-
-          if (isAvatarIntroduction.current) {
+            // Use the accumulated message content from AVATAR_TALKING_MESSAGE
+            const finalMessageContent = currentAvatarMessage.current;
             console.log(
-              "👋 This is avatar's introduction message, skipping AI intention check."
+              "Final accumulated message content:",
+              finalMessageContent,
+              currentAvatarMessage.current
             );
-            isAvatarIntroduction.current = false; // Mark introduction as complete
-            currentAvatarMessage.current = ""; // Reset message
-            return;
-          }
 
-          if (
-            (finalMessageContent &&
+            if (isAvatarIntroduction.current) {
+              console.log(
+                "👋 This is avatar's introduction message, skipping AI intention check."
+              );
+              isAvatarIntroduction.current = false; // Mark introduction as complete
+              currentAvatarMessage.current = ""; // Reset message
+              return;
+            }
+
+            if (
+              (finalMessageContent &&
+                (auth?.user?.username?.toLowerCase() ==
+                  "jason.padilla@papyrrus.com" ||
+                  auth?.user?.username?.toLowerCase() ==
+                    "irwin.spinello@papyrrus.com")) ||
               (auth?.user?.username?.toLowerCase() ==
-                "jason.padilla@papyrrus.com" ||
-                auth?.user?.username?.toLowerCase() ==
-                  "irwin.spinello@papyrrus.com")) ||
-            (auth?.user?.username?.toLowerCase() ==
-              "john.keating@papyrrus.com" &&
-              page == 1)
-          ) {
-            // Call AI Intention API with avatar message also
-            if (finalMessageContent) {
-              try {
-                const aiIntentionResponse =
-                  await createAiIntention(finalMessageContent);
+                "john.keating@papyrrus.com" &&
+                page == 1)
+            ) {
+              // Call AI Intention API with avatar message also
+              if (finalMessageContent) {
+                try {
+                  const aiIntentionResponse =
+                    await createAiIntention(finalMessageContent);
 
-                if (aiIntentionResponse.success && aiIntentionResponse.data) {
-                  const { openAiIntension } = aiIntentionResponse.data;
+                  if (aiIntentionResponse.success && aiIntentionResponse.data) {
+                    const { openAiIntension } = aiIntentionResponse.data;
 
-                  if (openAiIntension === "Job Search") {
-                    // Check if navigation is already in progress to prevent duplicate execution
-                    if (navigationInProgress.current) {
-                      console.log(
-                        "⚠️ Navigation already in progress, skipping duplicate execution"
-                      );
-                      return;
-                    }
-
-                    // Set flag immediately to prevent duplicate calls
-                    navigationInProgress.current = true;
-                    // Final confirmation toast
-                    toast.current?.show({
-                      severity: "success",
-                      summary: "Navigation Confirmed",
-                      detail: `Transferring the chat to JobSearch...`,
-                      life: 4000,
-                    });
-
-                    // Stop avatar and navigate
-                    setTimeout(async () => {
-                      try {
-                        await stopAvatarGracefully();
-                        router.push("/resume-builder");
-                      } catch (error) {
-                        console.error("Navigation error:", error);
-                        router.push("/resume-builder"); // Navigate anyway
-                      } finally {
-                        userRequestedNavigation.current = null;
-                        navigationInProgress.current = false;
+                    if (openAiIntension === "Job Search") {
+                      // Check if navigation is already in progress to prevent duplicate execution
+                      if (navigationInProgress.current) {
+                        console.log(
+                          "⚠️ Navigation already in progress, skipping duplicate execution"
+                        );
+                        return;
                       }
-                    }, 4000);
+
+                      // Set flag immediately to prevent duplicate calls
+                      navigationInProgress.current = true;
+                      // Final confirmation toast
+                      toast.current?.show({
+                        severity: "success",
+                        summary: "Navigation Confirmed",
+                        detail: `Transferring the chat to JobSearch...`,
+                        life: 4000,
+                      });
+
+                      // Stop avatar and navigate
+                      setTimeout(async () => {
+                        try {
+                          await stopAvatarGracefully();
+                          router.push("/resume-builder");
+                        } catch (error) {
+                          console.error("Navigation error:", error);
+                          router.push("/resume-builder"); // Navigate anyway
+                        } finally {
+                          userRequestedNavigation.current = null;
+                          navigationInProgress.current = false;
+                        }
+                      }, 4000);
+                    }
                   }
+                } catch (error) {
+                  console.error("❌ Error calling AI Intention API:", error);
                 }
-              } catch (error) {
-                console.error("❌ Error calling AI Intention API:", error);
+              }
+              // Check if there was a user navigation request first
+              if (userRequestedNavigation.current) {
+                // User already requested navigation, check if avatar confirmed it
+                console.log(
+                  "🔄 User navigation request exists, checking avatar confirmation"
+                );
+                //checkAvatarNavigationConfirmation(finalMessageContent);
+              } else {
+                // No user navigation request, check if avatar message contains navigation keywords (fallback detection)
+                console.log(
+                  "🔍 No user navigation request, checking avatar for navigation keywords"
+                );
+                //checkAvatarNavigationRequest(finalMessageContent);
               }
             }
-            // Check if there was a user navigation request first
-            if (userRequestedNavigation.current) {
-              // User already requested navigation, check if avatar confirmed it
-              console.log(
-                "🔄 User navigation request exists, checking avatar confirmation"
-              );
-              //checkAvatarNavigationConfirmation(finalMessageContent);
-            } else {
-              // No user navigation request, check if avatar message contains navigation keywords (fallback detection)
-              console.log(
-                "🔍 No user navigation request, checking avatar for navigation keywords"
-              );
-              //checkAvatarNavigationRequest(finalMessageContent);
-            }
-          }
 
-          // Reset the accumulated message for the next avatar response
-          currentAvatarMessage.current = "";
+            // Reset the accumulated message for the next avatar response
+            currentAvatarMessage.current = "";
+          } catch (error) {
+            console.error("Error in AVATAR_END_MESSAGE handler:", error);
+            // Reset message accumulator even on error to prevent state corruption
+            currentAvatarMessage.current = "";
+          }
         });
 
         // Create a personalized config with user's display name
