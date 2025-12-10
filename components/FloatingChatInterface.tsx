@@ -15,6 +15,7 @@ import { useAuthContext } from "./Prividers/AuthProvider";
 import { AVATARS } from "@/app/lib/constants";
 import { useThemeIcons } from "./logic/useThemeIcon";
 import { useSelectedAvatarLanguage } from "./logic/useSelectedAvatarLanguage";
+import WhiteChatLogo from "../public/Svg/whiteChatLogo.png";
 
 // AI Assistant profiles
 const AI_ASSISTANTS = [
@@ -481,7 +482,7 @@ export const FloatingChatInterface: React.FC<FloatingChatInterfaceProps> = ({
               </Button>
             )} */}
             <Image
-              src={whiteLogoIcon}
+              src={WhiteChatLogo}
               alt="Chat"
               width={142}
               height={35}
