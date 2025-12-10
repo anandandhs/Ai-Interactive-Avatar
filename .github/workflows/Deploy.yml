@@ -41,7 +41,8 @@ jobs:
             echo "Installing dependencies..."
             yarn install --frozen-lockfile
 
-            echo "Building Next.js..."
+            echo "Building Next.js with memory optimization..."
+            export NODE_OPTIONS='--max-old-space-size=4096'
             yarn build
 
             echo "Starting app with PM2..."
