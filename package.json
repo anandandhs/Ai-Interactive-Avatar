@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "NODE_OPTIONS='--max-old-space-size=4096' next build",
-    "build:production": "NODE_OPTIONS='--max-old-space-size=4096' next build",
-    "build:skip-checks": "NODE_OPTIONS='--max-old-space-size=4096' SKIP_TYPE_CHECK=true SKIP_LINT=true next build",
-    "build:low-memory": "NODE_OPTIONS='--max-old-space-size=1536' SKIP_TYPE_CHECK=true SKIP_LINT=true next build",
+    "build": "cross-env NODE_OPTIONS=--max-old-space-size=4096 next build",
+    "build:production": "cross-env NODE_OPTIONS=--max-old-space-size=4096 next build",
+    "build:skip-checks": "cross-env NODE_OPTIONS=--max-old-space-size=4096 SKIP_TYPE_CHECK=true SKIP_LINT=true next build",
+    "build:low-memory": "cross-env NODE_OPTIONS=--max-old-space-size=1536 SKIP_TYPE_CHECK=true SKIP_LINT=true next build",
     "start": "next start",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
     "type-check": "tsc --noEmit"
@@ -34,6 +34,7 @@
     "@types/react-dom": "^19.1.2",
     "@typescript-eslint/eslint-plugin": "^8.31.0",
     "@typescript-eslint/parser": "^8.31.0",
+    "cross-env": "^10.1.0",
     "eslint": "^9.25.1",
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-import": "^2.31.0",
