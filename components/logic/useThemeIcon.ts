@@ -67,7 +67,7 @@ import JobMatchWhite from "../../public/Svg/jobMatchWhite.svg";
 import ResumeWhite from "../../public/Svg/resumeWhite.svg";
 import SettingsWhite from "../../public/Svg/settingsWhite.svg";
 import NotificationWhite from "../../public/Svg/notificationsWhite.svg";
-import InterviewWhite from "../../public/Svg/interviewWhite.svg";
+import InterviewWhite from "../../public/Svg/interview_white.svg";
 import SkillsWhite from "../../public/Svg/skillsWhite.svg";
 import EyeWhite from "../../public/Svg/eyeWhite.svg";
 
