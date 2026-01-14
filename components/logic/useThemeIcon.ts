@@ -1,4 +1,4 @@
-import {useMemo} from "react";
+import { useMemo } from "react";
 
 import Mail from "../../public/Svg/mail.svg";
 import BlueMail from "../../public/Svg/blue_mail.svg";
@@ -61,105 +61,113 @@ import LoginRightRectangle from "../../public/Svg/loginRightRectangle.svg";
 import RedLoginRightRectangle from "../../public/Svg/red_right_rectangle.svg";
 import LoginLeftRectangle from "../../public/Svg/loginLeftRectangle.svg";
 import RedLoginLeftRectangle from "../../public/Svg/red_left_rectangle.svg";
+import AssignmentsWhite from "../../public/Svg/assignmentsWhite.svg";
+import HomeWhite from "../../public/Svg/homeWhite.svg";
+import JobMatchWhite from "../../public/Svg/jobMatchWhite.svg";
+import ResumeWhite from "../../public/Svg/resumeWhite.svg";
+import SettingsWhite from "../../public/Svg/settingsWhite.svg";
+import NotificationWhite from "../../public/Svg/notificationsWhite.svg";
+import InterviewWhite from "../../public/Svg/interviewWhite.svg";
+import SkillsWhite from "../../public/Svg/skillsWhite.svg";
+import EyeWhite from "../../public/Svg/eyeWhite.svg";
 
 export const useThemeIcons = () => {
   const themeIcons = useMemo(() => {
     const isOnCreativTheme = process.env.NEXT_PUBLIC_THEME === "oncreativ";
     const isVictorValleyTheme =
       process.env.NEXT_PUBLIC_THEME === "victorvalley";
-    console.log("oncreativ", isOnCreativTheme);
     return {
       mailIcon: isOnCreativTheme
         ? BlueMail
         : isVictorValleyTheme
-        ? RedMail
-        : Mail,
+          ? RedMail
+          : Mail,
       passwordIcon: isOnCreativTheme
         ? BluePassword
         : isVictorValleyTheme
-        ? RedPassword
-        : Password,
+          ? RedPassword
+          : Password,
       settingsIcon: isOnCreativTheme
         ? BlueSettings
         : isVictorValleyTheme
-        ? RedSettings
-        : Settings,
+          ? RedSettings
+          : Settings,
       dashboardIcon: isOnCreativTheme
         ? BlueDasboard
         : isVictorValleyTheme
-        ? RedDasboard
-        : Dasboard,
+          ? RedDasboard
+          : Dasboard,
       aiChatIcon: isOnCreativTheme
         ? BlueAiChat
         : isVictorValleyTheme
-        ? RedAiChat
-        : AiChat,
+          ? RedAiChat
+          : AiChat,
       chatCloseIcon: isOnCreativTheme
         ? BlueChatClose
         : isVictorValleyTheme
-        ? RedChatClose
-        : ChatClose,
+          ? RedChatClose
+          : ChatClose,
       chatOpenIcon: isOnCreativTheme
         ? BlueChatOpen
         : isVictorValleyTheme
-        ? RedChatOpen
-        : ChatOpen,
+          ? RedChatOpen
+          : ChatOpen,
       homeIcon: isOnCreativTheme
         ? BlueHome
         : isVictorValleyTheme
-        ? RedHome
-        : Home,
+          ? RedHome
+          : HomeWhite,
       resumeIcon: isOnCreativTheme
         ? BlueResume
         : isVictorValleyTheme
-        ? RedResume
-        : Resume,
+          ? RedResume
+          : ResumeWhite,
       jobMatchIcon: isOnCreativTheme
         ? BlueJobMatch
         : isVictorValleyTheme
-        ? RedJobMatch
-        : JobMatch,
+          ? RedJobMatch
+          : JobMatchWhite,
       interviewIcon: isOnCreativTheme
         ? BlueInterview
         : isVictorValleyTheme
-        ? RedInterview
-        : Interview,
+          ? RedInterview
+          : InterviewWhite,
       skillsIcon: isOnCreativTheme
         ? BlueSkills
         : isVictorValleyTheme
-        ? RedSkills
-        : Skills,
+          ? RedSkills
+          : SkillsWhite,
       settingsideIcon: isOnCreativTheme
         ? BlueSettingsIcon
         : isVictorValleyTheme
-        ? RedSettingsIcon
-        : SettingsIcon,
+          ? RedSettingsIcon
+          : SettingsWhite,
       notiIcon: isOnCreativTheme
         ? BlueNotiIcon
         : isVictorValleyTheme
-        ? RedNotiIcon
-        : NotiIcon,
+          ? RedNotiIcon
+          : NotificationWhite,
       assignmentIcon: isOnCreativTheme
         ? BlueAssignment
         : isVictorValleyTheme
-        ? RedAssignment
-        : Assignment,
+          ? RedAssignment
+          : AssignmentsWhite,
       exportIcon: isOnCreativTheme
         ? BlueExportArrow
         : isVictorValleyTheme
-        ? RedExportArrow
-        : ExportArrow,
+          ? RedExportArrow
+          : ExportArrow,
       whiteLogoIcon: isOnCreativTheme
         ? OncreativWhite
         : isVictorValleyTheme
-        ? VictorWhite
-        : TexasWhite,
-      eyeIcon: isOnCreativTheme ? BlueEye : isVictorValleyTheme ? RedEye : Eye,
+          ? VictorWhite
+          : TexasWhite,
+      eyeIcon: isOnCreativTheme ? BlueEye : isVictorValleyTheme ? RedEye : EyeWhite,
       backIcon: isOnCreativTheme
         ? BlueBack
         : isVictorValleyTheme
-        ? RedBack
-        : Back,
+          ? RedBack
+          : Back,
       RectangleLeftImage: isVictorValleyTheme
         ? RedLoginLeftRectangle
         : LoginLeftRectangle,

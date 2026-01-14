@@ -55,7 +55,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
           onLoadingComplete={() => {
             setImageLoading(false);
           }}
-          // style={{objectFit: "cover"}}
+        // style={{objectFit: "cover"}}
         />
         {/* <div className="w-full relative">
           <h5
@@ -130,8 +130,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             <Image
               src={process.env.NEXT_PUBLIC_LOGO!}
               alt="logo"
-              width={isVictorValleyTheme ? 108 : 250}
-              height={isVictorValleyTheme ? 108 : 80}
+              width={isVictorValleyTheme ? 108 : 130}
+              height={isVictorValleyTheme ? 108 : 130}
             />
             <div className="flex flex-column justify-content-center align-items-center gap-2 mt-5">
               <h2
@@ -151,7 +151,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
                   fontSize: "1rem",
                   lineHeight: "100%",
                 }}
-                // className={style.blueText}
+              // className={style.blueText}
               >
                 {"Jobs, tools, and training to launch your next career step"}
               </p>

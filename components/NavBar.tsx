@@ -113,8 +113,8 @@ export default function NavBar({
       <Image
         src={process.env.NEXT_PUBLIC_LOGO!}
         alt="logo"
-        width={160}
-        height={38}
+        width={60}
+        height={60}
       />
     </>
   );

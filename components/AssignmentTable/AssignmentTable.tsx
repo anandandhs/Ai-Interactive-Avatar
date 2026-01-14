@@ -1,15 +1,15 @@
 "use client";
 
 import React from "react";
-import {DataTable} from "primereact/datatable";
-import {Column} from "primereact/column";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
 import clsx from "clsx";
 import style from "../../styles/commonStyle.module.css";
 import Image from "next/image";
-import {useThemeIcons} from "../logic/useThemeIcon";
+import { useThemeIcons } from "../logic/useThemeIcon";
 
 export default function AssignmentTable() {
-  const {eyeIcon} = useThemeIcons();
+  const { eyeIcon } = useThemeIcons();
   const mockRow = [
     {
       name: "Safety Procedure Quiz",
@@ -40,10 +40,10 @@ export default function AssignmentTable() {
   };
 
   const mockColumn = [
-    {header: "Assignment Name", field: "name", width: "30%"},
-    {header: "Class", field: "class", width: "30%"},
-    {header: "Due", field: "date", width: "30%"},
-    {header: "Action", field: "action", body: actionTemplate, width: "10%"},
+    { header: "Assignment Name", field: "name", width: "30%" },
+    { header: "Class", field: "class", width: "30%" },
+    { header: "Due", field: "date", width: "30%" },
+    { header: "Action", field: "action", body: actionTemplate, width: "10%" },
   ];
 
   const tableHeader = () => {
@@ -61,7 +61,7 @@ export default function AssignmentTable() {
   };
 
   return (
-    <div style={{width: "60%"}}>
+    <div style={{ width: "60%" }}>
       <DataTable
         header={tableHeader()}
         value={mockRow}
@@ -73,7 +73,7 @@ export default function AssignmentTable() {
             field={col.field}
             header={col.header}
             body={col.body}
-            style={{width: col.width}}
+            style={{ width: col.width }}
           />
         ))}
       </DataTable>
